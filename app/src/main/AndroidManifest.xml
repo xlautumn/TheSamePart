@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.same.part.assistant">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,6 +15,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.LoginActivity" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".activity.ShopManagerActivity" />
+        <activity android:name=".activity.CustomManagerActivity" />
+        <activity android:name=".activity.VipManagerActivity" />
+        <activity android:name=".activity.BusinessManagerActivity" />
+        <activity android:name=".activity.BusinessDetailActivity" />
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" />
         <!--适配华为（huawei）刘海屏-->
         <meta-data
             android:name="android.notch_support"
