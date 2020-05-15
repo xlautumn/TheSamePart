@@ -19,3 +19,23 @@ data class VipInfoModel(
     var vipCard: String,
     var vipBalance: String
 )
+
+/**
+ * 收银商品数据类
+ */
+data class CashierModel(
+    var id: String,
+    var name: String,
+    var price: String,
+    var specification: String,
+    var operation: Boolean
+)
+
+/**
+ * 商品分类数据类
+ */
+data class ProductClassificationModel(
+    var id: String,
+    var name: String,
+    var count: String
+)
