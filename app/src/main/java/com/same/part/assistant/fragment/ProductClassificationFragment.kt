@@ -1,19 +1,28 @@
 package com.same.part.assistant.fragment
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.zhouwei.library.CustomPopWindow
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.AddProductActivity
+import com.same.part.assistant.activity.AddProductClassificationActivity
+import com.same.part.assistant.activity.LoginActivity
+import com.same.part.assistant.activity.ViewProductActivity
 import com.same.part.assistant.model.ProductClassificationModel
 import kotlinx.android.synthetic.main.fragment_product_classification.*
+import kotlinx.android.synthetic.main.pop_product_operation.view.*
 
 /**
- * 收银商品
+ * 商品分类
  */
 class ProductClassificationFragment : Fragment() {
     private val mProductClassificationList = arrayListOf<ProductClassificationModel>().apply {
@@ -35,7 +44,7 @@ class ProductClassificationFragment : Fragment() {
             ProductClassificationModel(
                 "20131108",
                 "果园",
-                "5113"
+                "0"
             )
         )
     }
@@ -81,7 +90,54 @@ class ProductClassificationFragment : Fragment() {
             holder.productName.text = model.name
             holder.productCount.text = model.count
             holder.productOperation.setOnClickListener {
+                showOperationPop(
+                    holder.itemView.context,
+                    holder.productOperationPic,
+                    (model.count.toIntOrNull() ?: 0) > 0
+                )
+            }
+        }
 
+        /**
+         * 操作弹框
+         */
+        private fun showOperationPop(context: Context, anchorView: View, hasProduct: Boolean) {
+            LayoutInflater.from(context).inflate(R.layout.pop_product_operation, null).apply {
+                optionTwo.text = if (hasProduct) "添加商品" else "添加子分类"
+                optionThree.text = if (hasProduct) "查看商品" else "添加商品"
+                val popWindow =
+                    CustomPopWindow.PopupWindowBuilder(context).setView(this).create()
+                        .showAsDropDown(anchorView)
+                //第一个选项
+                findViewById<View>(R.id.optionOne).setOnClickListener {
+                    popWindow.dissmiss()
+                    context.startActivity(
+                        Intent(
+                            context,
+                            AddProductClassificationActivity::class.java
+                        )
+                    )
+                }
+                //第二个选项
+                findViewById<View>(R.id.optionTwo).setOnClickListener {
+                    popWindow.dissmiss()
+                    context.startActivity(
+                        Intent(
+                            context,
+                            if (hasProduct) AddProductActivity::class.java else AddProductClassificationActivity::class.java
+                        )
+                    )
+                }
+                //第三个选项
+                findViewById<View>(R.id.optionThree).setOnClickListener {
+                    popWindow.dissmiss()
+                    context.startActivity(
+                        Intent(
+                            context,
+                            if (hasProduct) ViewProductActivity::class.java else AddProductActivity::class.java
+                        )
+                    )
+                }
             }
         }
     }
@@ -91,6 +147,6 @@ class ProductClassificationFragment : Fragment() {
         var productName: TextView = itemView.findViewById(R.id.productName)
         var productCount: TextView = itemView.findViewById(R.id.productCount)
         var productOperation: View = itemView.findViewById(R.id.productOperation)
+        var productOperationPic: View = itemView.findViewById(R.id.productOperationPic)
     }
-
 }

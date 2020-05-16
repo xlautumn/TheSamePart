@@ -4,8 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar_title"
+        layout="@layout/toolbar_title" />
+
     <LinearLayout
-        android:id="@+id/cashier_header"
+        android:id="@+id/product_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/color_E8E8E9"
@@ -37,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="单价"
+            android:text="现价"
             android:textSize="16dp" />
 
         <TextView
@@ -45,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="规格"
+            android:text="库存"
             android:textSize="16dp" />
 
         <TextView
@@ -63,10 +67,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cashier_header">
+        app:layout_constraintTop_toBottomOf="@+id/product_header">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cashierRecyclerView"
+            android:id="@+id/productRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

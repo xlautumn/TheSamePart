@@ -39,3 +39,13 @@ data class ProductClassificationModel(
     var name: String,
     var count: String
 )
+
+/**
+ * 商品分类数据类
+ */
+data class ProductModel(
+    var id: String,
+    var name: String,
+    var price: String,
+    var repertory:String
+)
