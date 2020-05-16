@@ -1,2 +1,2 @@
-rootProject.name='同在一方管家'
-include ':app', ':notchlib'
+rootProject.name = '同方云商'
+include ':app', ':matisse'

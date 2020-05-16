@@ -27,7 +27,7 @@
                 android:background="@color/color_E8E8E9" />
 
             <LinearLayout
-                android:id="@+id/shop_info"
+                android:id="@+id/shopAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
