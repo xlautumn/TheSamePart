@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar_title"
+        layout="@layout/toolbar_title" />
+
+    <View
+        android:id="@+id/lineOne"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/color_E8E8E9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
+
+
+    <TextView
+        android:id="@+id/accountPassword"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:drawableRight="@drawable/arrow_next_page"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="15dp"
+        android:text="账号密码"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineOne" />
+
+    <View
+        android:id="@+id/lineTwo"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_E8E8E9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountPassword" />
+
+    <TextView
+        android:id="@+id/shippingAddress"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:drawableRight="@drawable/arrow_next_page"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="15dp"
+        android:text="收货地址"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineTwo" />
+
+    <View
+        android:id="@+id/lineThree"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_E8E8E9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shippingAddress" />
+
+    <LinearLayout
+        android:id="@+id/versionDetect"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineThree">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="版本检测"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/currentVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/arrow_next_page"
+            android:drawablePadding="5dp"
+            android:text="V1.0.0"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/lineFour"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_E8E8E9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/versionDetect" />
+
+    <TextView
+        android:id="@+id/accountQuit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/shape_gray_rect_border"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="退出"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineFour" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

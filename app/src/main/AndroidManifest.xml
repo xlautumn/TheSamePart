@@ -34,6 +34,16 @@
         <activity android:name=".activity.AddProductClassificationActivity" />
         <activity android:name=".activity.AddProductActivity" />
         <activity android:name=".activity.ViewProductActivity" />
+        <activity android:name=".activity.CashierOrderActivity" />
+        <activity android:name=".activity.OrderDetailActivity" />
+        <activity android:name=".activity.PurchaseOrderActivity" />
+        <activity android:name=".activity.VipCardManagerActivity" />
+        <activity android:name=".activity.AddVipCardActivity" />
+        <activity android:name=".activity.CouponManagerActivity" />
+        <activity android:name=".activity.AddCouponActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.AccountPasswordManagerActivity" />
+        <activity android:name=".activity.ChangePasswordActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
