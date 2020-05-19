@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar_title"
+        layout="@layout/toolbar_title" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="@dimen/dip_0"
+        android:layout_height="@dimen/dip_0"
+        android:background="@color/color_E8E8E9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_title">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_10"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_FFFFFF"
+                android:padding="@dimen/dip_15">
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/iv_next_arrow"
+                    android:text=""
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/dip_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/shopName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/address"
+                    android:layout_marginTop="@dimen/dip_5"
+                    android:layout_toLeftOf="@id/iv_next_arrow"
+                    android:text=""
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/dip_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/customerInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/shopName"
+                    android:layout_marginTop="@dimen/dip_5"
+                    android:layout_toLeftOf="@id/iv_next_arrow"
+                    android:text=""
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/dip_14" />
+
+                <ImageView
+                    android:id="@+id/iv_next_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dip_15"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/arrow_next_page" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_10"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:id="@+id/rlPayContain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_FFFFFF"
+                android:padding="@dimen/dip_15">
+
+                <TextView
+                    android:id="@+id/tv_pay_way"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="支付方式"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/dip_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_offline_settlement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/iv_pay_arrow"
+                    android:text="线下结算"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/dip_16" />
+
+                <ImageView
+                    android:id="@+id/iv_pay_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dip_6"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/arrow_next_page" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_10"
+                android:background="@android:color/transparent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/orderRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_FFFFFF"
+                android:paddingHorizontal="@dimen/dip_15" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
