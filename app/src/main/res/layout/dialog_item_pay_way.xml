@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/payWayName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dip_10"
+        android:focusable="false"
+        android:layout_toLeftOf="@id/ivChecked"
+        android:paddingTop="@dimen/dip_15"
+        android:paddingBottom="@dimen/dip_15"
+        android:text=""
+        android:textColor="@color/color_000000"
+        android:textSize="@dimen/dip_16" />
+
+    <ImageView
+        android:id="@+id/ivChecked"
+        android:layout_width="@dimen/dip_24"
+        android:layout_height="@dimen/dip_24"
+        android:focusable="false"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_checkbox"
+        android:visibility="invisible"
+        />
+
+</RelativeLayout>

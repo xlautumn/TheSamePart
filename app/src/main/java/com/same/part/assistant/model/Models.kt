@@ -110,3 +110,11 @@ data class AccountModel(
     var mobile: String,
     var role: String
 )
+
+/**
+ * 支付方式数据类
+ */
+data class PayWayModel(
+    var name: String,
+    var isChecked: Boolean
+)

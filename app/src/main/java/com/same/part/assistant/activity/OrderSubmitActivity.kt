@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
 import com.same.part.assistant.adapter.CustomOrderAdapter
+import com.same.part.assistant.dialog.PayWayDialogFragment
 import com.same.part.assistant.model.GoodItemModel
 import kotlinx.android.synthetic.main.activity_order_submit.*
 import kotlinx.android.synthetic.main.toolbar_title.*
@@ -61,8 +62,13 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.rlPayContain -> {
-                //TODO 点击支付方式。弹出选择
-
+                val payWayDialogFragment = PayWayDialogFragment(this)
+                payWayDialogFragment.setChooseCallBack {
+                    tv_offline_settlement.text = it
+                }
+                supportFragmentManager.let {
+                    payWayDialogFragment.show(it)
+                }
             }
         }
     }

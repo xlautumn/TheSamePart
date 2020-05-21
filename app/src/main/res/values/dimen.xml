@@ -12,5 +12,7 @@
     <dimen name="dip_14">14dp</dimen>
     <dimen name="dip_15">15dp</dimen>
     <dimen name="dip_16">16dp</dimen>
+    <dimen name="dip_24">24dp</dimen>
+    <dimen name="dip_30">30dp</dimen>
 
 </resources>
