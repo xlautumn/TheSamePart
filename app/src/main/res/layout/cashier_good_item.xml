@@ -117,7 +117,7 @@
             android:paddingHorizontal="6dp"
             android:paddingVertical="2dp"
             android:text="启用"
-            android:textColor="@color/color_1296DB"
+            android:textColor="@color/color_0EB170"
             android:textSize="16dp" />
 
     </RelativeLayout>
