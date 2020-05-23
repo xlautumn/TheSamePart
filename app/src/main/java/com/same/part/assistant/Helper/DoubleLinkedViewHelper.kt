@@ -1,4 +1,4 @@
-package com.same.part.assistant
+package com.same.part.assistant.Helper
 
 class DoubleLinkedViewHelper {
     companion object {
