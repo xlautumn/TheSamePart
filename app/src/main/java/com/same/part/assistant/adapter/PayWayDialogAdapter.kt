@@ -33,7 +33,7 @@ class PayWayDialogAdapter(var mContext: Context, private var mData: ArrayList<Pa
                     setTextColor(
                         ContextCompat.getColor(
                             mContext,
-                            if (payWayModel.isChecked) R.color.color_1296DB else R.color.color_000000
+                            if (payWayModel.isChecked) R.color.color_0EB170 else R.color.color_000000
                         )
                     )
                 }
@@ -62,7 +62,7 @@ class PayWayDialogAdapter(var mContext: Context, private var mData: ArrayList<Pa
             holder.payWayName.setTextColor(
                 ContextCompat.getColor(
                     mContext,
-                    if (payWayModel.isChecked) R.color.color_1296DB else R.color.color_000000
+                    if (payWayModel.isChecked) R.color.color_0EB170 else R.color.color_000000
                 )
             )
             holder.imageView.visibility =
