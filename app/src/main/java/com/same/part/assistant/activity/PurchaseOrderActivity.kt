@@ -56,6 +56,6 @@ class PurchaseOrderActivity : AppCompatActivity(), TabLayout.OnTabSelectedListen
 
     companion object {
         //标题
-        val TITLES = arrayOf("待接单", "已接单", "待配送", "配送中", "已收货", "取消/关闭")
+        val TITLES = arrayOf("待付款", "待发货", "待收货", "取消/完成")
     }
 }

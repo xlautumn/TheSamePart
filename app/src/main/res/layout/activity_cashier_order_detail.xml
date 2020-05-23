@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar_title"
+        layout="@layout/toolbar_title" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/color_F8F8F8"
+        android:paddingLeft="@dimen/dip_15"
+        android:paddingTop="@dimen/dip_10"
+        android:paddingRight="@dimen/dip_15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:background="@drawable/shape_gray_rect_border_with_solid"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dip_15"
+                    android:text="订单编号："
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/dip_12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="1567894515215684712"
+                    android:textColor="@color/color_999999"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/dip_20"
+                    android:layout_marginLeft="@dimen/dip_12"
+                    android:layout_marginRight="@dimen/dip_15"
+                    android:background="@drawable/shape_gray_rect_border_two"
+                    android:gravity="center"
+                    android:text="复制"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginTop="@dimen/dip_10"
+                android:background="@drawable/shape_gray_rect_border_with_solid"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dip_15"
+                    android:text="支付方式："
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/dip_12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dip_15"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="货到付款"
+                    android:textColor="@color/color_999999"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dip_10"
+                android:background="@drawable/shape_gray_rect_border_with_solid"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/goodDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:text="商品详情："
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="2020-05-17 10:26:43"
+                        android:textColor="@color/color_999999"
+                        android:textSize="11dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/goodDetail"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:background="@color/color_CCCCCC"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/orderRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dip_5"
+                    android:layout_marginBottom="@dimen/dip_5" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:id="@+id/line_one"
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:background="@color/color_CCCCCC"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/couponTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:layout_marginTop="@dimen/dip_15"
+                        android:text="优惠券"
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toTopOf="@+id/vipDiscountTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/line_one"
+                        app:layout_constraintVertical_chainStyle="spread" />
+
+                    <TextView
+                        android:id="@+id/couponMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dip_15"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:text="-￥5.00"
+                        android:textColor="@color/color_E6660F"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toBottomOf="@+id/couponTitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/couponTitle" />
+
+                    <TextView
+                        android:id="@+id/vipDiscountTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:layout_marginTop="@dimen/dip_15"
+                        android:text="会员卡折扣"
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/couponTitle" />
+
+                    <TextView
+                        android:id="@+id/vipCardMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dip_15"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:text="-￥5.00"
+                        android:textColor="@color/color_E6660F"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toBottomOf="@+id/vipDiscountTitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/vipDiscountTitle" />
+
+                    <View
+                        android:id="@+id/line_two"
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:layout_marginTop="@dimen/dip_15"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:background="@color/color_CCCCCC"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/vipDiscountTitle" />
+
+                    <TextView
+                        android:id="@+id/orderAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dip_20"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:layout_marginBottom="@dimen/dip_20"
+                        android:text="￥25.00"
+                        android:textColor="@color/color_E6660F"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/line_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="合计："
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toBottomOf="@+id/orderAmount"
+                        app:layout_constraintEnd_toStartOf="@+id/orderAmount"
+                        app:layout_constraintTop_toTopOf="@+id/orderAmount" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mOrderRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/color_F8F8F8" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

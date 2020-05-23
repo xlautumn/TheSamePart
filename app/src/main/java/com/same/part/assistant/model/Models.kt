@@ -71,6 +71,17 @@ data class GoodItemModel(
 )
 
 /**
+ * 收银订单条目数据类
+ */
+data class CashierGoodItemModel(
+    var avatar: String,
+    var name: String,
+    var number: String,
+    var oldPrice: String,
+    var newPrice: String
+)
+
+/**
  * 采购订单数据类
  */
 data class PurchaseOrderModel(

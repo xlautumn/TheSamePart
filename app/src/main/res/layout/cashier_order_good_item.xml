@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/dip_15"
+    android:paddingTop="@dimen/dip_5"
+    android:paddingRight="@dimen/dip_15"
+    android:paddingBottom="@dimen/dip_5">
+
+    <com.zhihu.matisse.internal.ui.widget.RoundedRectangleImageView
+        android:id="@+id/goodAvatar"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:src="@drawable/good_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/goodName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="[特价]精品进口香蕉/1根"
+        android:textColor="@color/color_333333"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/goodNum"
+        app:layout_constraintEnd_toStartOf="@+id/goodPriceOld"
+        app:layout_constraintStart_toEndOf="@+id/goodAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/goodNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="x1"
+        android:textColor="@color/color_666666"
+        android:textSize="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/goodAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/goodName" />
+
+    <TextView
+        android:id="@+id/goodPriceOld"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="￥0.99"
+        android:textColor="@color/color_999999"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/goodName"
+        app:layout_constraintEnd_toStartOf="@+id/goodPriceNew"
+        app:layout_constraintStart_toEndOf="@+id/goodName"
+        app:layout_constraintTop_toTopOf="@+id/goodName" />
+
+    <TextView
+        android:id="@+id/goodPriceNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="￥0.99"
+        android:textColor="@color/color_333333"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/goodName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/goodPriceOld"
+        app:layout_constraintTop_toTopOf="@+id/goodName" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

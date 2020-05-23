@@ -35,7 +35,7 @@
         <activity android:name=".activity.AddProductActivity" />
         <activity android:name=".activity.ViewProductActivity" />
         <activity android:name=".activity.CashierOrderActivity" />
-        <activity android:name=".activity.OrderDetailActivity" />
+        <activity android:name=".activity.CashierOrderDetailActivity" />
         <activity android:name=".activity.PurchaseOrderActivity" />
         <activity android:name=".activity.VipCardManagerActivity" />
         <activity android:name=".activity.AddVipCardActivity" />
@@ -45,6 +45,7 @@
         <activity android:name=".activity.AccountPasswordManagerActivity" />
         <activity android:name=".activity.ChangePasswordActivity" />
         <activity android:name=".activity.OrderSubmitActivity" />
+        <activity android:name=".activity.PurchaseOrderDetailActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

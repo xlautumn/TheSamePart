@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.same.part.assistant.R
-import com.same.part.assistant.activity.OrderDetailActivity.Companion.STYLE_CASHIER_DETAIL
-import com.same.part.assistant.activity.OrderDetailActivity.Companion.STYLE_DETAIL_KEY
 import com.same.part.assistant.model.CashierOrderModel
 import kotlinx.android.synthetic.main.activity_cashier_order.*
 import kotlinx.android.synthetic.main.toolbar_title.*
@@ -24,7 +22,7 @@ class CashierOrderActivity : AppCompatActivity() {
         add(
             CashierOrderModel(
                 "220131108",
-                "2113513",
+                "￥20.05",
                 "支付宝",
                 "2020-12-23\n11:10:24"
             )
@@ -32,7 +30,7 @@ class CashierOrderActivity : AppCompatActivity() {
         add(
             CashierOrderModel(
                 "220131108",
-                "2113513",
+                "￥20.05",
                 "微信",
                 "2020-12-23\n11:20:24"
             )
@@ -40,7 +38,7 @@ class CashierOrderActivity : AppCompatActivity() {
         add(
             CashierOrderModel(
                 "220131108",
-                "2113513",
+                "￥20.05",
                 "现金支付",
                 "2020-12-23\n11:22:04"
             )
@@ -64,7 +62,7 @@ class CashierOrderActivity : AppCompatActivity() {
     }
 
 
-    class CustomAdapter(var dataList: ArrayList<CashierOrderModel>) :
+    inner class CustomAdapter(var dataList: ArrayList<CashierOrderModel>) :
         RecyclerView.Adapter<CashierOrderItemHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CashierOrderItemHolder =
             CashierOrderItemHolder(
@@ -87,14 +85,12 @@ class CashierOrderActivity : AppCompatActivity() {
             holder.time.text = model.time
             holder.itemView.setOnClickListener {
                 //跳转详情页
-                Bundle().apply bundle@{
-                    putInt(STYLE_DETAIL_KEY, STYLE_CASHIER_DETAIL)
-                    holder.itemView.context.startActivity(
-                        Intent(holder.itemView.context, OrderDetailActivity::class.java).apply {
-                            putExtras(this@bundle)
-                        }
+                startActivity(
+                    Intent(
+                        this@CashierOrderActivity,
+                        CashierOrderDetailActivity::class.java
                     )
-                }
+                )
             }
         }
 

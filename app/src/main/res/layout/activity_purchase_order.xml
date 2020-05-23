@@ -8,36 +8,18 @@
         android:id="@+id/toolbar_title"
         layout="@layout/toolbar_title" />
 
-    <View
-        android:id="@+id/lineOne"
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/mTabLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineOne"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_title"
         app:tabIndicatorColor="@color/color_0EB170"
-        app:tabMode="scrollable"
+        app:tabMode="fixed"
         app:tabSelectedTextColor="@color/color_0EB170"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
         app:tabTextColor="@color/color_333333" />
-
-    <View
-        android:id="@+id/lineTwo"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mTabLayout" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/mViewPager"
@@ -46,6 +28,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineTwo" />
+        app:layout_constraintTop_toBottomOf="@+id/mTabLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

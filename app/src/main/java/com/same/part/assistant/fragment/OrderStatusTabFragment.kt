@@ -81,22 +81,12 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
 
         override fun onBindViewHolder(holder: OrderStatusItemHolder, position: Int) {
             val model = dataList[position]
-            holder.orderId.text = model.id
+            holder.orderTime.text = "订单时间：${model.time}"
+            holder.orderId.text = "订单编号：${model.id}"
             holder.orderPrice.text = model.price
-            holder.orderTime.text = model.time
             holder.itemView.setOnClickListener {
                 //跳转详情页
-                Bundle().apply bundle@{
-                    putInt(
-                        OrderDetailActivity.STYLE_DETAIL_KEY,
-                        OrderDetailActivity.STYLE_PURCHASE_DETAIL
-                    )
-                    mContext.startActivity(
-                        Intent(mContext, OrderDetailActivity::class.java).apply {
-                            putExtras(this@bundle)
-                        }
-                    )
-                }
+                startActivity(Intent(mContext, CashierOrderDetailActivity::class.java))
             }
         }
     }

@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.model.GoodItemModel
-import kotlinx.android.synthetic.main.activity_order_detail.*
+import kotlinx.android.synthetic.main.activity_cashier_order_detail.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
 
 /**
- * 订单详情
+ * 采购订单详情
  */
-class OrderDetailActivity : AppCompatActivity() {
+class PurchaseOrderDetailActivity : AppCompatActivity() {
     /**
      * 当前详情页的样式
      */
@@ -53,25 +53,12 @@ class OrderDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_order_detail)
+        setContentView(R.layout.activity_cashier_order_detail)
         //标题
         mToolbarTitle.text = "订单详情"
         //返回按钮
         mTitleBack.setOnClickListener {
             finish()
-        }
-        //判断显示详情页样式
-        intent?.extras?.apply {
-            //收银商品
-            mCurrentStyle =
-                if (getInt(STYLE_DETAIL_KEY, STYLE_CASHIER_DETAIL) == STYLE_CASHIER_DETAIL) {
-                    cashierPayMethod.visibility = View.VISIBLE
-                    cashierBottomArea.visibility = View.VISIBLE
-                    STYLE_CASHIER_DETAIL
-                } else {
-                    purchaseBottomArea.visibility = View.VISIBLE
-                    STYLE_PURCHASE_DETAIL
-                }
         }
         orderRecyclerView.apply {
             adapter = CustomAdapter(mOrderList)

@@ -2,59 +2,77 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/orderId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="订单编号:8646446464644654"
-        app:layout_constraintBottom_toTopOf="@+id/orderPrice"
-        app:layout_constraintEnd_toEndOf="@+id/barrierOne"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/orderPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="15dp"
-        android:text="￥9560.00"
-        android:textColor="@color/color_FF0000"
-        android:textSize="17dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/orderId"
-        app:layout_constraintTop_toBottomOf="@+id/orderId" />
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dip_15"
+    android:layout_marginTop="@dimen/dip_8"
+    android:layout_marginRight="@dimen/dip_15"
+    android:background="@color/color_FFFFFF">
 
     <TextView
         android:id="@+id/orderTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="@dimen/dip_15"
+        android:layout_marginTop="28dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="2020-05-17 22:14:15"
-        app:layout_constraintBottom_toBottomOf="@+id/orderPrice"
-        app:layout_constraintEnd_toEndOf="@+id/barrierOne"
-        app:layout_constraintStart_toEndOf="@+id/orderPrice"
-        app:layout_constraintTop_toTopOf="@+id/orderPrice" />
+        android:text="下单时间：2020-05-17 22:14:15"
+        android:textColor="@color/color_999999"
+        android:textSize="@dimen/dip_12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/orderId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="订单编号：8646446464644654"
+        android:textColor="@color/color_999999"
+        android:textSize="@dimen/dip_12"
+        app:layout_constraintStart_toStartOf="@+id/orderTime"
+        app:layout_constraintTop_toBottomOf="@+id/orderTime" />
+
+    <TextView
+        android:id="@+id/orderPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="15dp"
+        android:text="￥9560.00"
+        android:textColor="@color/color_E76612"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/orderId"
+        app:layout_constraintTop_toBottomOf="@+id/orderId" />
+
 
     <TextView
         android:id="@+id/orderOperation"
+        android:layout_width="45dp"
+        android:layout_height="@dimen/dip_20"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_orange_rect_border"
+        android:gravity="center"
+        android:text="确认收货"
+        android:textColor="@color/color_E76612"
+        android:textSize="@dimen/dip_9"
+        app:layout_constraintBottom_toBottomOf="@+id/orderPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/orderPrice" />
+
+    <TextView
+        android:id="@+id/orderStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dip_15"
         android:layout_marginRight="15dp"
-        android:background="@drawable/shape_gray_rect_border"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp"
-        android:text="取消"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:text="待收货"
+        android:textColor="@color/color_E76612"
+        android:textSize="@dimen/dip_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,14 +82,5 @@
         android:layout_height="wrap_content"
         app:barrierDirection="left"
         app:constraint_referenced_ids="orderOperation" />
-
-    <View
-        android:id="@+id/lineOne"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
