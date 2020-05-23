@@ -15,7 +15,7 @@ import com.same.part.assistant.model.PurchaseOrderModel
 import kotlinx.android.synthetic.main.fragment_order_status_tab.*
 
 /**
- * 我的
+ * 采购订单状态页面
  */
 class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: String) : Fragment() {
     private val mOrderStatusList = arrayListOf<PurchaseOrderModel>().apply {
@@ -86,7 +86,7 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
             holder.orderPrice.text = model.price
             holder.itemView.setOnClickListener {
                 //跳转详情页
-                startActivity(Intent(mContext, CashierOrderDetailActivity::class.java))
+                startActivity(Intent(mContext, PurchaseOrderDetailActivity::class.java))
             }
         }
     }

@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dip_15"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="right|center_vertical"
                     android:text="货到付款"
                     android:textColor="@color/color_999999"
                     android:textSize="11dp" />
