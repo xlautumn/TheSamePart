@@ -23,10 +23,11 @@
         android:id="@+id/mTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color_FFFFFF"
         app:tabIndicatorColor="@android:color/transparent"
-        app:tabSelectedTextColor="@color/color_1296DB"
+        app:tabSelectedTextColor="@color/color_0EB170"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        app:tabTextColor="@color/color_333333" />
+        app:tabTextColor="@color/color_999999" />
 
 </LinearLayout>
 

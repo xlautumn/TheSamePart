@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             findViewById<TextView>(R.id.mTabText).setTextColor(
                 ActivityCompat.getColor(
                     this@MainActivity,
-                    if (isSelected) R.color.colorPrimary else R.color.color_333333
+                    if (isSelected) R.color.colorPrimary else R.color.color_999999
                 )
             )
             findViewById<ImageView>(R.id.mTabIcon).setBackgroundResource(if (isSelected) ICONS_CHECKED[tab.position] else ICONS[tab.position])
