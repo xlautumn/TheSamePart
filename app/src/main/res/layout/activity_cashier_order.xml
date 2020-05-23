@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/custom_manager_header"
         android:layout_width="0dp"
-        android:layout_height="41dp"
+        android:layout_height="42dp"
         android:background="@color/color_F0F0F0"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"

@@ -33,19 +33,17 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:textSize="18dp"
+                android:textColor="@color/color_FFFFFF"
+                android:textSize="16dp"
                 tools:text="客户管理" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/mToolbarAdd"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:text="添加"
-                android:textSize="18dp" />
+                android:padding="@dimen/dip_14"
+                android:src="@drawable/selector_add" />
 
         </RelativeLayout>
 
@@ -54,11 +52,10 @@
     <LinearLayout
         android:id="@+id/custom_manager_header"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/color_E8E8E9"
+        android:layout_height="42dp"
+        android:background="@color/color_F0F0F0"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mToolbar">
@@ -69,7 +66,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="名称"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dip_12" />
 
         <TextView
             android:layout_width="0dp"
@@ -77,7 +75,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="面额"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dip_12" />
 
         <TextView
             android:layout_width="0dp"
@@ -85,7 +84,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="折扣"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dip_12" />
 
         <TextView
             android:layout_width="0dp"
@@ -93,7 +93,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="用户数量"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dip_12" />
 
         <TextView
             android:layout_width="0dp"
@@ -101,13 +102,15 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="操作"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dip_12" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mVipRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/color_F8F8F8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

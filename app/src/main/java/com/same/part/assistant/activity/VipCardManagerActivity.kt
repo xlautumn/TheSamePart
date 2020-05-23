@@ -27,24 +27,6 @@ class VipCardManagerActivity : AppCompatActivity() {
                 true
             )
         )
-        add(
-            VipCardInfoModel(
-                "银卡",
-                "300",
-                "8.5",
-                "1256",
-                false
-            )
-        )
-        add(
-            VipCardInfoModel(
-                "铜卡",
-                "200",
-                "9.5",
-                "1036",
-                true
-            )
-        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +39,21 @@ class VipCardManagerActivity : AppCompatActivity() {
             finish()
         }
         //添加会员卡
-        mToolbarAdd.setOnClickListener {
-            startActivity(Intent(this@VipCardManagerActivity, AddVipCardActivity::class.java))
+        mToolbarAdd.apply {
+            if (mVipList.size > 1) {
+                isEnabled = false
+            } else {
+                isEnabled = true
+                setOnClickListener {
+                    it.isEnabled = false
+                    startActivity(
+                        Intent(
+                            this@VipCardManagerActivity,
+                            AddVipCardActivity::class.java
+                        )
+                    )
+                }
+            }
         }
         //列表数据
         mVipRecyclerView.apply {
