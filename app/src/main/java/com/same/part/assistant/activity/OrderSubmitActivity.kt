@@ -57,6 +57,7 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
             adapter = CustomOrderAdapter(mOrderList)
         }
         rlPayContain.setOnClickListener(this)
+        btnPayMoney.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -69,6 +70,11 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
                 supportFragmentManager.let {
                     payWayDialogFragment.show(it)
                 }
+            }
+
+            R.id.btnPayMoney -> {
+                //支付按钮操作
+                //TODO 如果是在线翻译，弹窗提示 微信、支付宝
             }
         }
     }

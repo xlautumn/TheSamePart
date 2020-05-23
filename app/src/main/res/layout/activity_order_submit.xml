@@ -9,10 +9,11 @@
         layout="@layout/toolbar_title" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/sv_order_content"
         android:layout_width="@dimen/dip_0"
         android:layout_height="@dimen/dip_0"
         android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/rl_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_title">
@@ -134,5 +135,67 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dip_10"
+        android:paddingBottom="@dimen/dip_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sv_order_content">
+
+        <TextView
+            android:id="@+id/btnPayMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dip_15"
+            android:background="@drawable/shape_red_rect"
+            android:paddingLeft="@dimen/dip_25"
+            android:paddingTop="@dimen/dip_10"
+            android:paddingRight="@dimen/dip_25"
+            android:paddingBottom="@dimen/dip_10"
+            android:text="支付"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="@dimen/dip_16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/payMoneyAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dip_15"
+            android:layout_toLeftOf="@id/btnPayMoney"
+            android:text="--"
+            android:textColor="@color/color_FF0000"
+            android:textSize="@dimen/dip_14" />
+
+        <TextView
+            android:id="@+id/tv_money_amount_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dip_5"
+            android:layout_toLeftOf="@id/payMoneyAmount"
+            android:text="￥"
+            android:textColor="@color/color_FF0000"
+            android:textSize="@dimen/dip_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dip_15"
+            android:layout_toLeftOf="@id/tv_money_amount_unit"
+            android:text="合计"
+            android:textColor="@color/color_000000"
+            android:textSize="@dimen/dip_14" />
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

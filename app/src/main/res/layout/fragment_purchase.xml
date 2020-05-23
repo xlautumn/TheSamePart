@@ -2,32 +2,143 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="62.8dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="20dp"
-        android:contentDescription="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/splash"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/tv_cloud"
+    <LinearLayout
+        android:id="@+id/rootSearch"
+        android:layout_width="@dimen/dip_0"
+        android:layout_height="@dimen/dip_55"
+        android:background="@color/color_0EB170"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tv_cloud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:text="采购"
-        android:textColor="@color/color_FFFFFF"
-        android:textSize="25dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_30"
+            android:layout_marginLeft="@dimen/dip_30"
+            android:layout_marginRight="@dimen/dip_30"
+            android:background="@drawable/shape_search_white_rect"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dip_15"
+                android:layout_height="@dimen/dip_15"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_search" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dip_5"
+                android:text="输入商品名称"
+                android:textColor="@color/color_B4B4B4"
+                android:textSize="@dimen/dip_12" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.same.part.assistant.LinkedDoubleView
+        android:id="@+id/linkedView"
+        android:layout_width="@dimen/dip_0"
+        android:layout_height="@dimen/dip_0"
+        app:layout_constraintBottom_toTopOf="@id/root_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rootSearch" />
+
+
+    <LinearLayout
+        android:id="@+id/root_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dip_45"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_purchase_gray_rect_dotted_line_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linkedView">
+
+        <LinearLayout
+            android:id="@+id/rootDetail"
+            android:layout_width="@dimen/dip_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="详情"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dip_12" />
+
+            <ImageView
+                android:layout_width="@dimen/dip_9"
+                android:layout_height="@dimen/dip_9"
+                android:layout_marginLeft="@dimen/dip_5"
+                android:scaleType="fitXY"
+                android:src="@drawable/arrow_next_page" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/dip_0"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="合计："
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dip_12" />
+
+            <TextView
+                android:id="@+id/tv_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/tv_total"
+                android:text="￥"
+                android:textColor="@color/color_E15C00"
+                android:textSize="@dimen/dip_12" />
+
+            <TextView
+                android:id="@+id/totalMoney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dip_3"
+                android:layout_toRightOf="@id/tv_unit"
+                android:text=""
+                android:textColor="@color/color_E15C00"
+                android:textSize="@dimen/dip_12" />
+
+            <TextView
+                android:id="@+id/statement"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/dip_05"
+                android:layout_marginRight="@dimen/dip_05"
+                android:layout_marginBottom="@dimen/dip_05"
+                android:layout_centerVertical="true"
+                android:background="@color/color_E15C00"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dip_20"
+                android:paddingRight="@dimen/dip_20"
+                android:text="去结算"
+                android:textColor="@color/color_FFFFFF"
+                android:textSize="@dimen/dip_12" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
