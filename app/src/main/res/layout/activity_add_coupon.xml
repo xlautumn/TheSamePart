@@ -8,265 +8,278 @@
         android:id="@+id/toolbar_title"
         layout="@layout/toolbar_title" />
 
-    <View
-        android:id="@+id/lineOne"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
-
     <LinearLayout
-        android:id="@+id/llName"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineOne">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="名称        "
-            android:textSize="16dp" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:hint="必填,例如中秋优惠券"
-            android:lines="1"
-            android:paddingLeft="5dp"
-            android:textSize="13dp" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineTwo"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llName" />
-
-    <LinearLayout
-        android:id="@+id/llDistributeCount"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineTwo">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发放总量"
-            android:textSize="16dp" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:hint="必填,最多1000000张"
-            android:lines="1"
-            android:paddingLeft="5dp"
-            android:textSize="13dp" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineThree"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llDistributeCount" />
-
-    <LinearLayout
-        android:id="@+id/llReduceMoney"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineThree">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="减免金额"
-            android:textSize="16dp" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:hint="减免多少元"
-            android:lines="1"
-            android:paddingLeft="5dp"
-            android:textSize="13dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="元"
-            android:textSize="16dp" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineFour"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llReduceMoney" />
-
-    <LinearLayout
-        android:id="@+id/llSuitableProduct"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineFour">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="适用商品"
-            android:textSize="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="全部商品"
-            android:textSize="16dp" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineFive"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llSuitableProduct" />
-
-    <LinearLayout
-        android:id="@+id/llUseThreshold"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineFive">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="使用门槛"
-            android:textSize="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/arrow_next_page"
-            android:drawablePadding="5dp"
-            android:text="无使用门槛"
-            android:textSize="16dp" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineSix"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llUseThreshold" />
-
-    <TextView
-        android:id="@+id/useTime"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:drawableRight="@drawable/arrow_next_page"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="15dp"
-        android:text="用券时间"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineSix" />
-
-    <View
-        android:id="@+id/lineSeven"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/useTime" />
-
-    <TextView
-        android:id="@+id/pickUpChannel"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:drawableRight="@drawable/arrow_next_page"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="15dp"
-        android:text="优惠券领取渠道"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineSeven" />
-
-    <View
-        android:id="@+id/lineEight"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pickUpChannel" />
-
-    <TextView
-        android:layout_width="0dp"
+        android:id="@+id/llTop"
+        android:layout_width="@dimen/dip_0"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/shape_gray_rect_border"
-        android:gravity="center"
-        android:paddingVertical="8dp"
-        android:text="保存"
-        android:textSize="16dp"
+        android:layout_marginLeft="@dimen/dip_15"
+        android:layout_marginTop="@dimen/dip_10"
+        android:layout_marginRight="@dimen/dip_15"
+        android:background="@drawable/shape_rect_white_solid"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineEight" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
+
+        <LinearLayout
+            android:id="@+id/llName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineOne">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="名称        "
+                android:textColor="@color/color_333333"
+                android:textSize="12dp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="（必填，例如中秋优惠券）"
+                android:lines="1"
+                android:paddingLeft="5dp"
+                android:textSize="11dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_15"
+            android:background="@color/color_D2D2D2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llName" />
+
+        <LinearLayout
+            android:id="@+id/llDistributeCount"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineTwo">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="发放总量"
+                android:textColor="@color/color_333333"
+                android:textSize="12dp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="（必填，最多100000000张）"
+                android:lines="1"
+                android:paddingLeft="5dp"
+                android:textSize="11dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_15"
+            android:background="@color/color_D2D2D2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llDistributeCount" />
+
+        <LinearLayout
+            android:id="@+id/llReduceMoney"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineThree">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="减免金额"
+                android:textColor="@color/color_333333"
+                android:textSize="12dp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="（减免多少元）"
+                android:lines="1"
+                android:paddingLeft="5dp"
+                android:textSize="11dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元"
+                android:textColor="@color/color_333333"
+                android:textSize="11dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_15"
+            android:background="@color/color_D2D2D2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llReduceMoney" />
+
+        <LinearLayout
+            android:id="@+id/llSuitableProduct"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineFour">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="适用商品"
+                android:textColor="@color/color_333333"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部商品"
+                android:textColor="@color/color_333333"
+                android:textSize="11dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_15"
+            android:background="@color/color_D2D2D2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llSuitableProduct" />
+
+        <LinearLayout
+            android:id="@+id/llUseThreshold"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineFive">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="使用门槛"
+                android:textColor="@color/color_333333"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/arrow_next_page"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:text="无使用门槛"
+                android:textSize="11dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_15"
+            android:background="@color/color_D2D2D2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llUseThreshold" />
+
+        <TextView
+            android:id="@+id/useTime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableRight="@drawable/arrow_next_page"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:text="用券时间"
+            android:textColor="@color/color_333333"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineSix" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_15"
+            android:background="@color/color_D2D2D2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/useTime" />
+
+        <TextView
+            android:id="@+id/pickUpChannel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableRight="@drawable/arrow_next_page"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:text="优惠券领取渠道"
+            android:textColor="@color/color_333333"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineSeven" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="285dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="42dp"
+        android:background="@drawable/shape_half_circle_primary_color_rect"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="@color/color_FFFFFF"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llTop" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

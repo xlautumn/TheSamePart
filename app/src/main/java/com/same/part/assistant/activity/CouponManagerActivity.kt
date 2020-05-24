@@ -24,7 +24,7 @@ class CouponManagerActivity : AppCompatActivity() {
                 "50",
                 "200",
                 "20",
-                "未开始"
+                "0"
             )
         )
         add(
@@ -33,7 +33,7 @@ class CouponManagerActivity : AppCompatActivity() {
                 "50",
                 "200",
                 "20",
-                "未开始"
+                "1"
             )
         )
         add(
@@ -42,7 +42,7 @@ class CouponManagerActivity : AppCompatActivity() {
                 "50",
                 "200",
                 "20",
-                "未开始"
+                "2"
             )
         )
     }
@@ -88,11 +88,19 @@ class CouponManagerActivity : AppCompatActivity() {
             holder.couponName.text = model.name
             holder.couponCount.text = "${model.remain}/${model.total}"
             holder.couponUse.text = model.used
-            holder.couponStatus.text = model.status
-            holder.couponOperation.apply {
-                setOnClickListener {
-
+            holder.couponStatus.apply {
+                text = when (model.status) {
+                    "0" -> "未开始"
+                    "1" -> "已开始"
+                    else -> "已结束"
                 }
+                setTextColor(
+                    when (model.status) {
+                        "0" -> 0xFF0EB170.toInt()
+                        "1" -> 0xFFE6660F.toInt()
+                        else -> 0xFF999999.toInt()
+                    }
+                )
             }
         }
 
@@ -103,7 +111,6 @@ class CouponManagerActivity : AppCompatActivity() {
         var couponCount: TextView = itemView.findViewById(R.id.couponCount)
         var couponUse: TextView = itemView.findViewById(R.id.couponUse)
         var couponStatus: TextView = itemView.findViewById(R.id.couponStatus)
-        var couponOperation: View = itemView.findViewById(R.id.llFive)
     }
 
 }

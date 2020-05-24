@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/dip_45">
 
     <RelativeLayout
         android:id="@+id/llOne"
@@ -24,7 +23,8 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="中秋优惠券"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
 
     </RelativeLayout>
 
@@ -47,7 +47,8 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="50/100"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -68,7 +69,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="7"
-            android:textSize="16dp" />
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -77,7 +79,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/llFive"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/llThree"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -89,37 +91,18 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="未开始"
-            android:textSize="16dp" />
+            android:textColor="@color/color_999999"
+            android:textSize="12dp" />
 
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/llFive"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/llFour"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/couponOperationIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerInParent="true"
-            android:layout_marginVertical="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/more" />
-
-    </RelativeLayout>
-
 
     <View
         android:id="@+id/item_divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
+        android:layout_height="1px"
+        android:layout_marginLeft="@dimen/dip_15"
+        android:layout_marginRight="@dimen/dip_15"
+        android:background="@color/color_D2D2D2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
