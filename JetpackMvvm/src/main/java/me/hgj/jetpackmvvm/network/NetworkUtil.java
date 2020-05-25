@@ -36,6 +36,15 @@ public class NetworkUtil {
      */
     private static int TIMEOUT = 3000;
 
+    /**
+     * resultCode 9000
+     */
+    public static String RESULT_9000 = "9000";
+
+    /**
+     * resultCode 8000
+     */
+    public static String RESULT_8000 = "8000";
 
     /**
      * check NetworkAvailable
