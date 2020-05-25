@@ -140,3 +140,8 @@ data class PayWayModel(
     var name: String,
     var isChecked: Boolean
 )
+
+/**
+ * 登录信息
+ */
+data class ShopUserLoginModel(var accessToken: String, var expiresIn: String)
