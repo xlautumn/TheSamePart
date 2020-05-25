@@ -1,4 +1,4 @@
-package com.same.part.assistant.network.converter;
+package com.same.part.assistant.app.network.converter;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

@@ -144,4 +144,4 @@ data class PayWayModel(
 /**
  * 登录信息
  */
-data class ShopUserLoginModel(var accessToken: String, var expiresIn: String)
+data class ShopUserLoginModel(var accessToken: String, var expiresIn: Long)

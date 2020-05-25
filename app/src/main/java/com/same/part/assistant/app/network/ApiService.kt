@@ -1,4 +1,4 @@
-package com.same.part.assistant.network
+package com.same.part.assistant.app.network
 
 import com.same.part.assistant.data.ApiResponse
 import com.same.part.assistant.data.RequestShopUserLogin
@@ -8,7 +8,7 @@ import retrofit2.http.*
 /**
  * 网络API
  */
-interface NetApiService {
+interface ApiService {
 
     companion object {
         const val SERVER_URL = "http://118.31.54.197:8061/"

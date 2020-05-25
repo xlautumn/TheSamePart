@@ -1,4 +1,4 @@
-package com.same.part.assistant.network.converter;
+package com.same.part.assistant.app.network.converter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

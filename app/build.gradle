@@ -12,10 +12,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        ndk {
-            // 设置支持的SO库架构 一般只设置这个就阔以设配所有的设备了，还可以极大的减少apk的大小
-            abiFilters 'armeabi-v7a'
-        }
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -57,8 +54,21 @@ dependencies {
     implementation 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation project(path: ':matisse')
+    //项目核心框架JetpackMvvm
     implementation project(path: ':JetpackMvvm')
-
     //fastjson
     implementation 'com.alibaba:fastjson:1.1.71.android'
+    //dialog
+    implementation "com.afollestad.material-dialogs:lifecycle:3.3.0"
+    implementation "com.afollestad.material-dialogs:core:3.3.0"
+    implementation "com.afollestad.material-dialogs:color:3.3.0"
+    implementation "com.afollestad.material-dialogs:datetime:3.3.0"
+    implementation "com.afollestad.material-dialogs:bottomsheets:3.3.0"
+    //util
+    implementation 'com.blankj:utilcodex:1.26.0'
+    //微信开源项目，替代SP
+    implementation 'com.tencent:mmkv:1.0.22'
+    //
+    implementation 'com.android.support:multidex:1.0.3'
+
 }

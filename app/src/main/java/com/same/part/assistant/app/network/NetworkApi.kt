@@ -1,11 +1,10 @@
-package com.same.part.assistant.network
+package com.same.part.assistant.app.network
 
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.google.gson.GsonBuilder
 import com.same.part.assistant.TheSamePartApplication
-import com.same.part.assistant.network.converter.CustomGsonConverterFactory
+import com.same.part.assistant.app.network.converter.CustomGsonConverterFactory
 import me.hgj.jetpackmvvm.network.BaseNetworkApi
 import me.hgj.jetpackmvvm.network.CoroutineCallAdapterFactory
 import me.hgj.jetpackmvvm.network.interceptor.CacheInterceptor
@@ -13,7 +12,6 @@ import me.hgj.jetpackmvvm.network.interceptor.logging.LogInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -22,9 +20,14 @@ import java.util.concurrent.TimeUnit
  * 在这里可以添加拦截器，设置构造器可以对Builder做任意操作
  */
 class NetworkApi : BaseNetworkApi() {
-    //封装NetApiService变量 方便直接快速调用
-    val service: NetApiService by lazy {
-        getApi(NetApiService::class.java, NetApiService.SERVER_URL)
+    companion object {
+        val instance: NetworkApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            NetworkApi() }
+
+        //双重校验锁式-单例 封装NetApiService 方便直接快速调用
+        val service: ApiService by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            instance.getApi(ApiService::class.java, ApiService.SERVER_URL)
+        }
     }
 
     /**

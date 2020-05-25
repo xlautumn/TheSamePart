@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +14,6 @@ import com.example.zhouwei.library.CustomPopWindow
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddProductActivity
 import com.same.part.assistant.activity.AddProductClassificationActivity
-import com.same.part.assistant.activity.LoginActivity
 import com.same.part.assistant.activity.ViewProductActivity
 import com.same.part.assistant.model.ProductClassificationModel
 import kotlinx.android.synthetic.main.fragment_product_classification.*
