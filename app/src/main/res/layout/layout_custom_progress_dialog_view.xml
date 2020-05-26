@@ -18,7 +18,7 @@
             android:layout_height="48dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:indeterminateTint="@color/colorAccent"
+            android:indeterminateTint="@color/color_08B070"
             android:indeterminateTintMode="src_atop" />
 
         <TextView

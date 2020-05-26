@@ -1,10 +1,19 @@
 package com.same.part.assistant.app.ext
 
+import android.app.Dialog
+import android.graphics.Color
 import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
+import com.afollestad.materialdialogs.actions.getActionButton
+import com.afollestad.materialdialogs.callbacks.onShow
+import com.afollestad.materialdialogs.color.colorChooser
+import com.afollestad.materialdialogs.color.setArgbColor
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
+import com.same.part.assistant.R
+import kotlinx.android.synthetic.main.dialog_pay_way.*
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.IOException
@@ -40,6 +49,9 @@ fun AppCompatActivity.showMessage(
                     negativeAction.invoke()
                 }
             }
+        }.onShow { dialog ->
+            dialog.getActionButton(WhichButton.POSITIVE).updateTextColor(Color.BLACK)
+            dialog.getActionButton(WhichButton.NEGATIVE).updateTextColor(Color.BLACK)
         }
 }
 
@@ -74,6 +86,9 @@ fun Fragment.showMessage(
                         negativeAction.invoke()
                     }
                 }
+            }.onShow { dialog ->
+                dialog.getActionButton(WhichButton.POSITIVE).updateTextColor(Color.BLACK)
+                dialog.getActionButton(WhichButton.NEGATIVE).updateTextColor(Color.BLACK)
             }
     }
 }

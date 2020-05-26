@@ -3,6 +3,7 @@ package com.same.part.assistant.ui.login
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import com.gyf.immersionbar.ImmersionBar
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.MainActivity
 import com.same.part.assistant.app.base.BaseActivity
@@ -25,6 +26,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
     override fun layoutId(): Int = R.layout.activity_login
 
     override fun initView(savedInstanceState: Bundle?) {
+        ImmersionBar.with(this).transparentNavigationBar().fullScreen(true).statusBarColor(R.color.color_08B070).init()
         mDatabind.viewmodel = mViewModel
         mDatabind.click = ProxyClick()
     }

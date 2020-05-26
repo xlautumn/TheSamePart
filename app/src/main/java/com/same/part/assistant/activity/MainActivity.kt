@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.tabs.TabLayout
+import com.gyf.immersionbar.ImmersionBar
 import com.same.part.assistant.R
 import com.same.part.assistant.fragment.GoodsFragment
 import com.same.part.assistant.ui.home.HomeFragment
@@ -27,6 +28,9 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        ImmersionBar.with(this).statusBarDarkFont(true) .fitsSystemWindows(true).statusBarColor(R.color.colorPrimary).init()
+
         mTitleBack.visibility = View.GONE
         mViewPager.apply {
             adapter = TabAdapter(supportFragmentManager)
@@ -103,7 +107,6 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             findViewById<ImageView>(R.id.mTabIcon).setBackgroundResource(ICONS[position])
         }
 
-
     /**
      * 更改TabItem状态
      *
@@ -115,7 +118,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             findViewById<TextView>(R.id.mTabText).setTextColor(
                 ActivityCompat.getColor(
                     this@MainActivity,
-                    if (isSelected) R.color.colorPrimary else R.color.color_999999
+                    if (isSelected) R.color.color_0EB170 else R.color.color_999999
                 )
             )
             findViewById<ImageView>(R.id.mTabIcon).setBackgroundResource(if (isSelected) ICONS_CHECKED[tab.position] else ICONS[tab.position])
@@ -124,7 +127,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
     companion object {
         //底部Tab
-        val TITLES = arrayOf("首页", "商品", "采购", "我的")
+        val TITLES = arrayOf("概览", "商品", "采购", "我的")
         //未选中的图标
         val ICONS = arrayOf(R.drawable.home, R.drawable.goods, R.drawable.purchase, R.drawable.my)
         //选中的图标

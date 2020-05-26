@@ -16,7 +16,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        ImmersionBar.with(this).transparentNavigationBar().fullScreen(true).statusBarColor(R.color.colorPrimary).init()
+        ImmersionBar.with(this).transparentNavigationBar().fullScreen(true).statusBarColor(R.color.color_EEFEF8).init()
         Handler().postDelayed({
             if (CacheUtil.isLogin() && CacheUtil.getTokenExpirationTime() > System.currentTimeMillis()) {
                 startActivity(Intent(this, MainActivity::class.java))

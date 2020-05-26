@@ -9,10 +9,10 @@
     </style>
 
     <style name="SplashAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/colorAccent</item>
+        <item name="colorPrimary">@color/color_EEFEF8</item>
+        <item name="colorPrimaryDark">@color/color_EEFEF8</item>
+        <item name="colorAccent">@color/color_EEFEF8</item>
+        <item name="android:windowBackground">@color/color_EEFEF8</item>
     </style>
 
     <style name="DialogFullScreen" parent="Theme.AppCompat.Dialog">

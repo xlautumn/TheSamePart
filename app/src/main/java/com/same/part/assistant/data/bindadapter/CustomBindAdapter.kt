@@ -16,8 +16,8 @@ object CustomBindAdapter {
     fun imageUrl(view: CircleImageView, url: String) {
         Glide.with(view.context.applicationContext)
             .load(url)
-            .placeholder(R.drawable.icn_head_img)
-            .error(R.drawable.icn_head_img)
+            .placeholder(R.drawable.home_user_avatar)
+            .error(R.drawable.home_user_avatar)
             .into(view)
     }
 
