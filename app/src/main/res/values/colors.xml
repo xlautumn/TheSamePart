@@ -28,6 +28,9 @@
     <color name="color_08B070">#08B070</color>
     <color name="color_ECEFEE">#ECEFEE</color>
     <color name="color_888989">#888989</color>
+    <color name="color_DEDEDE">#DEDEDE</color>
+    <color name="color_EFEFEF">#EFEFEF</color>
 
+    <color name="color_F7F7F7">#F7F7F7</color>
 
 </resources>

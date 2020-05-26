@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.toolbar_title.*
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 
-
 /**
  * 店铺管理
  */

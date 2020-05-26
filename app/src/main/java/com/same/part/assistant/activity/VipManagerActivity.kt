@@ -90,6 +90,7 @@ class VipManagerActivity : AppCompatActivity() {
             holder.userId.text = model.userId
             holder.vipCard.text = model.vipCard
             holder.vipBalance.text = model.vipBalance
+            if (position == dataList.size -1 ) holder.divider.visibility = View.GONE
         }
 
     }
@@ -100,6 +101,8 @@ class VipManagerActivity : AppCompatActivity() {
         var userId: TextView = itemView.findViewById(R.id.userId)
         var vipCard: TextView = itemView.findViewById(R.id.vipCard)
         var vipBalance: TextView = itemView.findViewById(R.id.vipBalance)
+        var divider: View = itemView.findViewById(R.id.item_divider)
+
     }
 
 }

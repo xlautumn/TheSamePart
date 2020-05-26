@@ -2,256 +2,276 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_F4F4F4">
 
     <include
         android:id="@+id/toolbar_title"
         layout="@layout/toolbar_title" />
 
-    <View
-        android:id="@+id/lineOne"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constrain_deal_layout"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/color_E8E8E9"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="13dp"
+        android:background="@drawable/shape_primary_color_rect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
-
-    <TextView
-        android:id="@+id/total_merchant_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="20dp"
-        android:text="商家交易总金额"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/total_merchant"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineOne" />
-
-    <TextView
-        android:id="@+id/total_merchant"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingRight="15dp"
-        android:text="￥25555"
-        android:textColor="@color/color_FF0000"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/total_merchant_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/total_merchant_title"
-        app:layout_constraintTop_toTopOf="@+id/total_merchant_title" />
-
-    <View
-        android:id="@+id/lineTwo"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/total_merchant_title" />
-
-    <LinearLayout
-        android:id="@+id/order_count_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/lineThree"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lineTwo">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_title">
 
         <TextView
-            android:id="@+id/orderAveragePrice"
+            android:id="@+id/total_merchant_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="￥5.00"
-            android:textColor="@color/color_FF0000" />
+            android:gravity="center_vertical"
+            android:padding="15dp"
+            android:text="商家交易总金额"
+            android:textSize="12dp"
+            android:textColor="@color/color_666666"
+            app:layout_constraintEnd_toStartOf="@+id/total_merchant"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/total_merchant"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="商家每单均价" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineThree"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="@+id/order_amount_area"
-        app:layout_constraintEnd_toStartOf="@+id/order_amount_area"
-        app:layout_constraintStart_toEndOf="@+id/order_count_area"
-        app:layout_constraintTop_toTopOf="@+id/order_amount_area" />
-
-    <LinearLayout
-        android:id="@+id/order_amount_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/lineThree"
-        app:layout_constraintTop_toTopOf="@+id/lineTwo">
-
-        <TextView
-            android:id="@+id/dayAverageOrderCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1000"
-            android:textColor="@color/color_FF0000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="商家日均订单数" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineFour"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="@+id/order_amount_area"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/week_order_count_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/lineFive"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lineFour">
-
-        <TextView
-            android:id="@+id/todayAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="￥3000"
-            android:textColor="@color/color_FF0000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="今日收入金额" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/lineFive"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="@+id/week_deal_area"
-        app:layout_constraintEnd_toStartOf="@+id/week_deal_area"
-        app:layout_constraintStart_toEndOf="@+id/week_order_count_area"
-        app:layout_constraintTop_toTopOf="@+id/lineFour" />
-
-    <LinearLayout
-        android:id="@+id/week_deal_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/lineSix"
-        app:layout_constraintStart_toEndOf="@+id/lineFive"
-        app:layout_constraintTop_toTopOf="@+id/lineFour">
-
-        <TextView
-            android:id="@+id/weekAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:paddingEnd="15dp"
             android:text="￥25555"
-            android:textColor="@color/color_FF0000" />
+            android:textColor="@color/color_E6660F"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/total_merchant_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/total_merchant_title"
+            app:layout_constraintTop_toTopOf="@+id/total_merchant_title" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <View
+            android:id="@+id/lineTwo"
+            android:layout_width="match_parent"
+            android:layout_height="0.67dp"
+            android:background="@color/color_EEEEEE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/total_merchant_title" />
+
+        <LinearLayout
+            android:id="@+id/order_count_area"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="一周收入金额" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="17dp"
+            android:paddingBottom="13dp"
+            app:layout_constraintEnd_toStartOf="@+id/lineThree"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lineTwo">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/orderAveragePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥5.00"
+                android:textSize="13dp"
+                android:textColor="@color/color_E6660F" />
 
-    <View
-        android:id="@+id/lineSix"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="@+id/week_deal_area"
-        app:layout_constraintEnd_toStartOf="@+id/week_order_amount_area"
-        app:layout_constraintStart_toEndOf="@+id/week_deal_area"
-        app:layout_constraintTop_toTopOf="@+id/lineFour" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:textColor="@color/color_333333"
+                android:textSize="13dp"
+                android:text="商家每单均价" />
 
-    <LinearLayout
-        android:id="@+id/week_order_amount_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/lineSix"
-        app:layout_constraintTop_toTopOf="@+id/lineFour">
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/week_order_amount"
-            android:layout_width="wrap_content"
+        <View
+            android:id="@+id/lineThree"
+            android:layout_width="0.67dp"
+            android:layout_height="0dp"
+            android:background="@color/color_EEEEEE"
+            app:layout_constraintBottom_toBottomOf="@+id/order_amount_area"
+            app:layout_constraintEnd_toStartOf="@+id/order_amount_area"
+            app:layout_constraintStart_toEndOf="@+id/order_count_area"
+            app:layout_constraintTop_toTopOf="@+id/order_amount_area" />
+
+        <LinearLayout
+            android:id="@+id/order_amount_area"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="￥1552222"
-            android:textColor="@color/color_FF0000" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="17dp"
+            android:paddingBottom="13dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lineThree"
+            app:layout_constraintTop_toTopOf="@+id/lineTwo">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/dayAverageOrderCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1000"
+                android:textSize="13dp"
+                android:textColor="@color/color_E6660F"  />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:textColor="@color/color_333333"
+                android:textSize="13dp"
+                android:text="商家日均订单数" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lineFour"
+            android:layout_width="0dp"
+            android:layout_height="0.67dp"
+            android:background="@color/color_EEEEEE"
+            app:layout_constraintBottom_toBottomOf="@+id/order_amount_area"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/week_order_count_area"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="一月收入金额" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/lineFive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lineFour">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/todayAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥3000"
+                android:textSize="13dp"
+                android:textColor="@color/color_E6660F" />
 
-    <View
-        android:id="@+id/lineSeven"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="@+id/week_order_amount_area"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/color_333333"
+                android:textSize="13dp"
+                android:text="今日收入金额" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lineFive"
+            android:layout_width="0.67dp"
+            android:layout_height="0dp"
+            android:background="@color/color_EEEEEE"
+            app:layout_constraintBottom_toBottomOf="@+id/week_deal_area"
+            app:layout_constraintEnd_toStartOf="@+id/week_deal_area"
+            app:layout_constraintStart_toEndOf="@+id/week_order_count_area"
+            app:layout_constraintTop_toTopOf="@+id/lineFour" />
+
+        <LinearLayout
+            android:id="@+id/week_deal_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/lineSix"
+            app:layout_constraintStart_toEndOf="@+id/lineFive"
+            app:layout_constraintTop_toTopOf="@+id/lineFour">
+
+            <TextView
+                android:id="@+id/weekAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥25555"
+                android:textSize="13dp"
+                android:textColor="@color/color_E6660F" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/color_333333"
+                android:textSize="13dp"
+                android:text="一周收入金额" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lineSix"
+            android:layout_width="0.67dp"
+            android:layout_height="0dp"
+            android:background="@color/color_EEEEEE"
+            app:layout_constraintBottom_toBottomOf="@+id/week_deal_area"
+            app:layout_constraintEnd_toStartOf="@+id/week_order_amount_area"
+            app:layout_constraintStart_toEndOf="@+id/week_deal_area"
+            app:layout_constraintTop_toTopOf="@+id/lineFour" />
+
+        <LinearLayout
+            android:id="@+id/week_order_amount_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lineSix"
+            app:layout_constraintTop_toTopOf="@+id/lineFour">
+
+            <TextView
+                android:id="@+id/week_order_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥1552222"
+                android:textSize="13dp"
+                android:textColor="@color/color_E6660F"  />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/color_333333"
+                android:textSize="13dp"
+                android:text="一月收入金额" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lineSeven"
+            android:layout_width="0dp"
+            android:layout_height="0.67dp"
+            android:background="@color/color_EEEEEE"
+            app:layout_constraintBottom_toBottomOf="@+id/week_order_amount_area"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/businessDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="38dp"
         android:background="@drawable/shape_gray_rect_border"
         android:gravity="center"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp"
+        android:paddingHorizontal="25dp"
+        android:paddingVertical="7dp"
         android:text="交易明细"
-        android:textColor="@color/color_000000"
-        android:textSize="16dp"
+        android:textColor="@color/color_999999"
+        android:textSize="11dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineSeven" />
+        app:layout_constraintTop_toBottomOf="@+id/constrain_deal_layout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

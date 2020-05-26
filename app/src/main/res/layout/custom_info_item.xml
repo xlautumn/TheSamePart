@@ -7,9 +7,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userAvatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="40dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +26,8 @@
         android:gravity="center"
         android:maxLines="1"
         android:text="1号店"
-        android:textSize="16dp"
+        android:textSize="12dp"
+        android:textColor="@color/color_999999"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/userId"
         app:layout_constraintStart_toEndOf="@+id/userAvatar"
@@ -41,7 +42,8 @@
         android:paddingEnd="10dp"
         android:paddingRight="10dp"
         android:text="1"
-        android:textSize="16dp"
+        android:textSize="12dp"
+        android:textColor="@color/color_999999"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userNickname"
@@ -50,8 +52,8 @@
     <View
         android:id="@+id/item_divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
+        android:layout_height="0.67dp"
+        android:background="@color/color_EEEEEE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
