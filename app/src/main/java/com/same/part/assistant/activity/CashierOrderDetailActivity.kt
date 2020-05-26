@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
-import com.same.part.assistant.model.CashierGoodItemModel
+import com.same.part.assistant.data.model.CashierGoodItemModel
 import kotlinx.android.synthetic.main.activity_cashier_order_detail.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 

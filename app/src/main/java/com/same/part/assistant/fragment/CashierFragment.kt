@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.same.part.assistant.R
-import com.same.part.assistant.model.CashierModel
+import com.same.part.assistant.data.model.CashierModel
 import kotlinx.android.synthetic.main.fragment_cashier.*
 
 /**

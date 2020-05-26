@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.same.part.assistant.R
-import com.same.part.assistant.model.PayWayModel
+import com.same.part.assistant.data.model.PayWayModel
 
 class PayWayDialogAdapter(var mContext: Context, private var mData: ArrayList<PayWayModel>?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

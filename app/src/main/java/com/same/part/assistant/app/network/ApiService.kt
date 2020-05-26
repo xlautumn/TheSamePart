@@ -1,8 +1,10 @@
 package com.same.part.assistant.app.network
 
 import com.same.part.assistant.data.ApiResponse
-import com.same.part.assistant.data.RequestShopUserLogin
-import com.same.part.assistant.model.ShopUserLoginModel
+import com.same.part.assistant.data.model.RequestShopUserInfo
+import com.same.part.assistant.data.model.RequestShopUserLogin
+import com.same.part.assistant.data.model.ShopUserModel
+import com.same.part.assistant.data.model.ShopUserLoginModel
 import retrofit2.http.*
 
 /**
@@ -19,5 +21,13 @@ interface ApiService {
      */
     @POST("shopUserLogin")
     suspend fun login(@Body requestShopUserLogin: RequestShopUserLogin): ApiResponse<ShopUserLoginModel>
+
+
+    /**
+     * 账号信息
+     */
+    @POST("getAccountByToken")
+    suspend fun getUserInfo(@Body requestShopUserInfo: RequestShopUserInfo): ApiResponse<ShopUserModel>
+
 
 }

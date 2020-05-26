@@ -7,10 +7,11 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.tencent.mmkv.MMKV
+import me.hgj.jetpackmvvm.base.BaseApp
 import kotlin.properties.Delegates
 
 
-class TheSamePartApplication : Application() {
+class TheSamePartApplication : BaseApp() {
 
     companion object {
         var context: Context by Delegates.notNull()

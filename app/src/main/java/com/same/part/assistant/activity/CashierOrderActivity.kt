@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.same.part.assistant.R
-import com.same.part.assistant.model.CashierOrderModel
+import com.same.part.assistant.data.model.CashierOrderModel
 import kotlinx.android.synthetic.main.activity_cashier_order.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 

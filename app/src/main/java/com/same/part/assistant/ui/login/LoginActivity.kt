@@ -33,7 +33,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
         mLoginViewModel.loginResult.observe(this, Observer {resultState ->
             parseState(resultState, {
                 //登录成功
-                CacheUtil.setLoginModel(it)
+                CacheUtil.setShopUserModel(it)
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }, {

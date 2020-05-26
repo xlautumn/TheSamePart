@@ -15,7 +15,7 @@ import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddProductActivity
 import com.same.part.assistant.activity.AddProductClassificationActivity
 import com.same.part.assistant.activity.ViewProductActivity
-import com.same.part.assistant.model.ProductClassificationModel
+import com.same.part.assistant.data.model.ProductClassificationModel
 import kotlinx.android.synthetic.main.fragment_product_classification.*
 import kotlinx.android.synthetic.main.pop_product_operation.view.*
 

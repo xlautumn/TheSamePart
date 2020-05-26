@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
 import com.same.part.assistant.adapter.CustomOrderAdapter
 import com.same.part.assistant.dialog.PayWayDialogFragment
-import com.same.part.assistant.model.GoodItemModel
+import com.same.part.assistant.data.model.GoodItemModel
 import kotlinx.android.synthetic.main.activity_order_submit.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 

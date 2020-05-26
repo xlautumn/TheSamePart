@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.same.part.assistant.R
 import com.same.part.assistant.adapter.PayWayDialogAdapter
-import com.same.part.assistant.model.PayWayModel
+import com.same.part.assistant.data.model.PayWayModel
 import kotlinx.android.synthetic.main.dialog_pay_way.*
 
 class PayWayDialogFragment(var mContext: Context) : DialogFragment() {

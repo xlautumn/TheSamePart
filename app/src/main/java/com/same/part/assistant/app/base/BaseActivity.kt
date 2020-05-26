@@ -10,6 +10,9 @@ import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.same.part.assistant.R
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.base.activity.BaseVmDbActivity
+import com.same.part.assistant.app.event.AppViewModel
+import me.hgj.jetpackmvvm.demo.app.event.EventViewModel
+import me.hgj.jetpackmvvm.ext.getAppViewModel
 
 
 /**
@@ -20,6 +23,12 @@ import me.hgj.jetpackmvvm.base.activity.BaseVmDbActivity
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding> : BaseVmDbActivity<VM, DB>() {
 
     private var dialog: MaterialDialog? = null
+
+    //Application全局的ViewModel，里面存放了一些账户信息，基本配置信息等
+    val shareViewModel: AppViewModel by lazy { getAppViewModel<AppViewModel>()}
+
+    //Application全局的ViewModel，用于发送全局通知操作
+    val eventViewModel: EventViewModel by lazy { getAppViewModel<EventViewModel>() }
 
     abstract override fun layoutId(): Int
 

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.same.part.assistant.R
-import com.same.part.assistant.model.CouponInfoModel
+import com.same.part.assistant.data.model.CouponInfoModel
 import kotlinx.android.synthetic.main.activity_coupon_manager.*
 
 /**

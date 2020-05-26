@@ -2,34 +2,38 @@ package com.same.part.assistant.app.util
 
 import android.text.TextUtils
 import com.google.gson.Gson
-import com.same.part.assistant.model.ShopUserLoginModel
+import com.same.part.assistant.data.model.ShopUserModel
+import com.same.part.assistant.data.model.ShopUserLoginModel
 import com.tencent.mmkv.MMKV
 
+/**
+ * 本地缓存类
+ */
 object CacheUtil {
     /**
      * 获取保存的账户信息
      */
-    fun getLoginModel(): ShopUserLoginModel? {
+    fun getShopUserModel(): ShopUserModel? {
         val kv = MMKV.mmkvWithID("app")
-        val userStr = kv.decodeString("loginModel")
-        return if (TextUtils.isEmpty(userStr)) {
+        val shopUserModel = kv.decodeString("shopUserModel")
+        return if (TextUtils.isEmpty(shopUserModel)) {
             null
         } else {
-            Gson().fromJson(userStr, ShopUserLoginModel::class.java)
+            Gson().fromJson(shopUserModel, ShopUserModel::class.java)
         }
     }
 
     /**
      * 设置账户信息
      */
-    fun setLoginModel(userResponse: ShopUserLoginModel?) {
+    fun setShopUserModel(shopUserModel: ShopUserModel?) {
         val kv = MMKV.mmkvWithID("app")
-        if (userResponse == null) {
-            kv.encode("loginModel", "")
+        if (shopUserModel == null) {
+            kv.encode("shopUserModel", "")
             setIsLogin(false)
         } else {
-            kv.encode("loginModel", Gson().toJson(userResponse))
-            setTokenExpirationTime(userResponse.expiresIn + System.currentTimeMillis())
+            kv.encode("shopUserModel", Gson().toJson(shopUserModel))
+            setTokenExpirationTime(shopUserModel.AccessToken.expiresIn + System.currentTimeMillis())
             setIsLogin(true)
         }
     }
@@ -65,6 +69,7 @@ object CacheUtil {
         val kv = MMKV.mmkvWithID("app")
         return kv.decodeLong("expirationTime")
     }
+
 
 
 }

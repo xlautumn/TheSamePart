@@ -9,9 +9,12 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.same.part.assistant.R
+import com.same.part.assistant.app.event.AppViewModel
 import com.same.part.assistant.app.ext.hideSoftKeyboard
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.base.fragment.BaseVmDbFragment
+import me.hgj.jetpackmvvm.demo.app.event.EventViewModel
+import me.hgj.jetpackmvvm.ext.getAppViewModel
 
 /**
  * 描述　: 你项目中的Fragment基类，在这里实现显示弹窗，吐司，还有自己的需求操作 ，如果不想用Databind，请继承
@@ -21,6 +24,11 @@ import me.hgj.jetpackmvvm.base.fragment.BaseVmDbFragment
 abstract class BaseFragment<VM : BaseViewModel, DB : ViewDataBinding> : BaseVmDbFragment<VM, DB>() {
 
     private var dialog: MaterialDialog? = null
+
+    //Application全局的ViewModel，里面存放了一些账户信息，基本配置信息等
+    val shareViewModel: AppViewModel by lazy { getAppViewModel<AppViewModel>() }
+    //Application全局的ViewModel，用于发送全局通知操作
+    val eventViewModel: EventViewModel by lazy { getAppViewModel<EventViewModel>()}
 
     /**
      * 当前Fragment绑定的视图布局

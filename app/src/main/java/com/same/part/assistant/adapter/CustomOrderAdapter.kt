@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
-import com.same.part.assistant.model.GoodItemModel
+import com.same.part.assistant.data.model.GoodItemModel
 
 class CustomOrderAdapter(var dataList: ArrayList<GoodItemModel>) :
     RecyclerView.Adapter<GoodItemHolder>() {

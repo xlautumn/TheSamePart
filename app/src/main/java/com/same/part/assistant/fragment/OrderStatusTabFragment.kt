@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.*
-import com.same.part.assistant.model.PurchaseOrderModel
+import com.same.part.assistant.data.model.PurchaseOrderModel
 import kotlinx.android.synthetic.main.fragment_order_status_tab.*
 
 /**

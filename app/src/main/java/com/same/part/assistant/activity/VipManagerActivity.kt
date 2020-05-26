@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
-import com.same.part.assistant.model.VipInfoModel
+import com.same.part.assistant.data.model.VipInfoModel
 import kotlinx.android.synthetic.main.activity_custom_manager.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 

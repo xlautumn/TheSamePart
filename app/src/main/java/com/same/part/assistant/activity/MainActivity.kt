@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.same.part.assistant.R
 import com.same.part.assistant.fragment.GoodsFragment
-import com.same.part.assistant.fragment.HomeFragment
+import com.same.part.assistant.ui.home.HomeFragment
 import com.same.part.assistant.fragment.MyFragment
 import com.same.part.assistant.fragment.PurchaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
