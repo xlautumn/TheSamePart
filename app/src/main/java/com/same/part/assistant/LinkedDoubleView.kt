@@ -83,8 +83,6 @@ class LinkedDoubleView : LinearLayout {
             //需要得效果，点击左边item 直接定位到当前分类得标题
             var count = 0
             val end = position.shl(1)
-            //因为rightView中设置有子类别的标题控件，会占用一个子适配器
-            //所以会有两倍leftView条目数得子适配器
             for (i in 0 until end) {
                 count += mAdapter?.getMergeAdapter()?.getAdapter(count)?.count ?: 0
             }
@@ -104,7 +102,9 @@ class LinkedDoubleView : LinearLayout {
                 totalItemCount: Int
             ) {
                 view?.let {
-                    //此处获取的index有问题
+                    //TODO 当点击左边item的时候，此处获取的index比真实少1有问题
+                    //当点击左边item的时候，设置rightView滚动，此时firstVisibleItem的值为上一组数据的最后一个数据对应的position
+                    //所以获取的index为上一个分组的标题position
                     var index = it.adapter.getItemViewType(firstVisibleItem)
                     if (lastIndex != index) {
                         mLeftView?.setSelection(index)
