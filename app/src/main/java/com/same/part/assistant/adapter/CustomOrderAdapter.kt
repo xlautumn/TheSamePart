@@ -11,7 +11,7 @@ import com.same.part.assistant.R
 import com.same.part.assistant.data.model.GoodItemModel
 
 class CustomOrderAdapter(var dataList: ArrayList<GoodItemModel>) :
-    RecyclerView.Adapter<GoodItemHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoodItemHolder =
         GoodItemHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -25,18 +25,20 @@ class CustomOrderAdapter(var dataList: ArrayList<GoodItemModel>) :
     override fun getItemCount(): Int = dataList.size
 
 
-    override fun onBindViewHolder(holder: GoodItemHolder, position: Int) {
-        val model = dataList[position]
-        Glide.with(holder.itemView.context).load(model.avatar).into(holder.goodAvatar)
-        holder.goodName.text = model.name
-        holder.goodNum.text = "x${model.number}"
-        holder.goodPrice.text = model.price
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is GoodItemHolder) {
+            val model = dataList[position]
+            Glide.with(holder.itemView.context).load(model.avatar).into(holder.goodAvatar)
+            holder.goodName.text = model.name
+            holder.goodNum.text = "x${model.number}"
+            holder.goodPrice.text = model.price
+        }
     }
-}
 
-class GoodItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    var goodAvatar: ImageView = itemView.findViewById(R.id.goodAvatar)
-    var goodName: TextView = itemView.findViewById(R.id.goodName)
-    var goodNum: TextView = itemView.findViewById(R.id.goodNum)
-    var goodPrice: TextView = itemView.findViewById(R.id.goodPrice)
+    class GoodItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var goodAvatar: ImageView = itemView.findViewById(R.id.goodAvatar)
+        var goodName: TextView = itemView.findViewById(R.id.goodName)
+        var goodNum: TextView = itemView.findViewById(R.id.goodNum)
+        var goodPrice: TextView = itemView.findViewById(R.id.goodPrice)
+    }
 }

@@ -9,6 +9,7 @@
         android:layout_width="@dimen/dip_0"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@color/color_EEEEEE"
         android:divider="@color/color_F6F6F6"
         android:scrollbars="none" />
 
@@ -20,7 +21,16 @@
         <ListView
             android:id="@+id/lv_right_list"
             android:layout_width="match_parent"
+            android:background="@color/color_FFFFFF"
+            android:divider="@android:color/transparent"
             android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/iv_float_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
     </FrameLayout>
 
 </LinearLayout>
