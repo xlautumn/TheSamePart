@@ -22,8 +22,10 @@
     <dimen name="dip_24">24dp</dimen>
     <dimen name="dip_25">25dp</dimen>
     <dimen name="dip_30">30dp</dimen>
+    <dimen name="dip_40">40dp</dimen>
     <dimen name="dip_45">45dp</dimen>
     <dimen name="dip_50">50dp</dimen>
     <dimen name="dip_55">55dp</dimen>
+    <dimen name="dip_57">57dp</dimen>
 
 </resources>
