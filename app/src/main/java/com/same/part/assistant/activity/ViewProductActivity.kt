@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_product_classification.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
 /**
- * home_vip_manager
+ * 会员管理
  */
 class ViewProductActivity : AppCompatActivity() {
     private val mProductList = arrayListOf<ProductModel>().apply {

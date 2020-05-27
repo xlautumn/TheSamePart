@@ -12,7 +12,7 @@
         android:id="@+id/custom_manager_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/color_FEFEFE"
         android:orientation="horizontal"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
@@ -55,7 +55,7 @@
         android:layout_marginTop="7dp"
         android:layout_marginStart="13dp"
         android:layout_marginEnd="13dp"
-        android:background="@drawable/shape_primary_color_rect"
+        android:background="@drawable/shape_white_color_rect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/custom_manager_header" />

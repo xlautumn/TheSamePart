@@ -22,13 +22,10 @@
 
             <ImageView
                 android:id="@+id/mTitleBack"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="14dp"
-                android:layout_centerVertical="true"
-                android:backgroundTint="@color/color_888989"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:padding="15dp"
-                android:background="@drawable/arrow_back" />
+                android:src="@drawable/arrow_back" />
 
             <TextView
                 android:id="@+id/mToolbarTitle"
