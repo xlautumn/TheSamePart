@@ -18,11 +18,11 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         ImmersionBar.with(this).statusBarDarkFont(true).transparentNavigationBar().fullScreen(true).statusBarColor(R.color.color_EEFEF8).init()
         Handler().postDelayed({
-//            if (CacheUtil.isLogin() && CacheUtil.getTokenExpirationTime() > System.currentTimeMillis()) {
+            if (CacheUtil.isLogin() && CacheUtil.getTokenExpirationTime() > System.currentTimeMillis()) {
                 startActivity(Intent(this, MainActivity::class.java))
-//            } else {
-//                startActivity(Intent(this, LoginActivity::class.java))
-//            }
+            } else {
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
             finish()
             //带点渐变动画
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
