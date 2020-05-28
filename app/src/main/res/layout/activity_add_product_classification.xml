@@ -139,9 +139,9 @@
                     android:layout_marginHorizontal="10dp"
                     android:background="@drawable/shape_dark_gray_rect"
                     android:gravity="top"
+                    android:hint="请添加说明..."
                     android:lines="6"
                     android:padding="10dp"
-                    android:hint="请添加说明..."
                     android:textColorHint="@color/color_999999"
                     android:textSize="11dp" />
 
@@ -163,7 +163,7 @@
                     android:lines="6"
                     android:padding="10dp"
                     android:hint="添加备注..."
-                    android:textSize="13dp" />
+                    android:textSize="11dp" />
 
             </LinearLayout>
 
@@ -172,6 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"
+                android:gravity="center_vertical"
                 android:layout_marginTop="7dp"
                 android:orientation="horizontal">
                 <TextView
@@ -182,13 +183,11 @@
                     android:textColor="@color/color_999999"
                     android:textSize="11dp" />
 
-                <com.suke.widget.SwitchButton
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_button"
-                    android:layout_width="48dp"
-                    android:layout_height="30dp"
-                    app:sb_show_indicator="false"
-                    app:sb_checked_color="@color/color_08B070"
-                    app:sb_background="@color/color_08B070"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
                     android:layout_marginStart="4dp"/>
 
             </LinearLayout>

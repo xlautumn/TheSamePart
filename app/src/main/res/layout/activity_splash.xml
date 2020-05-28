@@ -6,12 +6,13 @@
 
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="62.8dp"
-        android:layout_height="40dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginBottom="15dp"
         android:contentDescription="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/splash"
+        android:background="@drawable/splash_logo_bg"
+        android:src="@drawable/splash_logo_pic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/tv_cloud"
         app:layout_constraintEnd_toEndOf="parent"

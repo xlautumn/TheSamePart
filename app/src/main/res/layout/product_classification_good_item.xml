@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="42dp"
     android:background="@color/color_FEFEFE">
 
     <RelativeLayout
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/productId"
+            android:id="@+id/productName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -24,9 +24,9 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="12133"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333"/>
+            android:text="蔬菜"
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
 
     </RelativeLayout>
 
@@ -41,66 +41,57 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/productName"
+            android:id="@+id/productLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="苹果"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333" />
+            android:text="一级"
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/llThree"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/llFour"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/llTwo"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/productCount"
+            android:id="@+id/addSecondCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加二级"
+            android:textColor="@color/color_0EB170"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="1000"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333"/>
+            android:layout_marginLeft="@dimen/dip_10"
+            android:layout_toRightOf="@+id/addSecondCategory"
+            android:text="编辑"
+            android:textColor="@color/color_0EB170"
+            android:textSize="12dp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/llFour"
+    <View
+        android:id="@+id/item_divider"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="1px"
+        android:background="@color/color_CCCCCC"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/llThree"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <RelativeLayout
-            android:id="@+id/productOperation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="10dp">
-
-            <ImageView
-                android:id="@+id/productOperationPic"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/more" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

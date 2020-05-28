@@ -1,6 +1,5 @@
 package com.same.part.assistant.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,14 +9,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.zhouwei.library.CustomPopWindow
 import com.same.part.assistant.R
-import com.same.part.assistant.activity.AddProductActivity
 import com.same.part.assistant.activity.AddProductClassificationActivity
-import com.same.part.assistant.activity.ViewProductActivity
+import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_ADD_SECOND_CATEGORY
+import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_EDIT
+import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_TYPE
 import com.same.part.assistant.data.model.ProductClassificationModel
 import kotlinx.android.synthetic.main.fragment_product_classification.*
-import kotlinx.android.synthetic.main.pop_product_operation.view.*
 
 /**
  * 商品分类
@@ -28,21 +26,21 @@ class ProductClassificationFragment : Fragment() {
             ProductClassificationModel(
                 "https38",
                 "多多",
-                "511313"
+                "一级"
             )
         )
         add(
             ProductClassificationModel(
                 "htt",
                 "时间",
-                "21"
+                "一级"
             )
         )
         add(
             ProductClassificationModel(
                 "20131108",
                 "果园",
-                "0"
+                "二级"
             )
         )
     }
@@ -64,7 +62,7 @@ class ProductClassificationFragment : Fragment() {
         }
     }
 
-    class CustomAdapter(var dataList: ArrayList<ProductClassificationModel>) :
+    inner class CustomAdapter(var dataList: ArrayList<ProductClassificationModel>) :
         RecyclerView.Adapter<ProductClassificationItemHolder>() {
         override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -84,67 +82,31 @@ class ProductClassificationFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ProductClassificationItemHolder, position: Int) {
             val model = dataList[position]
-            holder.productId.text = model.id
             holder.productName.text = model.name
-            holder.productCount.text = model.count
-            holder.productOperation.setOnClickListener {
-                showOperationPop(
-                    holder.itemView.context,
-                    holder.productOperationPic,
-                    (model.count.toIntOrNull() ?: 0) > 0
+            holder.productLevel.text = model.level
+            //添加二级页面
+            holder.addSecondCategory.setOnClickListener {
+                startActivity(
+                    Intent(context, AddProductClassificationActivity::class.java).apply {
+                        putExtra(JUMP_FROM_TYPE, JUMP_FROM_ADD_SECOND_CATEGORY)
+                    }
                 )
             }
-        }
-
-        /**
-         * 操作弹框
-         */
-        private fun showOperationPop(context: Context, anchorView: View, hasProduct: Boolean) {
-            LayoutInflater.from(context).inflate(R.layout.pop_product_operation, null).apply {
-                optionTwo.text = if (hasProduct) "添加商品" else "添加子分类"
-                optionThree.text = if (hasProduct) "查看商品" else "添加商品"
-                val popWindow =
-                    CustomPopWindow.PopupWindowBuilder(context).setView(this).create()
-                        .showAsDropDown(anchorView)
-                //第一个选项
-                findViewById<View>(R.id.optionOne).setOnClickListener {
-                    popWindow.dissmiss()
-                    context.startActivity(
-                        Intent(
-                            context,
-                            AddProductClassificationActivity::class.java
-                        )
-                    )
-                }
-                //第二个选项
-                findViewById<View>(R.id.optionTwo).setOnClickListener {
-                    popWindow.dissmiss()
-                    context.startActivity(
-                        Intent(
-                            context,
-                            if (hasProduct) AddProductActivity::class.java else AddProductClassificationActivity::class.java
-                        )
-                    )
-                }
-                //第三个选项
-                findViewById<View>(R.id.optionThree).setOnClickListener {
-                    popWindow.dissmiss()
-                    context.startActivity(
-                        Intent(
-                            context,
-                            if (hasProduct) ViewProductActivity::class.java else AddProductActivity::class.java
-                        )
-                    )
-                }
+            //编辑
+            holder.edit.setOnClickListener {
+                startActivity(
+                    Intent(context, AddProductClassificationActivity::class.java).apply {
+                        putExtra(JUMP_FROM_TYPE, JUMP_FROM_EDIT)
+                    }
+                )
             }
         }
     }
 
     class ProductClassificationItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var productId: TextView = itemView.findViewById(R.id.productId)
         var productName: TextView = itemView.findViewById(R.id.productName)
-        var productCount: TextView = itemView.findViewById(R.id.productCount)
-        var productOperation: View = itemView.findViewById(R.id.productOperation)
-        var productOperationPic: View = itemView.findViewById(R.id.productOperationPic)
+        var productLevel: TextView = itemView.findViewById(R.id.productLevel)
+        var addSecondCategory: View = itemView.findViewById(R.id.addSecondCategory)
+        var edit: View = itemView.findViewById(R.id.edit)
     }
 }

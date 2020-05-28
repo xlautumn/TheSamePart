@@ -32,7 +32,6 @@
         <activity android:name=".activity.BusinessManagerActivity" />
         <activity android:name=".activity.BusinessDetailActivity" />
         <activity android:name=".activity.AddProductClassificationActivity" />
-        <activity android:name=".activity.AddProductActivity" />
         <activity android:name=".activity.ViewProductActivity" />
         <activity android:name=".activity.CashierOrderActivity" />
         <activity android:name=".activity.CashierOrderDetailActivity" />

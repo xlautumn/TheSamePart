@@ -38,7 +38,7 @@ data class CashierModel(
 data class ProductClassificationModel(
     var id: String,
     var name: String,
-    var count: String
+    var level: String
 )
 
 /**
