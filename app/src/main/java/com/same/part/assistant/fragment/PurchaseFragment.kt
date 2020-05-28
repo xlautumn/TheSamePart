@@ -6,9 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
-import com.same.part.assistant.adapter.LinkedDoubleViewAdapter
+import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
+import com.same.part.assistant.adapter.PurchaseProductAdapter
+import com.same.part.assistant.adapter.PurchaseFirstLevelAdapter
 import com.same.part.assistant.manager.GoodPurchaseDataManager
 import kotlinx.android.synthetic.main.fragment_purchase.*
 
@@ -20,7 +24,9 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         const val ANIMATION_DURATION = 200L
     }
 
-    private var mAdapter: LinkedDoubleViewAdapter? = null
+    private var mSecondLevelAdapter: PurchaseSecondLevelAdapter? = null
+    private var mFirstLevelAdapter: PurchaseFirstLevelAdapter? = null
+    private var mProductAdapter: PurchaseProductAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,57 +42,36 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         GoodPurchaseDataManager.getInstance().syncGoodPurchaseData()
         statement.setOnClickListener(this)
         rootDetail.setOnClickListener(this)
-        linkedView.apply {
-            activity?.also { ctx ->
-                mAdapter = LinkedDoubleViewAdapter(ctx)
-                mAdapter?.setCartDataChangedListener {
 
-                    changed {
-                        //更新 底部钱数，添加得数量等数据
-                    }
+        //一级分类及产品列表
+        fristLevelList.apply {
+            mFirstLevelAdapter = activity?.let { PurchaseFirstLevelAdapter(it) }
+            setOnItemClickListener { parent, view, position, id ->
+                Toast.makeText(activity, "一级分类：$position", Toast.LENGTH_LONG).show()
+                //刷新产品数据列表
 
-                    addToCartData { isAdd, goodModel ->
-                        //更新 底部钱数，添加得数量等数据
-                        var cartGoodModels = GoodPurchaseDataManager.getInstance().cartGoodModels
-                        if (isAdded) {
-                            if (!cartGoodModels.contains(goodModel)) {
-                                cartGoodModels.add(goodModel)
-                            }
-                        } else {
-                            if (cartGoodModels.contains(goodModel)) {
-                                cartGoodModels.remove(goodModel)
-                            }
-                        }
-                        updateCart(isAdded, goodModel.firstLevel)
-
-                    }
-
-                    modifyCartData {
-
-                    }
-                }
-                mAdapter?.let {
-                    setAdapter(it)
-                }
             }
+            adapter = mFirstLevelAdapter
         }
-    }
-
-    private fun updateCart(added: Boolean, firstLevel: String) {
-        var goodPurchaseModels = GoodPurchaseDataManager.getInstance().goodPurchaseModels
-        for (i in goodPurchaseModels.indices) {
-            var goodClassModel = goodPurchaseModels[i]
-            if (firstLevel == goodClassModel.level) {
-                var selectNum = goodClassModel.selectNum
-                goodClassModel.selectNum = if (added) selectNum++ else selectNum--
-
-                var leftView = linkedView.getLeftView()
-                var childAt = leftView?.getChildAt(i)
-                childAt?.apply {
-                    //如果selectNum>0且未选中item设置显示数量角标，selectNum==0 不显示数量角标
-                }
-                break
+        //二级分类
+        secondLevelListView.apply {
+            layoutManager = LinearLayoutManager(activity).apply {
+                orientation = LinearLayoutManager.HORIZONTAL
             }
+            mSecondLevelAdapter = activity?.let { PurchaseSecondLevelAdapter(it) }
+            //给adapter设置监听获取当前选中得一级分类
+            mSecondLevelAdapter?.setOnItemClickListener { position, firstLevelName ->
+                Toast.makeText(activity, "二级分类：$position", Toast.LENGTH_LONG).show()
+                //标记当前分类为选中，其他得为未选中
+                //刷新二级列表及产品数据列表
+
+            }
+            adapter = mSecondLevelAdapter
+        }
+        productList.apply {
+            mProductAdapter = activity?.let { PurchaseProductAdapter(it) }
+            adapter = mProductAdapter
+            mProductAdapter
         }
     }
 

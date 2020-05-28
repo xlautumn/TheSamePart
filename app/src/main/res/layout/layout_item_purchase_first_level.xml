@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/selector_purchase_left_list"
+    android:id="@+id/rootSecondLevel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -33,11 +33,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_05"
+        android:background="@color/color_D4D3D4"
         android:layout_marginLeft="@dimen/dip_7"
         android:layout_marginRight="@dimen/dip_7"
-        android:background="@color/color_D4D3D4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

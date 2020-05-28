@@ -41,14 +41,61 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.same.part.assistant.LinkedDoubleView
-        android:id="@+id/linkedView"
+    <LinearLayout
+        android:id="@+id/secondLevelProductRoot"
         android:layout_width="@dimen/dip_0"
         android:layout_height="@dimen/dip_0"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/root_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rootSearch" />
+        app:layout_constraintTop_toBottomOf="@id/rootSearch">
+
+        <ListView
+            android:id="@+id/fristLevelList"
+            android:layout_width="@dimen/dip_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:listSelector="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:scrollbars="none" />
+
+        <LinearLayout
+            android:layout_width="@dimen/dip_0"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/secondLevelListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_FFFFFF" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_05"
+                android:background="@color/color_E5E5E5" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_FFFFFF"
+                android:paddingTop="@dimen/dip_10"
+                android:paddingBottom="@dimen/dip_10"
+                android:text=""
+                android:textColor="@color/color_1d1d1d"
+                android:textSize="@dimen/dip_12" />
+
+            <ListView
+                android:id="@+id/productList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:listSelector="@android:color/transparent"
+                android:background="@color/color_FFFFFF"
+                android:divider="@android:color/transparent" />
+        </LinearLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cartDetailList"
@@ -91,8 +138,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dip_15"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dip_15"
                 android:drawableLeft="@drawable/icon_delete"
                 android:drawablePadding="@dimen/dip_5"
                 android:padding="@dimen/dip_5"
@@ -104,8 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dip_05"
                 android:layout_alignParentBottom="true"
-                android:background="@color/color_EEEEEE"
-                />
+                android:background="@color/color_EEEEEE" />
 
         </RelativeLayout>
 
@@ -123,7 +169,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <LinearLayout
         android:id="@+id/root_bottom"
         android:layout_width="match_parent"
@@ -133,7 +178,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linkedView">
+        app:layout_constraintTop_toBottomOf="@id/secondLevelProductRoot">
 
         <LinearLayout
             android:id="@+id/rootDetail"
