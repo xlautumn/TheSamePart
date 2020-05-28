@@ -19,11 +19,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/color_F7F7F7"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:background="@drawable/shape_white_color_rect"
                 android:padding="10dp">
 
                 <TextView
@@ -31,8 +36,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="分类封面图"
-                    android:textColor="@color/color_000000"
-                    android:textSize="15dp"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,144 +45,167 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(建议大小300*300)"
-                    android:textSize="12dp"
+                    android:textSize="11dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/color_999999"
                     app:layout_constraintBottom_toBottomOf="@+id/cover_title"
                     app:layout_constraintStart_toEndOf="@+id/cover_title"
                     app:layout_constraintTop_toTopOf="@+id/cover_title" />
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="13dp"
                     android:src="@drawable/ic_single_add"
                     app:layout_constraintStart_toStartOf="@+id/cover_title"
                     app:layout_constraintTop_toBottomOf="@+id/cover_title" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/color_E8E8E9" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:paddingBottom="14dp"
+                android:background="@drawable/shape_white_color_rect"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="分类名称"
+                        android:textColor="@color/color_333333"
+                        android:textSize="13dp" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_gray_rect_border_input"
+                        android:lines="1"
+                        android:paddingLeft="5dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="27dp"
+                        android:text="排序"
+                        android:textColor="@color/color_333333"
+                        android:textSize="13dp"/>
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_gray_rect_border_input"
+                        android:lines="1"
+                        android:paddingLeft="5dp" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="分类名称"
-                    android:textColor="@color/color_000000"
-                    android:textSize="15dp" />
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
+                    android:text="分类说明"
+                    android:textColor="@color/color_333333"
+                    android:textSize="13dp" />
 
                 <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_gray_rect_border_input"
-                    android:lines="1"
-                    android:paddingLeft="5dp" />
+                    android:background="@drawable/shape_dark_gray_rect"
+                    android:gravity="top"
+                    android:lines="6"
+                    android:padding="10dp"
+                    android:hint="请添加说明..."
+                    android:textColorHint="@color/color_999999"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
+                    android:text="备注"
+                    android:textColor="@color/color_333333"
+                    android:textSize="13dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/shape_dark_gray_rect"
+                    android:gravity="top"
+                    android:lines="6"
+                    android:padding="10dp"
+                    android:hint="添加备注..."
+                    android:textSize="13dp" />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="10dp"
-                android:background="@color/color_E8E8E9" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="排序        "
-                    android:textColor="@color/color_000000"
-                    android:textSize="15dp" />
+                    android:text="启用"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/color_999999"
+                    android:textSize="11dp" />
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="35dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_gray_rect_border_input"
-                    android:lines="1"
-                    android:paddingLeft="5dp" />
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/switch_button"
+                    android:layout_width="48dp"
+                    android:layout_height="30dp"
+                    app:sb_show_indicator="false"
+                    app:sb_checked_color="@color/color_08B070"
+                    app:sb_background="@color/color_08B070"
+                    android:layout_marginStart="4dp"/>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="10dp"
-                android:background="@color/color_E8E8E9" />
-
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="10dp"
-                android:text="分类说明"
-                android:textColor="@color/color_000000"
-                android:textSize="15dp" />
-
-            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/shape_gray_rect_border_input"
-                android:gravity="top"
-                android:lines="5"
-                android:padding="5dp"
-                android:textSize="15dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="10dp"
-                android:text="备注"
-                android:textColor="@color/color_000000"
-                android:textSize="15dp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/shape_gray_rect_border_input"
-                android:gravity="top"
-                android:lines="5"
-                android:padding="5dp"
-                android:textSize="15dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/selector_invocation"
-                android:drawablePadding="5dp"
-                android:padding="10dp"
-                android:text="启用"
-                android:textColor="@color/color_000000"
-                android:textSize="15dp" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/shape_primary_color_rect"
+                android:layout_height="38dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginTop="13dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/shape_half_circle_primary_color_rect"
+                android:gravity="center"
                 android:text="保存"
                 android:textColor="@color/color_FFFFFF"
-                android:textSize="18dp" />
+                android:textSize="13dp" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -20,27 +20,30 @@ class CashierFragment : Fragment() {
         add(
             CashierModel(
                 "https38",
-                "多多",
-                "511313",
-                "金卡",
-                true
-            )
-        )
-        add(
-            CashierModel(
-                "htt",
-                "时间",
-                "21",
-                "银卡",
+                "西蓝花",
+                "￥5.00",
+                "500g",
+                "g",
                 false
             )
         )
         add(
             CashierModel(
-                "20131108",
-                "果园",
-                "5113",
-                "金卡",
+                "https38",
+                "西蓝花",
+                "￥5.00",
+                "500g",
+                "g",
+                false
+            )
+        )
+        add(
+            CashierModel(
+                "https38",
+                "西蓝花",
+                "￥5.00",
+                "500g",
+                "g",
                 false
             )
         )
@@ -80,10 +83,10 @@ class CashierFragment : Fragment() {
 
         override fun onBindViewHolder(holder: CashierItemHolder, position: Int) {
             val model = dataList[position]
-            holder.cashierId.text = model.id
             holder.cashierName.text = model.name
             holder.cashierPrice.text = model.price
-            holder.cashierSpecification.text = model.specification
+            holder.cashierWeight.text = model.weight
+            holder.cashierUnit.text = model.unit
             holder.cashierOperation.apply {
                 setOnClickListener {
                     model.operation = !model.operation
@@ -95,10 +98,10 @@ class CashierFragment : Fragment() {
     }
 
     class CashierItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var cashierId: TextView = itemView.findViewById(R.id.cashierId)
         var cashierName: TextView = itemView.findViewById(R.id.cashierName)
         var cashierPrice: TextView = itemView.findViewById(R.id.cashierPrice)
-        var cashierSpecification: TextView = itemView.findViewById(R.id.cashierSpecification)
+        var cashierWeight: TextView = itemView.findViewById(R.id.cashierWeight)
+        var cashierUnit: TextView = itemView.findViewById(R.id.cashierUnit)
         var cashierOperation: TextView = itemView.findViewById(R.id.cashierOperation)
     }
 

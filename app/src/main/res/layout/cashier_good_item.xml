@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/color_FEFEFE"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -16,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/cashierId"
+            android:id="@+id/cashierName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -26,8 +27,9 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="1号店"
-            android:textSize="16dp" />
+            android:text="西蓝花"
+            android:textSize="12dp"
+            android:textColor="@color/color_333333"/>
 
     </RelativeLayout>
 
@@ -42,15 +44,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/cashierName"
+            android:id="@+id/cashierPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="1号店"
-            android:textSize="16dp" />
+            android:text="￥5.00"
+            android:textSize="12dp"
+            android:textColor="@color/color_333333" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -64,14 +67,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/cashierPrice"
+            android:id="@+id/cashierWeight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="1"
-            android:textSize="16dp" />
+            android:text="500g"
+            android:textSize="12dp"
+            android:textColor="@color/color_333333"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -85,14 +89,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/cashierSpecification"
+            android:id="@+id/cashierUnit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="金卡"
-            android:textSize="16dp" />
+            android:text="g"
+            android:textSize="12dp"
+            android:textColor="@color/color_333333" />
 
     </RelativeLayout>
 
@@ -111,25 +116,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/shape_blue_rect_border"
             android:ellipsize="end"
             android:maxLines="1"
             android:paddingHorizontal="6dp"
             android:paddingVertical="2dp"
             android:text="启用"
-            android:textColor="@color/color_0EB170"
-            android:textSize="16dp" />
+            android:textColor="@color/color_999999"
+            android:textSize="12dp" />
 
     </RelativeLayout>
-
-
-    <View
-        android:id="@+id/item_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_E8E8E9"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

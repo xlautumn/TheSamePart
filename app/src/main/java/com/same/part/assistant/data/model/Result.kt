@@ -27,7 +27,8 @@ data class CashierModel(
     var id: String,
     var name: String,
     var price: String,
-    var specification: String,
+    var weight: String,
+    var unit: String,
     var operation: Boolean
 )
 
