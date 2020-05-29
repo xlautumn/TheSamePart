@@ -76,6 +76,7 @@ class ProductClassificationFragment : Fragment() {
             .append("?page=$page")
             .append("&name=$name")
             .append("&size=$size")
+            .append("&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.size>0 }?.get(0)}")
             .append("&appKey=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey}")
             .append("&appSecret=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret}")
         HttpUtil.instance.getUrlWithHeader("WSCX", CacheUtil.getToken(), url.toString(), {
