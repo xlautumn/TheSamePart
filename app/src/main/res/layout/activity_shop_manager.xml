@@ -1,390 +1,362 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include
-        android:id="@+id/toolbar_title"
-        layout="@layout/toolbar_title" />
+    <data>
 
-    <View
-        android:id="@+id/line_top"
+        <variable
+            name="viewmodel"
+            type="com.same.part.assistant.viewmodel.state.ShopManagerViewModel" />
+
+        <variable
+            name="click"
+            type="com.same.part.assistant.activity.ShopManagerActivity.ProxyClick" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/color_EEEEEE"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_title" />
+        android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/color_F4F4F4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line_top">
+        <include
+            android:id="@+id/toolbar_title"
+            layout="@layout/toolbar_title" />
 
-        <LinearLayout
+        <View
+            android:id="@+id/line_top"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0.5dp"
+            android:background="@color/color_EEEEEE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_title" />
 
-            <LinearLayout
-                android:id="@+id/shopAvatar"
-                android:layout_width="match_parent"
-                android:layout_height="96dp"
-                android:background="@color/color_FFFFFF"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="26dp"
-                    android:layout_weight="1"
-                    android:text="店铺头像"
-                    android:textColor="@color/color_333333"
-                    android:textSize="14dp" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/userAvatar"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/home_user_avatar" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginEnd="17dp"
-                    android:src="@drawable/arrow_next_page" />
-
-            </LinearLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/color_F4F4F4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line_top">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="13dp"
-                android:background="@drawable/shape_white_color_rect"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/shopAvatar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="15dp"
-                    android:paddingBottom="10dp">
+                    android:layout_height="96dp"
+                    android:background="@color/color_FFFFFF"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="26dp"
                         android:layout_weight="1"
-                        android:text="店铺简介"
+                        android:text="店铺头像"
                         android:textColor="@color/color_333333"
                         android:textSize="14dp" />
 
-                    <TextView
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/userAvatar"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        app:circleImageUrl="@{viewmodel.imageUrl}"
+                        android:onClick="@{()->click.chooseAvatar()}" />
+
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="编辑"
-                        android:textColor="@color/color_999999"
-                        android:textSize="12dp" />
+                        android:layout_marginStart="18dp"
+                        android:layout_marginEnd="17dp"
+                        android:src="@drawable/arrow_next_page" />
 
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/shape_white_color_rect"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/color_333333"
-                        android:text="店铺名称:"
-                        android:textSize="13dp" />
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="店铺简介"
+                            android:textColor="@color/color_333333"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/tvSave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->click.save()}"
+                            android:visibility="gone"
+                            android:text="保存"
+                            android:layout_marginRight="10dp"
+                            android:textColor="@color/color_999999"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/tvEdit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->click.edit()}"
+                            android:text="编辑"
+                            android:textColor="@color/color_999999"
+                            android:textSize="12dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.67dp"
+                        android:background="@color/color_EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="DUODUO的生鲜店"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp" />
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="店铺名称:"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
+
+                        <EditText
+                            android:id="@+id/editShopName"
+                            android:layout_width="0dp"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:clickable="false"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:background="@null"
+                            android:imeOptions="actionNext"
+                            android:nextFocusRight="@+id/editDesc"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@={viewmodel.shopName}"
+                            android:textColor="@color/color_999999"
+                            android:textSize="13dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.67dp"
+                        android:background="@color/color_EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="店铺描述:"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
+
+                        <EditText
+                            android:id="@+id/editDesc"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:clickable="false"
+                            android:background="@null"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@={viewmodel.shopDesc}"
+                            android:textColor="@color/color_999999"
+                            android:textSize="13dp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/shape_white_color_rect"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="店铺描述:"
-                        android:textSize="13dp"
-                        android:textColor="@color/color_333333"/>
+                        android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="店铺信息"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.67dp"
+                        android:background="@color/color_EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="123456"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp" />
+                        android:orientation="horizontal"
+                        android:padding="15dp">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="经营者名称:"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@={viewmodel.operatorName}"
+                            android:textColor="@color/color_999999"
+                            android:textSize="13dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
+                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.67dp"
+                        android:background="@color/color_EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="店铺ID:"
-                        android:textSize="13dp"
-                        android:textColor="@color/color_333333" />
+                        android:orientation="horizontal"
+                        android:padding="15dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="经营者手机号:"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@={viewmodel.operatorPhone}"
+                            android:textColor="@color/color_999999"
+                            android:textSize="13dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.67dp"
+                        android:background="@color/color_EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="sdfsfsd5441sdfs"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp"/>
+                        android:orientation="horizontal"
+                        android:padding="15dp">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="经营者材料 :"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@={viewmodel.operatorMaterial}"
+                            android:textColor="@color/color_999999"
+                            android:textSize="13dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
+                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.67dp"
+                        android:background="@color/color_EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="店铺评分:"
-                        android:textSize="13dp"
-                        android:textColor="@color/color_333333"/>
+                        android:orientation="horizontal"
+                        android:padding="15dp">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="0.0"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="地址:"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
 
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@={viewmodel.address}"
+                            android:textColor="@color/color_999999"
+                            android:textSize="13dp" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
 
+        </androidx.core.widget.NestedScrollView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_marginStart="13dp"
-                android:layout_marginEnd="13dp"
-                android:background="@drawable/shape_white_color_rect"
-                android:orientation="vertical">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="15dp"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="店铺信息"
-                        android:textSize="17dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="编辑"
-                        android:textColor="@color/color_999999"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="经营者名称:"
-                        android:textSize="13dp"
-                        android:textColor="@color/color_333333" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="DUODUO"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="经营者手机号:"
-                        android:textSize="13dp"
-                        android:textColor="@color/color_333333" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="12345678901"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="经营者材料 :"
-                        android:textSize="13dp"
-                        android:textColor="@color/color_333333" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="个人"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.67dp"
-                    android:background="@color/color_EEEEEE" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="地址:"
-                        android:textSize="13dp"
-                        android:textColor="@color/color_333333" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="上海市浦东新区"
-                        android:textColor="@color/color_999999"
-                        android:textSize="13dp" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

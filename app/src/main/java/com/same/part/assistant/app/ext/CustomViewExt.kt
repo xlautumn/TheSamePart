@@ -2,6 +2,7 @@ package com.same.part.assistant.app.ext
 
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -39,6 +40,18 @@ fun hideSoftKeyboard(activity: Activity?) {
             )
         }
     }
+}
+
+fun EditText.setCanInput(canInput: Boolean) {
+    isFocusable = canInput
+    isFocusableInTouchMode = canInput
+    isClickable = canInput
+    isCursorVisible = canInput
+    if (canInput) {
+        hint = ""
+        requestFocus()
+    }
+
 }
 
 ///**

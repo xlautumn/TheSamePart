@@ -1,11 +1,11 @@
 package com.same.part.assistant.data.repository.request
 
 import com.same.part.assistant.data.ApiResponse
-import com.same.part.assistant.data.model.RequestShopUserLogin
 import com.same.part.assistant.app.network.NetworkApi
-import com.same.part.assistant.data.model.RequestShopUserInfo
-import com.same.part.assistant.data.model.ShopUserModel
+import com.same.part.assistant.app.network.NetworkApiv2
+import com.same.part.assistant.data.model.*
 import me.hgj.jetpackmvvm.network.AppException
+import okhttp3.ResponseBody
 
 /**
  * 从网络中获取数据
@@ -34,10 +34,38 @@ class HttpRequestManger {
     /**
      * 获取用户信息
      */
-    suspend fun getUserInfo(token:String): ApiResponse<ShopUserModel> {
+    suspend fun getUserInfo(token: String): ApiResponse<ShopUserModel> {
         return NetworkApi.service.getUserInfo(RequestShopUserInfo(token))
     }
 
+    /**
+     * 获取店铺信息
+     */
+    suspend fun getShopInfo(token: String): ApiResponse<ShopModel> {
+        return NetworkApi.service.getShopInfo(token)
+    }
+
+    /**
+     * 更新店铺信息
+     */
+    suspend fun updateShopInfo(
+        token: String,
+        img: String,
+        name: String,
+        brand: String,
+        shopId:String
+    ): ResponseBody {
+        return NetworkApi.service.updateShopIno(token, shopId,RequestUpdateShopInfo(brand, img, name))
+    }
+
+    /**
+     * 获取七牛Token
+     */
+    suspend fun getQiniuToken(
+        token: String
+    ): ResponseBody {
+        return NetworkApiv2.service.getQiniuToken(token)
+    }
 
 
 }

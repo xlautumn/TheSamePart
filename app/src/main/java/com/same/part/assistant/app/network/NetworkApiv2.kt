@@ -3,6 +3,7 @@ package com.same.part.assistant.app.network
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
+import com.google.gson.GsonBuilder
 import com.same.part.assistant.TheSamePartApplication
 import com.same.part.assistant.app.network.converter.CustomGsonConverterFactory
 import me.hgj.jetpackmvvm.network.BaseNetworkApi
@@ -12,6 +13,7 @@ import me.hgj.jetpackmvvm.network.interceptor.logging.LogInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -19,10 +21,10 @@ import java.util.concurrent.TimeUnit
  * 描述　: 网络请求构建器，继承BasenetworkApi 并实现setHttpClientBuilder/setRetrofitBuilder方法，
  * 在这里可以添加拦截器，设置构造器可以对Builder做任意操作
  */
-class NetworkApi : BaseNetworkApi() {
+class NetworkApiv2 : BaseNetworkApi() {
     companion object {
-        val instance: NetworkApi by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            NetworkApi()
+        val instance: NetworkApiv2 by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            NetworkApiv2()
         }
 
         //双重校验锁式-单例 封装NetApiService 方便直接快速调用
@@ -67,8 +69,7 @@ class NetworkApi : BaseNetworkApi() {
     override fun setRetrofitBuilder(builder: Retrofit.Builder): Retrofit.Builder {
         return builder.apply {
 
-
-            addConverterFactory(CustomGsonConverterFactory.create())
+            addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
 
 
             addCallAdapterFactory(CoroutineCallAdapterFactory())

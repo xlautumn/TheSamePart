@@ -1,8 +1,10 @@
 package com.same.part.assistant
 
-import android.app.Application
+
 import android.content.Context
 import androidx.multidex.MultiDex
+
+
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader

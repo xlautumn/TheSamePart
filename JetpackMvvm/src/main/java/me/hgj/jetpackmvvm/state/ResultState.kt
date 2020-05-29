@@ -3,6 +3,7 @@ import androidx.lifecycle.MutableLiveData
 import me.hgj.jetpackmvvm.network.AppException
 import me.hgj.jetpackmvvm.network.BaseResponse
 import me.hgj.jetpackmvvm.network.ExceptionHandle
+import okhttp3.ResponseBody
 
 /**
  * 作者　: hegaojian
@@ -20,6 +21,19 @@ sealed class ResultState<out T> {
     data class Success<out T>(val data: T) : ResultState<T>()
     data class Error(val error: AppException) : ResultState<Nothing>()
 }
+
+sealed class ResultResponseBodyState {
+    companion object {
+        fun  onAppSuccess(data: ResponseBody): ResultResponseBodyState = Success(data)
+        fun onAppLoading(loadingMessage:String): ResultResponseBodyState = Loading(loadingMessage)
+        fun onAppError(error: AppException): ResultResponseBodyState = Error(error)
+    }
+
+    data class Loading(val loadingMessage:String) : ResultResponseBodyState()
+    data class Success(val data: ResponseBody) : ResultResponseBodyState()
+    data class Error(val error: Exception) : ResultResponseBodyState()
+}
+
 
 
 /**

@@ -17,4 +17,23 @@ data class RequestShopUserInfo(
 )
 
 
+/**
+ * 更新店铺信息
+ */
+data class RequestUpdateShopInfo(
+    val brand: String,
+    val img: String,
+    val name: String
+)
+
+data class RequestUpdateShopInfo1(
+    val page: String = "0",
+    val size: String= "10",
+    val name: String= "",
+val type:String = "1,2"
+)
+
+
+
+
 

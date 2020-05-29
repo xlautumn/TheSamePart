@@ -75,6 +75,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     //开关
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    //七牛云
+    api 'com.qiniu:qiniu-android-sdk:7.3.3'
     //网络请求框架
     implementation("com.squareup.okhttp3:okhttp:4.7.2")
 

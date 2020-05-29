@@ -306,6 +306,67 @@ data class UserX(
     val version: Int
 )
 
+/**
+ * 店铺信息
+ */
+data class ShopModel(
+    val addTime: String,
+    val address: String,
+    val auditResult: Any,
+    val brand: String,
+    val businessLicense: String,
+    val businessLicenseImg: String,
+    val businessScope: Any,
+    val businessScopeJava: Any,
+    val cashName: Any,
+    val cashPassword: Any,
+    val categoryIds: List<Any>,
+    val city: String,
+    val commentCount: Int,
+    val content: Any,
+    val corporate: Any,
+    val count: Int,
+    val distance: Double,
+    val district: String,
+    val email: String,
+    val favoriteCount: Int,
+    val firstScore: Double,
+    val idCard: String,
+    val idCardImg: String,
+    val ifFavorite: Boolean,
+    val img: String,
+    val integrity: Int,
+    val lat: Any,
+    val linkman: String,
+    val lng: Any,
+    val mobile: String,
+    val monthOrders: Int,
+    val moods: Int,
+    val name: String,
+    val `open`: Boolean,
+    val phone: String,
+    val platformRate: Int,
+    val productCategoryCount: Int,
+    val productCommentCount: Int,
+    val productCount: Int,
+    val province: String,
+    val secondScore: Double,
+    val sequence: Int,
+    val shopExtends: List<Any>,
+    val shopId: Int,
+    val shopkeeperName: Any,
+    val shopkeeperPassword: Any,
+    val state: Int,
+    val thirdScore: Double,
+    val totalOrders: Int,
+    val type: Any,
+    val updateTime: String
+)
+
+
+
+
+
 
 
 

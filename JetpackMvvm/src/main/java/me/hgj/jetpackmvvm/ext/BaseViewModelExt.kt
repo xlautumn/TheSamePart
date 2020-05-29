@@ -12,9 +12,11 @@ import me.hgj.jetpackmvvm.ext.util.loge
 import me.hgj.jetpackmvvm.network.AppException
 import me.hgj.jetpackmvvm.network.BaseResponse
 import me.hgj.jetpackmvvm.network.ExceptionHandle
+import me.hgj.jetpackmvvm.state.ResultResponseBodyState
 import me.hgj.jetpackmvvm.state.ResultState
 import me.hgj.jetpackmvvm.state.paresException
 import me.hgj.jetpackmvvm.state.paresResult
+import okhttp3.ResponseBody
 
 /**
  * 作者　: hegaojian
@@ -51,6 +53,29 @@ fun <T> BaseVmDbActivity<*, *>.parseState(
         }
     }
 }
+
+fun BaseVmDbActivity<*, *>.parseStateResponseBody(
+    resultState: ResultResponseBodyState,
+    onSuccess: (ResponseBody) -> Unit,
+    onError: ((Exception) -> Unit)? = null,
+    onLoading: (() -> Unit)? = null
+) {
+    when (resultState) {
+        is ResultResponseBodyState.Loading -> {
+            showLoading(resultState.loadingMessage)
+            onLoading?.run { this }
+        }
+        is ResultResponseBodyState.Success -> {
+            dismissLoading()
+            onSuccess(resultState.data)
+        }
+        is ResultResponseBodyState.Error -> {
+            dismissLoading()
+            onError?.run { this(resultState.error) }
+        }
+    }
+}
+
 /**
  * 显示页面状态，这里有个技巧，成功回调在第一个，其后两个带默认值的回调可省
  * @param resultState 接口返回值
@@ -162,6 +187,31 @@ fun <T> BaseViewModel.request(
         }.onFailure {
             it.message?.loge("JetpackMvvm")
             resultState.paresException(it)
+        }
+    }
+}
+
+/**
+ * net request 不校验请求结果数据是否是成功
+ * @param block 请求体方法0
+ * @param resultState 请求回调的ResultState数据
+ * @param isShowDialog 是否显示加载框
+ * @param loadingMessage 加载框提示内容
+ */
+fun  BaseViewModel.requestResponseBody(
+    block: suspend () -> ResponseBody,
+    resultState: MutableLiveData<ResultResponseBodyState>,
+    isShowDialog: Boolean = false,
+    loadingMessage: String="请求网络中..."
+) {
+    viewModelScope.launch {
+        runCatching {
+            if (isShowDialog) resultState.value = ResultResponseBodyState.onAppLoading(loadingMessage)
+            withContext(Dispatchers.IO) { block() }
+        }.onSuccess {
+            resultState.value =  ResultResponseBodyState.onAppSuccess(it)
+        }.onFailure {
+            it.message?.loge("JetpackMvvm")
         }
     }
 }
