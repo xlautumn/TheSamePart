@@ -70,6 +70,12 @@ object CacheUtil {
         return kv.decodeLong("expirationTime")
     }
 
+    /**
+     * 获取TOKEN
+     */
+    fun getToken(): String {
+        return getShopUserModel()?.AccessToken?.accessToken?:""
+    }
 
 
 }
