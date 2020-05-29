@@ -45,6 +45,7 @@
         <activity android:name=".activity.ChangePasswordActivity" />
         <activity android:name=".activity.OrderSubmitActivity" />
         <activity android:name=".activity.PurchaseOrderDetailActivity" />
+        <activity android:name=".activity.AddCashierGoodActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

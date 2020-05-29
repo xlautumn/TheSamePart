@@ -7,13 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.google.android.material.tabs.TabLayout
 import com.same.part.assistant.R
 import kotlinx.android.synthetic.main.fragment_goods.*
 
 /**
  * 商品
  */
-class GoodsFragment : Fragment() {
+class GoodsFragment : Fragment(), TabLayout.OnTabSelectedListener {
+    /**
+     * 当前所在的Tab
+     */
+    internal var mCurrentTab = TAB_CASHIER_INDEX
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,7 +34,22 @@ class GoodsFragment : Fragment() {
             adapter = TabAdapter(childFragmentManager)
             offscreenPageLimit = TITLES.size
         }
-        goodsTabs.setupWithViewPager(goodsPager)
+        goodsTabs.apply {
+            setupWithViewPager(goodsPager)
+            addOnTabSelectedListener(this@GoodsFragment)
+        }
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        mCurrentTab = tab?.position ?: 0
     }
 
     class TabAdapter(fragmentManager: FragmentManager) :

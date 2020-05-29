@@ -1,5 +1,6 @@
 package com.same.part.assistant.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +14,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.same.part.assistant.R
 import com.same.part.assistant.fragment.GoodsFragment
-import com.same.part.assistant.ui.home.HomeFragment
 import com.same.part.assistant.fragment.MyFragment
 import com.same.part.assistant.fragment.PurchaseFragment
+import com.same.part.assistant.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar_title.*
 
 /**
  * 主页面
@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mTitleBack.visibility = View.GONE
         mViewPager.apply {
             adapter = TabAdapter(supportFragmentManager)
             offscreenPageLimit = TITLES.size
@@ -41,12 +40,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
     class TabAdapter(fragmentManager: FragmentManager) :
         FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int): Fragment = when (position) {
-            TAB_HOME_INDEX -> HomeFragment()
-            TAB_GOODS_INDEX -> GoodsFragment()
-            TAB_PURCHASE_INDEX -> PurchaseFragment()
-            else -> MyFragment()
-        }
+        override fun getItem(position: Int): Fragment = mFragmentList[position]
 
         override fun getCount(): Int = TITLES.size
 
@@ -68,6 +62,45 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             changedTabStatus(this, true)
         }
         mToolbarTitle.text = TITLES[tab?.position ?: 0]
+        //如果在商品Tab需要显示天添加和搜索按钮
+        if (tab?.position == TAB_GOODS_INDEX) {
+            //添加商品分类
+            mToolbarAdd.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    val fragment = mFragmentList[TAB_GOODS_INDEX]
+                    if (fragment is GoodsFragment) {
+                        if (fragment.mCurrentTab == GoodsFragment.TAB_CASHIER_INDEX) {
+                            startActivity(
+                                Intent(
+                                    this@MainActivity,
+                                    AddCashierGoodActivity::class.java
+                                )
+                            )
+                        } else {
+                            startActivity(
+                                Intent(
+                                    this@MainActivity,
+                                    AddProductClassificationActivity::class.java
+                                ).apply {
+                                    putExtra(
+                                        AddProductClassificationActivity.JUMP_FROM_TYPE,
+                                        AddProductClassificationActivity.JUMP_FROM_ADD_SECOND_CATEGORY
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+            //搜索商品
+            mToolbarSearch.apply {
+                visibility = View.VISIBLE
+            }
+        } else {
+            mToolbarAdd.visibility = View.GONE
+            mToolbarSearch.visibility = View.GONE
+        }
     }
 
     /**
@@ -134,6 +167,9 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             R.drawable.purchase_checked,
             R.drawable.my_checked
         )
+        //页面Fragment
+        val mFragmentList =
+            arrayOf(HomeFragment(), GoodsFragment(), PurchaseFragment(), MyFragment())
         const val TAB_HOME_INDEX = 0
         const val TAB_GOODS_INDEX = 1
         const val TAB_PURCHASE_INDEX = 2
