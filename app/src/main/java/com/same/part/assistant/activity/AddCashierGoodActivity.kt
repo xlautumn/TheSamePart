@@ -12,7 +12,7 @@ class AddCashierGoodActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_product_classification)
+        setContentView(R.layout.activity_add_cashier_good)
         //标题
         mToolbarTitle.text = "添加收银商品"
         //返回按钮

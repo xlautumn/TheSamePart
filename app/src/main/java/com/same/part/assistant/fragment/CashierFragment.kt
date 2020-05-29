@@ -113,11 +113,17 @@ class CashierFragment : Fragment() {
                         cashierRecyclerView.adapter?.notifyDataSetChanged()
                     }
 
+                } ?: also {
+                    //通知刷新结束
+                    mSmartRefreshLayout?.refreshComplete(false)
+                    mCurrentPage--
                 }
             }
         }, {
             //请求失败回退请求的页数
             mCurrentPage--
+            //通知刷新结束
+            mSmartRefreshLayout?.refreshComplete(true)
         })
     }
 
