@@ -7,7 +7,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dip_15"
+        android:paddingTop="@dimen/dip_10"
+        android:paddingBottom="@dimen/dip_10"
+        android:paddingRight="@dimen/dip_15"
+        android:paddingLeft="@dimen/dip_15"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -27,7 +30,7 @@
             android:layout_marginLeft="15dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="[特价]精品进口香蕉/1根"
+            android:text=""
             android:textSize="15dp"
             app:layout_constraintEnd_toStartOf="@+id/buy_or_choose"
             app:layout_constraintStart_toEndOf="@+id/goodAvatar"
@@ -41,7 +44,8 @@
             android:layout_marginTop="@dimen/dip_5"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="精品进口香蕉"
+            android:text=""
+            android:visibility="gone"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/dip_12"
             app:layout_constraintEnd_toStartOf="@+id/buy_or_choose"
@@ -78,7 +82,7 @@
                 android:id="@+id/tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sdfasdf"
+                android:text=""
                 android:textColor="@color/color_FF0000"
                 android:textSize="@dimen/dip_14" />
 
@@ -132,6 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     android:padding="@dimen/dip_5">
 
                     <ImageView
@@ -148,6 +153,7 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
+                    android:visibility="gone"
                     android:textColor="@color/color_1d1d1d"
                     android:textSize="@dimen/dip_14" />
 
@@ -184,6 +190,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
+        android:id="@+id/bottomDivider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_05"
         android:layout_marginLeft="@dimen/dip_15"

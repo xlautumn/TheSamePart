@@ -7,9 +7,10 @@
 
     <TextView
         android:id="@+id/secondLevelName"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dip_60"
         android:layout_height="wrap_content"
         android:text=""
+        android:gravity="center"
         android:textColor="@color/color_9F9F9F"
         android:textSize="@dimen/dip_12"
         app:layout_constraintEnd_toEndOf="parent"

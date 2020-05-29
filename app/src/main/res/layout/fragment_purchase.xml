@@ -52,10 +52,11 @@
         app:layout_constraintTop_toBottomOf="@id/rootSearch">
 
         <ListView
-            android:id="@+id/fristLevelList"
+            android:id="@+id/firstLevelList"
             android:layout_width="@dimen/dip_0"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/color_F7F7F7"
             android:listSelector="@android:color/transparent"
             android:divider="@android:color/transparent"
             android:scrollbars="none" />
@@ -76,16 +77,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dip_05"
                 android:background="@color/color_E5E5E5" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/color_FFFFFF"
-                android:paddingTop="@dimen/dip_10"
-                android:paddingBottom="@dimen/dip_10"
-                android:text=""
-                android:textColor="@color/color_1d1d1d"
-                android:textSize="@dimen/dip_12" />
 
             <ListView
                 android:id="@+id/productList"

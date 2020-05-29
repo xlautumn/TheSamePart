@@ -8,15 +8,16 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
 import com.same.part.assistant.R
+import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.dialog.ChooseSpecsDialogFragment
-import com.same.part.assistant.model.GoodClassModel
-import java.util.ArrayList
+import java.util.*
 
 class PurchaseProductAdapter(private var mContext: FragmentActivity) :
     BaseAdapter() {
 
-    private var mProductModels = ArrayList<GoodClassModel.GoodModel>()
+    private var mProductModels = ArrayList<ProductDetailData>()
 
     override fun getCount(): Int = mProductModels.size
 
@@ -56,15 +57,38 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity) :
             view = convertView
             goodViewHolder = view.tag as GoodViewHolder
         }
-        //填充View
-        mProductModels?.get(position)?.apply {
+        mProductModels[position].apply {
             goodViewHolder.goodName?.text = name ?: ""
-            goodViewHolder.goodNameExplain?.text = desc ?: ""
             goodViewHolder.price?.text = price ?: ""
+            goodViewHolder.goodAvatar?.takeIf { !img.isNullOrEmpty() }?.let {
+                Glide.with(mContext)
+                    .load(img)
+                    .into(it)
+            }
 
-            if (inCart) {
+            if (productSku.isNullOrEmpty()) {
+                goodViewHolder.goodShoppingCartRoot?.visibility = View.GONE
+                goodViewHolder.chooseSpecs?.visibility = View.VISIBLE
+                goodViewHolder.chooseSpecs?.setOnClickListener(View.OnClickListener {
+                    val dialogFragment = ChooseSpecsDialogFragment()
+                    dialogFragment.showDialog(mContext.supportFragmentManager)
+                })
+            } else {
                 goodViewHolder.chooseSpecs?.visibility = View.GONE
                 goodViewHolder.goodShoppingCartRoot?.visibility = View.VISIBLE
+                if (cartNum > 0) {
+                    goodViewHolder.cartIncrease?.visibility = View.VISIBLE
+                    goodViewHolder.cartNum?.apply {
+                        visibility = View.VISIBLE
+                        text = cartNum.toString()
+                    }
+                } else {
+                    goodViewHolder.cartIncrease?.visibility = View.GONE
+                    goodViewHolder.cartNum?.apply {
+                        visibility = View.GONE
+                        text = ""
+                    }
+                }
                 goodViewHolder.cartIncrease?.setOnClickListener(View.OnClickListener {
                     //TODO 购买数量 增加
 
@@ -73,21 +97,19 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity) :
                     //TODO 购买数量减少
 
                 })
-            } else {
-                goodViewHolder.goodShoppingCartRoot?.visibility = View.GONE
-                goodViewHolder.chooseSpecs?.visibility = View.VISIBLE
-                goodViewHolder.chooseSpecs?.setOnClickListener(View.OnClickListener {
-                    val dialogFragment = ChooseSpecsDialogFragment()
-                    dialogFragment.showDialog(mContext.supportFragmentManager)
-                })
             }
         }
+        goodViewHolder.bottomDivider?.visibility =
+            if (position == mProductModels.lastIndex) View.GONE else View.VISIBLE
         return view
     }
 
-    fun setData(data: ArrayList<GoodClassModel.GoodModel>) {
-        mProductModels.clear()
-        mProductModels.addAll(data)
+    fun setData(data: ArrayList<ProductDetailData>?) {
+        data?.takeIf { it.isNotEmpty() }?.let {
+            mProductModels.clear()
+            mProductModels.addAll(it)
+            notifyDataSetChanged()
+        }
     }
 
     class GoodViewHolder {
@@ -103,6 +125,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity) :
         var cartReduce: LinearLayout? = null
         var cartIncrease: LinearLayout? = null
         var chooseSpecs: TextView? = null
+        var bottomDivider: View? = null
     }
 }
 

@@ -13,7 +13,8 @@ import com.same.part.assistant.R
 import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
 import com.same.part.assistant.adapter.PurchaseFirstLevelAdapter
-import com.same.part.assistant.manager.GoodPurchaseDataManager
+import com.same.part.assistant.data.model.CategoryData
+import com.same.part.assistant.manager.GoodPurchaseManager
 import kotlinx.android.synthetic.main.fragment_purchase.*
 
 /**
@@ -39,32 +40,28 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        GoodPurchaseDataManager.getInstance().syncGoodPurchaseData()
         statement.setOnClickListener(this)
         rootDetail.setOnClickListener(this)
+    }
 
-        //一级分类及产品列表
-        fristLevelList.apply {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        firstLevelList.apply {
             mFirstLevelAdapter = activity?.let { PurchaseFirstLevelAdapter(it) }
             setOnItemClickListener { parent, view, position, id ->
-                Toast.makeText(activity, "一级分类：$position", Toast.LENGTH_LONG).show()
-                //刷新产品数据列表
-
+                refreshCategory(position)
             }
             adapter = mFirstLevelAdapter
         }
-        //二级分类
+
         secondLevelListView.apply {
             layoutManager = LinearLayoutManager(activity).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
             mSecondLevelAdapter = activity?.let { PurchaseSecondLevelAdapter(it) }
-            //给adapter设置监听获取当前选中得一级分类
-            mSecondLevelAdapter?.setOnItemClickListener { position, firstLevelName ->
-                Toast.makeText(activity, "二级分类：$position", Toast.LENGTH_LONG).show()
-                //标记当前分类为选中，其他得为未选中
-                //刷新二级列表及产品数据列表
-
+            mSecondLevelAdapter?.setOnItemClickListener { position, categorySecondData ->
+                refreshSecondCategory(position)
             }
             adapter = mSecondLevelAdapter
         }
@@ -72,6 +69,60 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             mProductAdapter = activity?.let { PurchaseProductAdapter(it) }
             adapter = mProductAdapter
             mProductAdapter
+        }
+        GoodPurchaseManager.instance.syncPurchaseCategoryData {
+            refreshCategory(0)
+        }
+    }
+
+    private fun refreshSecondCategory(position: Int) {
+        val categoryDataList = GoodPurchaseManager.instance.getPurchaseCategoryData()
+        categoryDataList.takeIf { GoodPurchaseManager.instance.mCurrentCategoryFirstLevel in categoryDataList.indices }
+            ?.let { dataList ->
+                val categoryData =
+                    dataList[GoodPurchaseManager.instance.mCurrentCategoryFirstLevel]
+                categoryData.let { data ->
+                    data.sons?.takeIf { position in it.indices }?.apply {
+                        for (i in 0 until size) this[i].let {
+                            it.isSelected = (i == position)
+                        }
+                        mSecondLevelAdapter?.setData(this)
+                        //请求产品列表
+                        refreshProduct(get(position))
+                    }
+                }
+            }
+    }
+
+    private fun refreshCategory(position: Int) {
+        GoodPurchaseManager.instance.mCurrentCategoryFirstLevel = position
+        val categoryDataList = GoodPurchaseManager.instance.getPurchaseCategoryData()
+        for (i in 0 until categoryDataList.size) categoryDataList[i].let {
+            it.isSelected = (i == position)
+        }
+        mFirstLevelAdapter?.setData(categoryDataList)
+        categoryDataList.takeIf { position in categoryDataList.indices }?.let {
+            val sons = categoryDataList[position].sons
+            sons?.apply {
+                for (i in 0 until size) this[i].let {
+                    it.isSelected = (i == 0)
+                }
+                mSecondLevelAdapter?.setData(this)
+
+                refreshProduct(get(0))
+            }
+        }
+    }
+
+    private fun refreshProduct(data: CategoryData) {
+        GoodPurchaseManager.instance.syncPurchaseProductData(
+            data.productCategoryId,
+            data.name
+        ) {
+            //刷新产品数据
+            val productData =
+                GoodPurchaseManager.instance.getPurchaseProductData()
+            mProductAdapter?.setData(productData)
         }
     }
 
