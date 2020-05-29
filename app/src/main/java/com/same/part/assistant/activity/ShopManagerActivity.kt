@@ -89,9 +89,10 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
 
         mRequestShopManagerViewModel.updateResult.observe(this, Observer { resultState ->
             parseStateResponseBody(resultState, {
-                val response: String = it.string()
-                val jsonObject = JSON.parseObject(response)
-                ToastUtils.showLong(jsonObject.getJSONObject("msg").toJSONString())
+                ToastUtils.showLong("更新成功")
+//                val response: String = it.string()
+//                val jsonObject = JSON.parseObject(response)
+//                ToastUtils.showLong(jsonObject.getJSONObject("msg").toString())
             })
         })
     }
