@@ -95,14 +95,14 @@ class CashierFragment : Fragment() {
     ) {
         val url = "${ApiService.SERVER_URL}amountCommodity/get"
         val json = JSON.toJSONString(
-            hashMapOf<String, String>(
-                "WSCX" to CacheUtil.getToken(),
+            hashMapOf(
+                "page" to page,
                 "name" to name,
                 "size" to size,
                 "type" to type
             )
         )
-        HttpUtil.instance.postUrl(url, json, {
+        HttpUtil.instance.postUrlWithHeader("WSCX", CacheUtil.getToken(), url, json, {
             ToastUtils.showShort("请求成功")
         })
     }
