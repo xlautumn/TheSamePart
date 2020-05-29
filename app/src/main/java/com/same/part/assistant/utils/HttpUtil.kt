@@ -41,7 +41,7 @@ class HttpUtil private constructor() {
 
                 override fun onResponse(call: Call, response: Response) {
                     SingletonHolder.handler.post {
-                        onSuccess?.invoke(response.body.toString())
+                        onSuccess?.invoke(response.body?.string().orEmpty())
                     }
                 }
             })
@@ -71,7 +71,7 @@ class HttpUtil private constructor() {
 
                 override fun onResponse(call: Call, response: Response) {
                     SingletonHolder.handler.post {
-                        onSuccess?.invoke(response.body.toString())
+                        onSuccess?.invoke(response.body?.string().orEmpty())
                     }
                 }
             })
