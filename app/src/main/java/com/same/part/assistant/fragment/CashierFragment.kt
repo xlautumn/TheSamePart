@@ -8,12 +8,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alibaba.fastjson.JSON
-import com.blankj.utilcode.util.ToastUtils
+import com.alibaba.fastjson.JSONObject
 import com.same.part.assistant.R
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CashierModel
+import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
 import kotlinx.android.synthetic.main.fragment_cashier.*
 
@@ -21,35 +21,10 @@ import kotlinx.android.synthetic.main.fragment_cashier.*
  * 收银商品
  */
 class CashierFragment : Fragment() {
-    private val mCashierList = arrayListOf<CashierModel>().apply {
-        add(
-            CashierModel(
-                "https38",
-                "西蓝花",
-                "￥5.00",
-                "500g",
-                false
-            )
-        )
-        add(
-            CashierModel(
-                "https38",
-                "西蓝花",
-                "￥5.00",
-                "500g",
-                false
-            )
-        )
-        add(
-            CashierModel(
-                "https38",
-                "西蓝花",
-                "￥5.00",
-                "500g",
-                false
-            )
-        )
-    }
+    //数据列表
+    private val mCashierList = arrayListOf<CashierModel>()
+    //当前请求第几页的数据
+    private var mCurrentPage = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,15 +47,17 @@ class CashierFragment : Fragment() {
         mSmartRefreshLayout.apply {
             //下拉刷新
             setOnRefreshListener {
-
+                mCurrentPage = 0
+                loadCashierList(page = mCurrentPage, isRefresh = true)
             }
             //上拉加载
             setOnLoadMoreListener {
-
+                mCurrentPage++
+                loadCashierList(page = mCurrentPage, isRefresh = false)
             }
         }
         //加载数据
-        loadCashierList()
+        loadCashierList(page = mCurrentPage, isRefresh = true)
     }
 
     /**
@@ -89,21 +66,58 @@ class CashierFragment : Fragment() {
      */
     private fun loadCashierList(
         name: String = "",
-        page: String = "0",
+        page: Int = 0,
         size: String = "10",
-        type: String = "1,2"
+        type: String = "1,2",
+        isRefresh: Boolean
     ) {
         val url = "${ApiService.SERVER_URL}amountCommodity/get"
-        val json = JSON.toJSONString(
-            hashMapOf(
-                "page" to page,
-                "name" to name,
-                "size" to size,
-                "type" to type
-            )
+        val jsonMap = hashMapOf(
+            "page" to "$page",
+            "name" to name,
+            "size" to size,
+            "type" to type
         )
-        HttpUtil.instance.postUrlWithHeader("WSCX", CacheUtil.getToken(), url, json, {
-            ToastUtils.showShort("请求成功")
+        HttpUtil.instance.postUrlWithHeader("WSCX", CacheUtil.getToken(), url, jsonMap, {
+            val resultJson = JSONObject.parseObject(it)
+            resultJson.apply {
+                getJSONObject("msg")?.getJSONArray("data")?.takeIf { it.size >= 0 }?.apply {
+                    if (this.size == 0) {
+                        //通知刷新结束
+                        mSmartRefreshLayout?.refreshComplete(false)
+                        mCurrentPage--
+                    } else {
+                        val itemList = ArrayList<CashierModel>()
+                        for (i in 0 until this.size) {
+                            getJSONObject(i)?.apply {
+                                val id = getString("productId")
+                                val name = getString("name")
+                                val price = getString("price")
+                                val unit = getString("unit")
+                                val state = getString("state") == "1"
+                                CashierModel(id, name, price, unit, state).apply {
+                                    itemList.add(this)
+                                }
+                            }
+                        }
+                        //如果是刷新需要清空之前的数据
+                        if (isRefresh && itemList.size > 0) {
+                            mCashierList.clear()
+                            mCashierList.addAll(itemList)
+                        } else {
+                            mCashierList.addAll(itemList)
+                        }
+                        //通知刷新结束
+                        mSmartRefreshLayout?.refreshComplete(true)
+                        //刷新数据
+                        cashierRecyclerView.adapter?.notifyDataSetChanged()
+                    }
+
+                }
+            }
+        }, {
+            //请求失败回退请求的页数
+            mCurrentPage--
         })
     }
 
@@ -130,7 +144,7 @@ class CashierFragment : Fragment() {
             holder.cashierOperation.apply {
                 setOnClickListener {
                     model.status = !model.status
-                    text = if (model.status) "启动" else "禁用"
+                    text = if (model.status) "禁用" else "启动"
                 }
             }
         }

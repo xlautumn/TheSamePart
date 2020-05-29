@@ -3,7 +3,6 @@ package com.same.part.assistant.utils
 import android.os.Handler
 import android.os.Looper
 import okhttp3.*
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 
@@ -11,6 +10,7 @@ import java.io.IOException
  * 网络请求
  */
 class HttpUtil private constructor() {
+
     companion object {
         val instance = SingletonHolder.holder
     }
@@ -86,13 +86,16 @@ class HttpUtil private constructor() {
      */
     internal fun postUrl(
         url: String,
-        json: String,
+        jsonMap: HashMap<String, String>,
         onSuccess: ((String) -> Unit)?,
         onError: ((String) -> Unit)? = null
     ) {
         try {
-            val body = json.toRequestBody()
-            val request: Request = Request.Builder().url(url).post(body).build()
+            val body = FormBody.Builder()
+            for (i in jsonMap) {
+                body.add(i.key, i.value)
+            }
+            val request: Request = Request.Builder().url(url).post(body.build()).build()
             SingletonHolder.client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     SingletonHolder.handler.post {
@@ -120,7 +123,7 @@ class HttpUtil private constructor() {
         headName: String,
         headValue: String,
         url: String,
-        json: String,
+        jsonMap: HashMap<String, String>,
         onSuccess: ((String) -> Unit)?,
         onError: ((String) -> Unit)? = null
     ) {
@@ -128,9 +131,12 @@ class HttpUtil private constructor() {
             if (headName.isEmpty() || headValue.isEmpty()) {
                 throw RuntimeException("Can't put Header with empty key or value")
             }
-            val body = json.toRequestBody()
+            val body = FormBody.Builder()
+            for (i in jsonMap) {
+                body.add(i.key, i.value)
+            }
             val request: Request =
-                Request.Builder().url(url).addHeader(headName, headValue).post(body).build()
+                Request.Builder().url(url).addHeader(headName, headValue).post(body.build()).build()
             SingletonHolder.client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     SingletonHolder.handler.post {
