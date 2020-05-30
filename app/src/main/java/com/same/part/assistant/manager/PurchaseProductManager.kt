@@ -124,7 +124,7 @@ class PurchaseProductManager private constructor() {
 
         HttpUtil.instance.getUrl(url.toString(), { result ->
             //todo 解析列表
-          var uu=result
+            var uu = result
         })
     }
 
@@ -152,6 +152,15 @@ class PurchaseProductManager private constructor() {
 
                 }
             }
+        })
+    }
+
+    fun getProductSpecs(productId: String, onSuccess: (() -> Unit)?) {
+        var url = StringBuilder("${ApiService.SERVER_URL}$productId")
+            .append("?appKey=${CacheUtil.getAppKey()}")
+            .append("&appSecret=${CacheUtil.getAppSecret()}")
+        HttpUtil.instance.getUrl(url.toString(), { result ->
+                val uu =result
         })
     }
 }

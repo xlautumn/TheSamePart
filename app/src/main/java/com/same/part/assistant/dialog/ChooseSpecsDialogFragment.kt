@@ -85,6 +85,7 @@ class ChooseSpecsDialogFragment : DialogFragment() {
         //设置监听等动作
         mDataView.apply {
             layoutManager = GridLayoutManager(mContext, 2)
+            //adapter需要重新处理
             mAdapter = mContext?.let { ChooseSpecsDialogAdapter(it) }
             mAdapter?.setChooseSpecsDialogListener {
                 onItemClick {position ->

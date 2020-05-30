@@ -195,4 +195,33 @@ class HttpUtil private constructor() {
             onError?.invoke(e.toString())
         }
     }
+
+    /**
+     * delete请求
+     */
+    internal fun deleteUrl(
+        url: String,
+        onSuccess: ((String) -> Unit)?,
+        onError: ((String) -> Unit)? = null
+    ) {
+        try {
+            val request: Request = Request.Builder().url(url).delete().build()
+            SingletonHolder.client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    SingletonHolder.handler.post {
+                        onError?.invoke(e.toString())
+                    }
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val result = response.body?.string().orEmpty()
+                    SingletonHolder.handler.post {
+                        onSuccess?.invoke(result)
+                    }
+                }
+            })
+        } catch (e: Exception) {
+            onError?.invoke(e.toString())
+        }
+    }
 }

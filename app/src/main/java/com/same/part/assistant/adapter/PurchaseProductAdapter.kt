@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.dialog.ChooseSpecsDialogFragment
+import com.same.part.assistant.manager.PurchaseProductManager
 import java.util.*
 
 class PurchaseProductAdapter(private var mContext: FragmentActivity) :
@@ -70,8 +71,13 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity) :
                 goodViewHolder.goodShoppingCartRoot?.visibility = View.GONE
                 goodViewHolder.chooseSpecs?.visibility = View.VISIBLE
                 goodViewHolder.chooseSpecs?.setOnClickListener(View.OnClickListener {
-                    val dialogFragment = ChooseSpecsDialogFragment()
-                    dialogFragment.showDialog(mContext.supportFragmentManager)
+                    //规格查询
+//                    PurchaseProductManager.INSTANCE.getProductSpecs(productId?:"") {
+                    PurchaseProductManager.INSTANCE.getProductSpecs("2063") {
+
+                        val dialogFragment = ChooseSpecsDialogFragment()
+                        dialogFragment.showDialog(mContext.supportFragmentManager)
+                    }
                 })
             } else {
                 goodViewHolder.chooseSpecs?.visibility = View.GONE
