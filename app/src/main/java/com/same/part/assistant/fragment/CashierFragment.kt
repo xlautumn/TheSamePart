@@ -67,7 +67,7 @@ class CashierFragment : Fragment() {
     private fun loadCashierList(
         name: String = "",
         page: Int = 0,
-        size: String = "10",
+        size: String = "20",
         type: String = "1,2",
         isRefresh: Boolean
     ) {
