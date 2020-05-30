@@ -69,7 +69,7 @@ class ProductClassificationFragment : Fragment() {
     private fun loadProductClassificationList(
         name: String = "",
         page: Int,
-        size: String = "10",
+        size: String = "20",
         isRefresh: Boolean
     ) {
         val url = StringBuilder("${ApiService.SERVER_URL}custom-categories")
@@ -77,9 +77,7 @@ class ProductClassificationFragment : Fragment() {
             .append("&name=$name")
             .append("&size=$size")
             .append(
-                "&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.size > 0 }?.get(
-                    0
-                )}"
+                "&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.size > 0 }?.get(0)?.shop?.shopId}"
             )
             .append("&appKey=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey}")
             .append("&appSecret=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret}")
