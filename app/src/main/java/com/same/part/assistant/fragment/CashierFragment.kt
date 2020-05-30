@@ -95,7 +95,7 @@ class CashierFragment : Fragment() {
                                     val name = getString("name")
                                     val price = getString("price")
                                     val unit = getString("unit")
-                                    val state = getString("state") == "1"
+                                    val state = getString("state")
                                     CashierModel(id, name, price, unit, state).apply {
                                         itemList.add(this)
                                     }
@@ -152,12 +152,11 @@ class CashierFragment : Fragment() {
         override fun onBindViewHolder(holder: CashierItemHolder, position: Int) {
             val model = dataList[position]
             holder.cashierName.text = model.name
-            holder.cashierPrice.text = model.price
+            holder.cashierPrice.text = "￥${model.price}"
             holder.cashierUnit.text = model.unit
             holder.cashierOperation.apply {
                 setOnClickListener {
-                    model.status = !model.status
-                    text = if (model.status) "禁用" else "启动"
+                  //todo
                 }
             }
         }
