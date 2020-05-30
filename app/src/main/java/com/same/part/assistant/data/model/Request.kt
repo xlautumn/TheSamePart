@@ -1,5 +1,7 @@
 package com.same.part.assistant.data.model
 
+import com.same.part.assistant.app.util.CacheUtil
+
 /**
  * 请求登录
  */
@@ -16,7 +18,6 @@ data class RequestShopUserInfo(
     val token: String
 )
 
-
 /**
  * 更新店铺信息
  */
@@ -25,12 +26,26 @@ data class RequestUpdateShopInfo(
     val img: String,
     val name: String
 )
+/**
+ * 添加/编辑商品分类
+ */
+data class RequestShopCategoryInfo(
+    val img: String,
+    val name: String,
+    val sequence: String,
+    val description: String,
+    val parentId: String,
+    val shopId: Int? = CacheUtil.getShopId(),
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret()
+)
 
-data class RequestUpdateShopInfo1(
-    val page: String = "0",
-    val size: String= "10",
-    val name: String= "",
-val type:String = "1,2"
+/**
+ * appKey  appSecret
+ */
+data class RequestAppInfo(
+    val appKey: String = CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey?:"",
+    val appSecret: String = CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret?:""
 )
 
 data class CategoryData(
@@ -91,6 +106,12 @@ data class ProductDetailSort(
     var unsorted: Boolean? = false,
     var empty: Boolean? = false
 )
+
+
+
+
+
+
 
 
 

@@ -155,4 +155,44 @@ class HttpUtil private constructor() {
             onError?.invoke(e.toString())
         }
     }
+
+    /**
+     * put请求添加header
+     */
+    internal fun putUrlWithHeader(
+        headName: String,
+        headValue: String,
+        url: String,
+        jsonMap: HashMap<String, String>,
+        onSuccess: ((String) -> Unit)?,
+        onError: ((String) -> Unit)? = null
+    ) {
+        try {
+            if (headName.isEmpty() || headValue.isEmpty()) {
+                throw RuntimeException("Can't put Header with empty key or value")
+            }
+            val body = FormBody.Builder()
+            for (i in jsonMap) {
+                body.add(i.key, i.value)
+            }
+            val request: Request =
+                Request.Builder().url(url).addHeader(headName, headValue).put(body.build()).build()
+            SingletonHolder.client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    SingletonHolder.handler.post {
+                        onError?.invoke(e.toString())
+                    }
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val result = response.body?.string().orEmpty()
+                    SingletonHolder.handler.post {
+                        onSuccess?.invoke(result)
+                    }
+                }
+            })
+        } catch (e: Exception) {
+            onError?.invoke(e.toString())
+        }
+    }
 }

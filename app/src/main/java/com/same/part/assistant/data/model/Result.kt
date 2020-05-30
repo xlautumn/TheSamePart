@@ -1,5 +1,7 @@
 package com.same.part.assistant.data.model
 
+import com.qiniu.android.http.ResponseInfo
+
 /**
  * 客户管理数据类
  */
@@ -24,12 +26,23 @@ data class VipInfoModel(
  * 收银商品数据类
  */
 data class CashierModel(
-    var id: String,
-    var name: String,
-    var price: String,
-    var unit: String,
-    var status: Boolean
+    var id: String = "",
+    var name: String = "",
+    var price: String = "",
+    var unit: String = "个",
+    var status: String = "1",
+    var img: String = "",
+    var imgs: String = "",
+    var productCategoryId: String = "",
+    var barcode: String = "",
+    var sequence: String = "",
+    //1—代表是收银商品 ,称重商品 2—代表是收银商品，非称重3—代表非收银商品，称重商品4—代表非收银商品，非称重商品
+    var type: String = "2",
+    //	审核状态（0待审核，1审核通过，-1审核驳回） 默认值2
+    var audit_state: String = "2",
+    var quantity: String = "2147483647"
 )
+
 
 /**
  * 商品分类数据类
@@ -362,6 +375,15 @@ data class ShopModel(
     val type: Any,
     val updateTime: String
 )
+
+/**
+ * 七牛云返回数据
+ */
+data class QiniuMode(
+    val img: String,
+    val qiniuResponseInfo: ResponseInfo?
+)
+
 
 
 

@@ -97,7 +97,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/cashierOperation"
+            android:id="@+id/edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -105,8 +105,8 @@
             android:maxLines="1"
             android:paddingHorizontal="6dp"
             android:paddingVertical="2dp"
-            android:text="启用"
-            android:textColor="@color/color_999999"
+            android:text="编辑"
+            android:textColor="@color/color_0EB170"
             android:textSize="12dp" />
 
     </RelativeLayout>

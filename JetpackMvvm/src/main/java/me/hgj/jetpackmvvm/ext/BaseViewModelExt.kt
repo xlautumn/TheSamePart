@@ -217,6 +217,51 @@ fun  BaseViewModel.requestResponseBody(
 }
 
 /**
+ * 过滤服务器结果，失败抛异常
+ * @param block 请求体方法，必须要用suspend关键字修饰
+ * @param success 成功回调
+ * @param error 失败回调 可不传
+ * @param isShowDialog 是否显示加载框
+ * @param loadingMessage 加载框提示内容
+ */
+fun BaseViewModel.requestResponseBody(
+    block: suspend () -> ResponseBody,
+    success: (ResponseBody) -> Unit,
+    error: (Exception) -> Unit = {},
+    isShowDialog: Boolean = false,
+    loadingMessage: String = "请求网络中..."
+) {
+    //如果需要弹窗 通知Activity/fragment弹窗
+    if (isShowDialog) loadingChange.showDialog.postValue(loadingMessage)
+    viewModelScope.launch {
+        runCatching {
+            //请求代码块调度在Io线程中
+            withContext(Dispatchers.IO) { block() }
+        }.onSuccess {
+            //网络请求成功 关闭弹窗
+            loadingChange.dismissDialog.call()
+            try {
+                //因为要判断请求的数据结果是否成功，失败会抛出自定义异常，所以在这里try一下
+                success(it)
+            }catch (e:Exception){
+                //打印错误消息
+                e.message?.loge("JetpackMvvm")
+                //失败回调
+                error(ExceptionHandle.handleException(e))
+            }
+        }.onFailure {
+            //网络请求异常 关闭弹窗
+            loadingChange.dismissDialog.call()
+            //打印错误消息
+            it.message?.loge("JetpackMvvm")
+            //失败回调
+            error(it)
+        }
+    }
+}
+
+
+/**
  * net request 不校验请求结果数据是否是成功
  * @param block 请求体方法
  * @param resultState 请求回调的ResultState数据

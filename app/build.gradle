@@ -79,5 +79,11 @@ dependencies {
     api 'com.qiniu:qiniu-android-sdk:7.3.3'
     //网络请求框架
     implementation("com.squareup.okhttp3:okhttp:4.7.2")
+    //底部弹框
+    implementation 'me.shaohui:bottomdialog:1.1.9'
+    //eventbus
+    implementation 'org.greenrobot:eventbus:3.2.0'
+    //二维码扫描
+    implementation 'com.github.yuzhiqiang1993:zxing:2.2.5'
 
 }

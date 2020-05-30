@@ -29,7 +29,7 @@ class ProductClassificationFragment : Fragment() {
     //当前请求第几页的数据
     private var mCurrentPage: Int = 0
 
-    private val mProductClassificationList = arrayListOf<ProductClassificationModel>()
+    private val mProductClassificationList = ArrayList<ProductClassificationModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,7 +69,7 @@ class ProductClassificationFragment : Fragment() {
     private fun loadProductClassificationList(
         name: String = "",
         page: Int,
-        size: String = "20",
+        size: String = "${Int.MAX_VALUE}",
         isRefresh: Boolean
     ) {
         val url = StringBuilder("${ApiService.SERVER_URL}custom-categories")
