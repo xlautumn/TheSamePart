@@ -91,12 +91,12 @@ class PurchaseProductManager private constructor() {
             .append("?appKey=${CacheUtil.getAppKey()}")
             .append("&appSecret=${CacheUtil.getAppSecret()}")
             .append("&productCategoryId=$productCategoryId")
-            .append("&name=$name")
+            .append("&shopId=2000")
 
         HttpUtil.instance.getUrl(url.toString(), { result ->
             JSONObject(result).also { jsonObject ->
+                mPurchaseProductData.clear()
                 jsonObject.optJSONArray("content")?.takeIf { it.length() > 0 }?.let { jsonArray ->
-                    mPurchaseProductData.clear()
                     for (i in 0 until jsonArray.length()) {
                         jsonArray.optJSONObject(i)?.let { jsonObject ->
                             ProductDetailData().apply {
@@ -109,8 +109,8 @@ class PurchaseProductManager private constructor() {
                             }
                         }
                     }
-                    onSuccess?.invoke()
                 }
+                onSuccess?.invoke()
             }
         })
     }

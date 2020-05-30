@@ -59,7 +59,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity) :
         }
         mProductModels[position].apply {
             goodViewHolder.goodName?.text = name ?: ""
-            goodViewHolder.price?.text = price ?: ""
+            goodViewHolder.price?.text = "￥$price"
             goodViewHolder.goodAvatar?.takeIf { !img.isNullOrEmpty() }?.let {
                 Glide.with(mContext)
                     .load(img)
@@ -105,7 +105,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity) :
     }
 
     fun setData(data: ArrayList<ProductDetailData>?) {
-        data?.takeIf { it.isNotEmpty() }?.let {
+        data?.let {
             mProductModels.clear()
             mProductModels.addAll(it)
             notifyDataSetChanged()
