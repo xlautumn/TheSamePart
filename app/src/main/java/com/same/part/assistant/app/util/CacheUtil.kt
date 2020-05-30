@@ -74,7 +74,21 @@ object CacheUtil {
      * 获取TOKEN
      */
     fun getToken(): String {
-        return getShopUserModel()?.AccessToken?.accessToken?:""
+        return getShopUserModel()?.AccessToken?.accessToken ?: ""
+    }
+
+    /**
+     * 获取appKey
+     */
+    fun getAppKey(): String {
+        return getShopUserModel()?.AccessToken?.easyapi?.appKey ?: ""
+    }
+
+    /**
+     * 获取appSecret
+     */
+    fun getAppSecret(): String {
+        return getShopUserModel()?.AccessToken?.easyapi?.appSecret ?: ""
     }
 
 
