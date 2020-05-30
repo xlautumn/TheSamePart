@@ -83,5 +83,7 @@ dependencies {
     implementation 'me.shaohui:bottomdialog:1.1.9'
     //eventbus
     implementation 'org.greenrobot:eventbus:3.2.0'
+    //二维码扫描
+    implementation 'com.github.yuzhiqiang1993:zxing:2.2.5'
 
 }

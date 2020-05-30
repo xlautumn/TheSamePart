@@ -19,13 +19,16 @@ import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.app.util.GlobalUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
+import com.same.part.assistant.app.util.ScanBarCodeUtil
 import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.utils.HttpUtil
+import com.yzq.zxinglibrary.common.Constant
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.activity_add_cashier_good.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.shaohui.bottomdialog.BottomDialog
 import pub.devrel.easypermissions.EasyPermissions
+
 
 /**
  * 添加收银商品
@@ -156,6 +159,10 @@ class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         coverImg.setOnClickListener {
             choosePhoto(this)
         }
+        //扫描二维码
+        scanBarCode.setOnClickListener {
+            ScanBarCodeUtil.startScanCode(this)
+        }
         //加载商品分类数据
         loadProductClassificationList(page = 0)
     }
@@ -166,6 +173,8 @@ class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
             PhotoPickerUtil.showPhotoPicker(this)
+        } else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA_FOR_SCAN_BARCODE) {
+            ScanBarCodeUtil.startScanCode(this)
         }
     }
 
@@ -180,13 +189,21 @@ class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PhotoPickerUtil.RESULT_CODE_PHOTO_PICKER && resultCode == Activity.RESULT_OK) {
-            Matisse.obtainResult(data)?.takeIf { it.isNotEmpty() }?.apply {
-                val imageUrl =
-                    GlobalUtil.getRealFilePath(this@AddCashierGoodActivity, this[0]).orEmpty()
-                Glide.with(this@AddCashierGoodActivity)
-                    .load(this[0])
-                    .into(coverImg)
+        if (resultCode == Activity.RESULT_OK) {
+            //选头像
+            if (requestCode == PhotoPickerUtil.RESULT_CODE_PHOTO_PICKER) {
+                Matisse.obtainResult(data)?.takeIf { it.isNotEmpty() }?.apply {
+                    val imageUrl =
+                        GlobalUtil.getRealFilePath(this@AddCashierGoodActivity, this[0]).orEmpty()
+                    Glide.with(this@AddCashierGoodActivity)
+                        .load(this[0])
+                        .into(coverImg)
+                }
+            }
+            //扫商品条形码
+            else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_SCAN) {
+                val content = data?.getStringExtra(Constant.CODED_CONTENT).orEmpty()
+                barCode.setText(content)
             }
         }
     }
