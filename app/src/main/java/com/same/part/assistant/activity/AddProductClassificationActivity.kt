@@ -3,7 +3,6 @@ package com.same.part.assistant.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
@@ -12,7 +11,6 @@ import com.same.part.assistant.R
 import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.app.util.GlobalUtil
-import com.same.part.assistant.app.util.PhotoPickerUtil.PERMISSIONS_REQUEST_LIST
 import com.same.part.assistant.app.util.PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA
 import com.same.part.assistant.app.util.PhotoPickerUtil.RESULT_CODE_PHOTO_PICKER
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
@@ -20,17 +18,14 @@ import com.same.part.assistant.app.util.PhotoPickerUtil.showPhotoPicker
 import com.same.part.assistant.data.model.RequestShopCategoryInfo
 import com.same.part.assistant.databinding.ActivityAddProductClassificationBinding
 import com.same.part.assistant.viewmodel.request.RequestCategoryViewModel
-import com.same.part.assistant.viewmodel.request.RequestShopManagerViewModel
 import com.same.part.assistant.viewmodel.request.RequestUploadDataViewModel
 import com.same.part.assistant.viewmodel.state.CategoryViewModel
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.activity_add_product_classification.*
-import kotlinx.android.synthetic.main.activity_shop_manager.userAvatar
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
 import pub.devrel.easypermissions.EasyPermissions
-import pub.devrel.easypermissions.PermissionRequest
 
 /**
  * 添加商品分类
@@ -97,7 +92,7 @@ class AddProductClassificationActivity :
             })
         })
         //编辑商品分类
-        mRequestCategoryViewModel.editShopCategoryResult.observe(this,Observer { resultState ->
+        mRequestCategoryViewModel.editShopCategoryResult.observe(this, Observer { resultState ->
             parseStateResponseBody(resultState, {
                 val jsonObject = JSON.parseObject(it.string())
                 ToastUtils.showLong(jsonObject.getString("msg"))
@@ -114,7 +109,7 @@ class AddProductClassificationActivity :
                         mViewModel.description.value,
                         "37"
                     )
-                    mRequestCategoryViewModel.editShopCategory("42",requestShopCategoryInfo)
+                    mRequestCategoryViewModel.editShopCategory("42", requestShopCategoryInfo)
                 }
                 qiuniuModel.qiniuResponseInfo != null -> {//七牛云上传失败
 
@@ -148,13 +143,34 @@ class AddProductClassificationActivity :
         fun chooseAvatar() {
             choosePhoto(this@AddProductClassificationActivity)
         }
+
         //保存
         fun save() {
-            //添加/编辑商品分类(当编辑页面时没有去选择图片时不需要去七牛云上传)
-            val isNeedUploadQiniu = mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value
-            mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imageUrl.value)
+            if (judgeCanSave()) {
+                //添加/编辑商品分类(当编辑页面时没有去选择图片时不需要去七牛云上传)
+                val isNeedUploadQiniu =
+                    mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value
+                mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imageUrl.value)
+            }
         }
     }
+
+    private fun judgeCanSave(): Boolean = when {
+        mViewModel.imageUrl.value.isNullOrEmpty() -> {
+            ToastUtils.showShort("分类封面图不可为空！")
+            false
+        }
+        classificationName.text.isNullOrEmpty()->{
+            ToastUtils.showShort("分类名称不可为空！")
+            false
+        }
+        sequence.text.isNullOrEmpty()->{
+            ToastUtils.showShort("排序不可为空！")
+            false
+        }
+        else -> true
+    }
+
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
     }
