@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
@@ -14,7 +13,7 @@ import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
 import com.same.part.assistant.adapter.PurchaseFirstLevelAdapter
 import com.same.part.assistant.data.model.CategoryData
-import com.same.part.assistant.manager.GoodPurchaseManager
+import com.same.part.assistant.manager.PurchaseProductManager
 import kotlinx.android.synthetic.main.fragment_purchase.*
 
 /**
@@ -70,20 +69,20 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             adapter = mProductAdapter
             mProductAdapter
         }
-        GoodPurchaseManager.instance.syncPurchaseCategoryData {
+        PurchaseProductManager.INSTANCE.syncPurchaseCategoryData {
             refreshCategory(0)
         }
-        GoodPurchaseManager.instance.getCartProductList{
+        PurchaseProductManager.INSTANCE.getCartProductList {
 
         }
     }
 
     private fun refreshSecondCategory(position: Int) {
-        val categoryDataList = GoodPurchaseManager.instance.getPurchaseCategoryData()
-        categoryDataList.takeIf { GoodPurchaseManager.instance.mCurrentCategoryFirstLevel in categoryDataList.indices }
+        val categoryDataList = PurchaseProductManager.INSTANCE.getPurchaseCategoryData()
+        categoryDataList.takeIf { PurchaseProductManager.INSTANCE.mCurrentCategoryFirstLevel in categoryDataList.indices }
             ?.let { dataList ->
                 val categoryData =
-                    dataList[GoodPurchaseManager.instance.mCurrentCategoryFirstLevel]
+                    dataList[PurchaseProductManager.INSTANCE.mCurrentCategoryFirstLevel]
                 categoryData.let { data ->
                     data.sons?.takeIf { position in it.indices }?.apply {
                         for (i in 0 until size) this[i].let {
@@ -91,15 +90,17 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                         }
                         mSecondLevelAdapter?.setData(this)
                         //请求产品列表
-                        refreshProduct(get(position))
+                        if (0 in this.indices) {
+                            refreshProduct(get(position))
+                        }
                     }
                 }
             }
     }
 
     private fun refreshCategory(position: Int) {
-        GoodPurchaseManager.instance.mCurrentCategoryFirstLevel = position
-        val categoryDataList = GoodPurchaseManager.instance.getPurchaseCategoryData()
+        PurchaseProductManager.INSTANCE.mCurrentCategoryFirstLevel = position
+        val categoryDataList = PurchaseProductManager.INSTANCE.getPurchaseCategoryData()
         for (i in 0 until categoryDataList.size) categoryDataList[i].let {
             it.isSelected = (i == position)
         }
@@ -111,20 +112,21 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                     it.isSelected = (i == 0)
                 }
                 mSecondLevelAdapter?.setData(this)
-
-                refreshProduct(get(0))
+                if (0 in this.indices) {
+                    refreshProduct(get(0))
+                }
             }
         }
     }
 
     private fun refreshProduct(data: CategoryData) {
-        GoodPurchaseManager.instance.syncPurchaseProductData(
+        PurchaseProductManager.INSTANCE.syncPurchaseProductData(
             data.productCategoryId,
             data.name
         ) {
             //刷新产品数据
             val productData =
-                GoodPurchaseManager.instance.getPurchaseProductData()
+                PurchaseProductManager.INSTANCE.getPurchaseProductData()
             mProductAdapter?.setData(productData)
         }
     }

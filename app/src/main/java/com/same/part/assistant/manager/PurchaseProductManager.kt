@@ -1,22 +1,20 @@
 package com.same.part.assistant.manager
 
-import android.util.Log
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CategoryData
-import com.same.part.assistant.data.model.ProductData
 import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.utils.HttpUtil
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.StringBuilder
 
-class GoodPurchaseManager private constructor() {
+class PurchaseProductManager private constructor() {
 
     companion object {
         @JvmStatic
-        val instance: GoodPurchaseManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            GoodPurchaseManager()
+        val INSTANCE: PurchaseProductManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            PurchaseProductManager()
         }
 
         const val CART_LIST_URL = "carts/group-by-shop"

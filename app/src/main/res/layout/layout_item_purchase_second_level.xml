@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dip_10">
+    android:paddingLeft="@dimen/dip_5"
+    android:paddingTop="@dimen/dip_10"
+    android:paddingRight="@dimen/dip_5"
+    android:paddingBottom="@dimen/dip_10">
 
     <TextView
         android:id="@+id/secondLevelName"
         android:layout_width="@dimen/dip_60"
         android:layout_height="wrap_content"
-        android:text=""
         android:gravity="center"
+        android:text=""
         android:textColor="@color/color_9F9F9F"
         android:textSize="@dimen/dip_12"
         app:layout_constraintEnd_toEndOf="parent"

@@ -62,7 +62,7 @@ class PurchaseFirstLevelAdapter(private var mContext: Context) :
     }
 
     fun setData(categoryData: ArrayList<CategoryData>?) {
-        categoryData?.takeIf { it.isNotEmpty() }?.let {
+        categoryData?.let {
             data.clear()
             data.addAll(categoryData)
             notifyDataSetChanged()
