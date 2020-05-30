@@ -32,6 +32,11 @@ import pub.devrel.easypermissions.EasyPermissions
  */
 class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     /**
+     * 跳转来源
+     */
+    private lateinit var mJumpFromType: String
+
+    /**
      * 商品分类列表数据
      */
     private val mProductClassificationList = ArrayList<ProductClassificationModel>()
@@ -59,8 +64,21 @@ class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_cashier_good)
-        //标题
-        mToolbarTitle.text = "添加收银商品"
+
+        //跳转来源
+        mJumpFromType =
+            when (intent?.getStringExtra(AddCashierGoodActivity.JUMP_FROM_TYPE).orEmpty()) {
+                JUMP_FROM_ADD_CASHIER_GOOD -> {
+                    //添加收银商品标题
+                    mToolbarTitle.text = "添加收银商品"
+                    JUMP_FROM_ADD_CASHIER_GOOD
+                }
+                else -> {
+                    //编辑收银商品标题
+                    mToolbarTitle.text = "编辑收银商品"
+                    JUMP_FROM_EDIT
+                }
+            }
         //返回按钮
         mTitleBack.setOnClickListener {
             finish()
@@ -269,5 +287,16 @@ class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 
     class ChooseItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var option: TextView = itemView.findViewById(R.id.option)
+    }
+
+    companion object {
+        //跳转来源
+        const val JUMP_FROM_TYPE = "JUMP_FROM_TYPE"
+
+        //从添加二级跳转过来
+        const val JUMP_FROM_ADD_CASHIER_GOOD = "JUMP_FROM_ADD_CASHIER_GOOD"
+
+        //从编辑跳转过来
+        const val JUMP_FROM_EDIT = "JUMP_FROM_EDIT"
     }
 }

@@ -72,10 +72,12 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
                     if (fragment is GoodsFragment) {
                         if (fragment.mCurrentTab == GoodsFragment.TAB_CASHIER_INDEX) {
                             startActivity(
-                                Intent(
-                                    this@MainActivity,
-                                    AddCashierGoodActivity::class.java
-                                )
+                                Intent(context, AddCashierGoodActivity::class.java).apply {
+                                    putExtra(
+                                        AddCashierGoodActivity.JUMP_FROM_TYPE,
+                                        AddCashierGoodActivity.JUMP_FROM_ADD_CASHIER_GOOD
+                                    )
+                                }
                             )
                         } else {
                             startActivity(

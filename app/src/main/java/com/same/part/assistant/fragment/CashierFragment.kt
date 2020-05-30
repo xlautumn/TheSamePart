@@ -1,5 +1,6 @@
 package com.same.part.assistant.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.AddCashierGoodActivity
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CashierModel
@@ -134,7 +136,7 @@ class CashierFragment : Fragment() {
         })
     }
 
-    class CustomAdapter(var dataList: ArrayList<CashierModel>) :
+    inner class CustomAdapter(var dataList: ArrayList<CashierModel>) :
         RecyclerView.Adapter<CashierItemHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CashierItemHolder =
             CashierItemHolder(
@@ -154,9 +156,16 @@ class CashierFragment : Fragment() {
             holder.cashierName.text = model.name
             holder.cashierPrice.text = "￥${model.price}"
             holder.cashierUnit.text = model.unit
-            holder.cashierOperation.apply {
+            holder.edit.apply {
                 setOnClickListener {
-                  //todo
+                    startActivity(
+                        Intent(context, AddCashierGoodActivity::class.java).apply {
+                            putExtra(
+                                AddCashierGoodActivity.JUMP_FROM_TYPE,
+                                AddCashierGoodActivity.JUMP_FROM_EDIT
+                            )
+                        }
+                    )
                 }
             }
         }
@@ -167,7 +176,7 @@ class CashierFragment : Fragment() {
         var cashierName: TextView = itemView.findViewById(R.id.cashierName)
         var cashierPrice: TextView = itemView.findViewById(R.id.cashierPrice)
         var cashierUnit: TextView = itemView.findViewById(R.id.cashierUnit)
-        var cashierOperation: TextView = itemView.findViewById(R.id.cashierOperation)
+        var edit: TextView = itemView.findViewById(R.id.edit)
     }
 
 }
