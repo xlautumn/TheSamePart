@@ -19,7 +19,6 @@ import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.app.util.GlobalUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
-import com.same.part.assistant.data.model.CashierModel
 import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.utils.HttpUtil
 import com.zhihu.matisse.Matisse
@@ -56,11 +55,6 @@ class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCa
      * 商品分类名称数据
      */
     private val mClassificationNameList: ArrayList<String> = ArrayList()
-
-    /**
-     * 即将要保存的对象
-     */
-    private var mAddCashierModel: CashierModel = CashierModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,8 +166,6 @@ class AddCashierGoodActivity : AppCompatActivity(), EasyPermissions.PermissionCa
             Matisse.obtainResult(data)?.takeIf { it.isNotEmpty() }?.apply {
                 val imageUrl =
                     GlobalUtil.getRealFilePath(this@AddCashierGoodActivity, this[0]).orEmpty()
-                mAddCashierModel.img = imageUrl
-                mAddCashierModel.imgs = imageUrl
                 Glide.with(this@AddCashierGoodActivity)
                     .load(this[0])
                     .into(coverImg)
