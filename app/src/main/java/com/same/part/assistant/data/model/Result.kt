@@ -1,5 +1,7 @@
 package com.same.part.assistant.data.model
 
+import com.qiniu.android.http.ResponseInfo
+
 /**
  * 客户管理数据类
  */
@@ -362,6 +364,15 @@ data class ShopModel(
     val type: Any,
     val updateTime: String
 )
+
+/**
+ * 七牛云返回数据
+ */
+data class QiniuMode(
+    val img: String,
+    val qiniuResponseInfo: ResponseInfo?
+)
+
 
 
 

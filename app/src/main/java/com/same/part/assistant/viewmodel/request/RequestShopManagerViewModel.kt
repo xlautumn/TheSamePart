@@ -19,8 +19,6 @@ class RequestShopManagerViewModel(application: Application) : BaseViewModel(appl
 
     var qiniuTokenResult = MutableLiveData<ResultResponseBodyState>()
 
-    var qiniuTokenResult1 = MutableLiveData<ResultResponseBodyState>()
-
     fun shopModelReq(token: String) {
         request(
             { HttpRequestManger.instance.getShopInfo(token) }
@@ -41,6 +39,7 @@ class RequestShopManagerViewModel(application: Application) : BaseViewModel(appl
             qiniuTokenResult
         )
     }
+
 
 
 }

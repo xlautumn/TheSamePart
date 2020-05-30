@@ -17,7 +17,7 @@ object CustomBindAdapter {
 
     @BindingAdapter(value = ["circleImageUrl"])
     @JvmStatic
-    fun imageUrl(view: CircleImageView, url: String) {
+    fun imageUrl(view: ImageView, url: String) {
         Glide.with(view.context.applicationContext)
             .load(url)
             .placeholder(R.drawable.home_user_avatar)

@@ -1,171 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include
-        android:id="@+id/toolbar_title"
-        layout="@layout/toolbar_title" />
+    <data>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
+        <variable
+            name="viewmodel"
+            type="com.same.part.assistant.viewmodel.state.CategoryViewModel" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/color_F7F7F7"
-            android:orientation="vertical">
+        <variable
+            name="click"
+            type="com.same.part.assistant.activity.AddProductClassificationActivity.ProxyClick" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="13dp"
-                android:background="@drawable/shape_white_color_rect"
-                android:padding="10dp">
+    </data>
 
-                <TextView
-                    android:id="@+id/cover_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="分类封面图"
-                    android:textColor="@color/color_333333"
-                    android:textSize="12dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="(建议大小300*300)"
-                    android:textColor="@color/color_999999"
-                    android:textSize="11dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/cover_title"
-                    app:layout_constraintStart_toEndOf="@+id/cover_title"
-                    app:layout_constraintTop_toTopOf="@+id/cover_title" />
+        <include
+            android:id="@+id/toolbar_title"
+            layout="@layout/toolbar_title" />
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="13dp"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/ic_single_add"
-                    app:layout_constraintStart_toStartOf="@+id/cover_title"
-                    app:layout_constraintTop_toBottomOf="@+id/cover_title" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="13dp"
-                android:background="@drawable/shape_white_color_rect"
-                android:orientation="vertical"
-                android:paddingBottom="14dp">
+                android:background="@color/color_F7F7F7"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/shape_white_color_rect"
                     android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/cover_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="分类封面图"
+                        android:textColor="@color/color_333333"
+                        android:textSize="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="分类名称"
-                        android:textColor="@color/color_333333"
-                        android:textSize="13dp" />
+                        android:layout_marginLeft="5dp"
+                        android:text="(建议大小300*300)"
+                        android:textColor="@color/color_999999"
+                        android:textSize="11dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cover_title"
+                        app:layout_constraintStart_toEndOf="@+id/cover_title"
+                        app:layout_constraintTop_toTopOf="@+id/cover_title" />
 
-                    <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_gray_rect_border_input"
-                        android:lines="1"
-                        android:hint="（必填）"
-                        android:textSize="@dimen/dip_11"
-                        android:paddingLeft="5dp" />
+                    <ImageView
+                        android:id="@+id/coverImg"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="8dp"
+                        app:circleImageUrl="@{viewmodel.imageUrl}"
+                        android:src="@drawable/ic_single_add"
+                        android:onClick="@{()->click.chooseAvatar()}"
+                        app:layout_constraintStart_toStartOf="@+id/cover_title"
+                        app:layout_constraintTop_toBottomOf="@+id/cover_title" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/shape_white_color_rect"
+                    android:orientation="vertical"
+                    android:paddingBottom="14dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="分类名称"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_weight="1"
+                            android:text="@={viewmodel.categoryName}"
+                            android:background="@drawable/shape_gray_rect_border_input"
+                            android:hint="（必填）"
+                            android:lines="1"
+                            android:paddingLeft="5dp"
+                            android:textSize="@dimen/dip_11" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="27dp"
+                            android:text="排序"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:text="@={viewmodel.sequence}"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_gray_rect_border_input"
+                            android:hint="（必填,例如1,数字越小越优先显示）"
+                            android:lines="1"
+                            android:paddingLeft="5dp"
+                            android:textSize="@dimen/dip_11" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="27dp"
-                        android:text="排序"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginVertical="10dp"
+                        android:text="分类说明"
                         android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
                     <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/dip_11"
-                        android:hint="（必填,例如1,数字越小越优先显示）"
-                        android:background="@drawable/shape_gray_rect_border_input"
-                        android:lines="1"
-                        android:paddingLeft="5dp" />
+                        android:background="@drawable/shape_dark_gray_rect"
+                        android:text="@={viewmodel.description}"
+                        android:gravity="top"
+                        android:hint="请添加说明..."
+                        android:lines="6"
+                        android:padding="10dp"
+                        android:textColorHint="@color/color_999999"
+                        android:textSize="11dp" />
 
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp"
-                    android:text="分类说明"
-                    android:textColor="@color/color_333333"
-                    android:textSize="13dp" />
-
-                <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@drawable/shape_dark_gray_rect"
-                    android:gravity="top"
-                    android:hint="请添加说明..."
-                    android:lines="6"
-                    android:padding="10dp"
-                    android:textColorHint="@color/color_999999"
-                    android:textSize="11dp" />
+                    android:layout_height="38dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="36dp"
+                    android:onClick="@{()->click.save()}"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginEnd="36dp"
+                    android:background="@drawable/shape_half_circle_primary_color_rect"
+                    android:gravity="center"
+                    android:text="保存"
+                    android:textColor="@color/color_FFFFFF"
+                    android:textSize="13dp" />
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="36dp"
-                android:background="@drawable/shape_half_circle_primary_color_rect"
-                android:gravity="center"
-                android:text="保存"
-                android:textColor="@color/color_FFFFFF"
-                android:textSize="13dp" />
+        </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

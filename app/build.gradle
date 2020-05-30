@@ -71,7 +71,7 @@ dependencies {
     implementation 'com.blankj:utilcodex:1.26.0'
     //微信开源项目，替代SP
     implementation 'com.tencent:mmkv:1.0.22'
-    //
+    //multidex
     implementation 'com.android.support:multidex:1.0.3'
     //开关
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
@@ -79,5 +79,7 @@ dependencies {
     api 'com.qiniu:qiniu-android-sdk:7.3.3'
     //网络请求框架
     implementation("com.squareup.okhttp3:okhttp:4.7.2")
+    //eventbus
+    implementation 'org.greenrobot:eventbus:3.2.0'
 
 }

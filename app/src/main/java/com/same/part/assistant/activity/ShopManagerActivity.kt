@@ -1,11 +1,8 @@
 package com.same.part.assistant.activity
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.Observer
 import com.alibaba.fastjson.JSON
@@ -17,37 +14,38 @@ import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.app.ext.setCanInput
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.app.util.GlobalUtil
+import com.same.part.assistant.app.util.PhotoPickerUtil.PERMISSIONS_REQUEST_LIST
+import com.same.part.assistant.app.util.PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA
+import com.same.part.assistant.app.util.PhotoPickerUtil.RESULT_CODE_PHOTO_PICKER
+import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
+import com.same.part.assistant.app.util.PhotoPickerUtil.showPhotoPicker
 import com.same.part.assistant.databinding.ActivityShopManagerBinding
 import com.same.part.assistant.utils.QiniuManager
 import com.same.part.assistant.viewmodel.request.RequestShopManagerViewModel
 import com.same.part.assistant.viewmodel.state.ShopManagerViewModel
 import com.zhihu.matisse.Matisse
-import com.zhihu.matisse.MimeType
-import com.zhihu.matisse.engine.impl.GlideEngine
-import com.zhihu.matisse.internal.entity.CaptureStrategy
 import kotlinx.android.synthetic.main.activity_shop_manager.*
 import kotlinx.android.synthetic.main.fragment_home.userAvatar
 import kotlinx.android.synthetic.main.toolbar_title.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
-import java.util.*
 
 /**
  * 店铺管理
  */
-class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManagerBinding>(),
-    EasyPermissions.PermissionCallbacks {
-
-    private val mRequestShopManagerViewModel: RequestShopManagerViewModel by lazy { getViewModel<RequestShopManagerViewModel>() }
+class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManagerBinding>(), EasyPermissions.PermissionCallbacks {
 
     /**
      * GIF图片的本地完整路径。
      */
     private var gifPath: String = ""
 
+    private val mRequestShopManagerViewModel: RequestShopManagerViewModel by lazy { getViewModel<RequestShopManagerViewModel>() }
 
     override fun layoutId(): Int = R.layout.activity_shop_manager
 
@@ -100,26 +98,13 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
     inner class ProxyClick {
         //选择头像
         fun chooseAvatar() {
-            if (EasyPermissions.hasPermissions(
-                    this@ShopManagerActivity,
-                    *PERMISSIONS_REQUEST_LIST
-                )
-            ) {
-                showPhotoPicker()
-            } else {
-                EasyPermissions.requestPermissions(
-                    PermissionRequest.Builder(
-                        this@ShopManagerActivity,
-                        REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA, *PERMISSIONS_REQUEST_LIST
-                    ).setRationale("设置头像需要访问您的存储权限和照相机权限。").build()
-                )
-            }
+            choosePhoto(this@ShopManagerActivity)
         }
-
+        //保存
         fun save() {
             mRequestShopManagerViewModel.getQiniuToken(CacheUtil.getToken())
         }
-
+        //编辑
         fun edit() {
             if (tvEdit.text == "编辑") {
                 tvEdit.text = "取消"
@@ -141,7 +126,7 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
-            showPhotoPicker()
+            showPhotoPicker(this)
         }
     }
 
@@ -167,18 +152,6 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
     }
 
     /**
-     * 选择头像
-     */
-    private fun showPhotoPicker() {
-        Matisse.from(this).choose(MimeType.ofImage()).showSingleMediaType(true).capture(true)
-            .captureStrategy(CaptureStrategy(true, FILE_PROVIDER_AUTHORITY))
-            .countable(true)
-            .maxSelectable(1)
-            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT).thumbnailScale(0.85f)
-            .imageEngine(GlideEngine()).showPreview(true).forResult(RESULT_CODE_PHOTO_PICKER)
-    }
-
-    /**
      * 七牛云上传
      */
     private fun uploadQiniu(qiniuToken: String) {
@@ -200,23 +173,5 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
             override fun onProgress(percent: Double) {
             }
         })
-    }
-
-    companion object {
-        //请求SD卡权限和CAMERA请求码
-        const val REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA = 1
-
-        //选择图片的结果
-        const val RESULT_CODE_PHOTO_PICKER = 2
-
-        //FileProvider
-        const val FILE_PROVIDER_AUTHORITY = "com.same.part.assistant.fileProvider"
-
-        //需要请求的权限
-        val PERMISSIONS_REQUEST_LIST = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-        )
     }
 }

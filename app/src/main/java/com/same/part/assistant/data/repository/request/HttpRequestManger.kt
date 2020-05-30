@@ -53,9 +53,13 @@ class HttpRequestManger {
         img: String,
         name: String,
         brand: String,
-        shopId:String
+        shopId: String
     ): ResponseBody {
-        return NetworkApi.service.updateShopIno(token, shopId,RequestUpdateShopInfo(brand, img, name))
+        return NetworkApi.service.updateShopIno(
+            token,
+            shopId,
+            RequestUpdateShopInfo(brand, img, name)
+        )
     }
 
     /**
@@ -67,5 +71,32 @@ class HttpRequestManger {
         return NetworkApiv2.service.getQiniuToken(token)
     }
 
+    /**
+     * 查询商品分类详情
+     */
+    suspend fun queryShopCategoryDetail(
+        token: String, customCategoryId: String
+    ): ResponseBody {
+        return NetworkApiv2.service.queryShopCategoryDetail(token, customCategoryId)
+    }
+
+    /**
+     * 添加商品分类
+     */
+    suspend fun addShopCategory(
+        token: String, requestShopCategory: RequestShopCategoryInfo
+    ): ResponseBody {
+        return NetworkApiv2.service.addShopCategory(token, requestShopCategory)
+    }
+
+
+    /**
+     * 编辑店铺商品分类
+     */
+    suspend fun editShopCategory(
+        customCategoryId: String, requestShopCategory: RequestShopCategoryInfo
+    ): ResponseBody {
+        return NetworkApiv2.service.editShopCategory(customCategoryId, requestShopCategory)
+    }
 
 }

@@ -44,8 +44,39 @@ interface ApiService {
      * 更新店铺信息
      */
     @PUT("wscx/updateShop/{shopId}")
-    suspend fun updateShopIno(@Header("WSCX") token: String, @Path("shopId") shopId: String,
-                              @Body requestUpdateShopInfo: RequestUpdateShopInfo):ResponseBody
+    suspend fun updateShopIno(
+        @Header("WSCX") token: String, @Path("shopId") shopId: String,
+        @Body requestUpdateShopInfo: RequestUpdateShopInfo
+    ): ResponseBody
+
+    /**
+     * 添加商品分类
+     */
+    @POST("admin/custom-category")
+    suspend fun addShopCategory(
+        @Header("WSCX") token: String,
+        @Body requestShopCategory: RequestShopCategoryInfo
+    ): ResponseBody
+
+
+    /**
+     * 编辑店铺商品分类
+     */
+    @PUT("admin/custom-category/{customCategoryId}")
+    suspend fun editShopCategory(
+        @Path("customCategoryId") customCategoryId: String,
+        @Body requestShopCategory: RequestShopCategoryInfo
+    ): ResponseBody
+
+
+    /**
+     * 查询商品分类详情
+     */
+    @GET("custom-category/{customCategoryId}")
+    suspend fun queryShopCategoryDetail(
+        @Header("WSCX") token: String,
+        @Path("customCategoryId") customCategoryId: String,
+        @Body requestAppInfo: RequestAppInfo = RequestAppInfo()): ResponseBody
 
 
 }
