@@ -91,5 +91,21 @@ object CacheUtil {
         return getShopUserModel()?.AccessToken?.easyapi?.appSecret ?: ""
     }
 
+    /**
+     * 获取shopId
+     */
+    fun getShopId(): Int? {
+        return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
+            ?.get(0)?.shop?.shopId
+    }
+
+    /**
+     * 获取userId
+     */
+    fun getUserId(): Int? {
+        return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
+            ?.get(0)?.user?.userId
+    }
+
 
 }

@@ -73,6 +73,9 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         GoodPurchaseManager.instance.syncPurchaseCategoryData {
             refreshCategory(0)
         }
+        GoodPurchaseManager.instance.getCartProductList{
+
+        }
     }
 
     private fun refreshSecondCategory(position: Int) {
