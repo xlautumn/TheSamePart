@@ -81,13 +81,40 @@ class AddProductClassificationActivity :
             Observer { resultState ->
                 parseStateResponseBody(resultState, {
                     val response: String = it.string()
+                    val responseObject = JSON.parseObject(response)
+                    val contentObject = responseObject.getJSONObject("content")
+                    mViewModel.imageUrl.postValue(contentObject.getString("img") ?: "")
+                    mViewModel.categoryName.postValue(contentObject.getString("name" ?: ""))
+                    mViewModel.sequence.postValue(contentObject.getString("sequence") ?: "")
+                    mViewModel.description.postValue(contentObject.getString("description") ?: "")
                 })
             })
-        //添加/编辑商品分类
+        //添加商品分类
+        mRequestCategoryViewModel.addShopCategoryResult.observe(this, Observer { resultState ->
+            parseStateResponseBody(resultState, {
+                val jsonObject = JSON.parseObject(it.string())
+                ToastUtils.showLong(jsonObject.getString("msg"))
+            })
+        })
+        //编辑商品分类
+        mRequestCategoryViewModel.editShopCategoryResult.observe(this,Observer { resultState ->
+            parseStateResponseBody(resultState, {
+                val jsonObject = JSON.parseObject(it.string())
+                ToastUtils.showLong(jsonObject.getString("msg"))
+            })
+        })
+        //七牛云
         mRequestUploadDataViewModel.uploadResult.observe(this, Observer { qiuniuModel ->
             when {
                 qiuniuModel == null -> {//编辑时
-
+                    val requestShopCategoryInfo = RequestShopCategoryInfo(
+                        mViewModel.imageUrl.value,
+                        mViewModel.categoryName.value,
+                        mViewModel.sequence.value,
+                        mViewModel.description.value,
+                        "37"
+                    )
+                    mRequestCategoryViewModel.editShopCategory("42",requestShopCategoryInfo)
                 }
                 qiuniuModel.qiniuResponseInfo != null -> {//七牛云上传失败
 
@@ -100,21 +127,20 @@ class AddProductClassificationActivity :
                         mViewModel.description.value,
                         "37"
                     )
-                    mRequestCategoryViewModel.addShopCategory(
-                        CacheUtil.getToken(),
-                        requestShopCategoryInfo
-                    )
+                    if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
+                        mRequestCategoryViewModel.editShopCategory(
+                            "42",
+                            requestShopCategoryInfo
+                        )
+                    } else {//添加商品
+                        mRequestCategoryViewModel.addShopCategory(
+                            CacheUtil.getToken(),
+                            requestShopCategoryInfo
+                        )
+                    }
                 }
             }
         })
-        mRequestCategoryViewModel.addShopCategoryResult.observe(this, Observer { resultState ->
-            parseStateResponseBody(resultState, {
-                val response: String = it.string()
-                val jsonObject = JSON.parseObject(response)
-                ToastUtils.showLong(jsonObject.getString("msg"))
-            })
-        })
-
     }
 
     inner class ProxyClick {
@@ -122,14 +148,13 @@ class AddProductClassificationActivity :
         fun chooseAvatar() {
             choosePhoto(this@AddProductClassificationActivity)
         }
-
         //保存
         fun save() {
-            //添加商品分类
-            mRequestUploadDataViewModel.uploadData(true, mViewModel.imageUrl.value)
+            //添加/编辑商品分类(当编辑页面时没有去选择图片时不需要去七牛云上传)
+            val isNeedUploadQiniu = mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value
+            mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imageUrl.value)
         }
     }
-
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
     }
@@ -153,7 +178,9 @@ class AddProductClassificationActivity :
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RESULT_CODE_PHOTO_PICKER && resultCode == Activity.RESULT_OK) {
             Matisse.obtainResult(data)?.takeIf { it.isNotEmpty() }?.apply {
-                val imageUrl = GlobalUtil.getRealFilePath(this@AddProductClassificationActivity, this[0]) ?: ""
+                val imageUrl =
+                    GlobalUtil.getRealFilePath(this@AddProductClassificationActivity, this[0]) ?: ""
+                mViewModel.hasSelectPhoto.postValue(true)
                 mViewModel.imageUrl.postValue(imageUrl)
                 Glide.with(this@AddProductClassificationActivity)
                     .load(this[0])

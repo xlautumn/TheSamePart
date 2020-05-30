@@ -1,5 +1,6 @@
 package com.same.part.assistant.app.network
 
+import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.ApiResponse
 import com.same.part.assistant.data.model.*
 import okhttp3.ResponseBody
@@ -76,7 +77,8 @@ interface ApiService {
     suspend fun queryShopCategoryDetail(
         @Header("WSCX") token: String,
         @Path("customCategoryId") customCategoryId: String,
-        @Body requestAppInfo: RequestAppInfo = RequestAppInfo()): ResponseBody
+        @Query("appKey") appkey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()): ResponseBody
 
 
 }

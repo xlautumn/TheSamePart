@@ -39,7 +39,7 @@ class RequestCategoryViewModel(application: Application) : BaseViewModel(applica
     /**
      * 编辑店铺商品分类
      */
-    fun editShopCategory( customCategoryId: String, requestShopCategory: RequestShopCategoryInfo) {
+    fun editShopCategory(customCategoryId: String, requestShopCategory: RequestShopCategoryInfo) {
         requestResponseBody(
             { HttpRequestManger.instance.editShopCategory(customCategoryId, requestShopCategory) },
             editShopCategoryResult
