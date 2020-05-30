@@ -129,7 +129,7 @@ class PurchaseProductManager private constructor() {
     }
 
     fun uploadCartProduct(
-        endTime: String, category: String, quantity: String, productId: String,
+        endTime: String, productCategory: String, quantity: String, productId: String,
         properties: String, productSkuNumber: String, onSuccess: (() -> Unit)?
     ) {
         val url = "${ApiService.SERVER_URL}cart"
@@ -138,7 +138,7 @@ class PurchaseProductManager private constructor() {
             "appSecret" to CacheUtil.getAppSecret(),
             "accessToken" to CacheUtil.getToken(),
             "endTime" to endTime,
-            "category" to category,
+            "category" to productCategory,
             "quantity" to quantity,
             "productId" to productId,
             "properties" to properties,

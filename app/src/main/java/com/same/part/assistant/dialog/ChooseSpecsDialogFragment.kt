@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -76,7 +77,11 @@ class ChooseSpecsDialogFragment : DialogFragment() {
             dialog?.window?.decorView?.setPadding(Util.dip2px(it, 25f), 0,
                 Util.dip2px(it, 25f), 0)
         }
-
+        addCart.setOnClickListener {
+            Toast.makeText(mContext,"加入购物车了~~",Toast.LENGTH_LONG).show()
+            //TODO 加入购物车，调用加入购物车的接口
+            dismiss()
+        }
         //设置监听等动作
         mDataView.apply {
             layoutManager = GridLayoutManager(mContext, 2)
