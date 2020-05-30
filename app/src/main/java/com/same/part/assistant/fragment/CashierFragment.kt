@@ -79,49 +79,56 @@ class CashierFragment : Fragment() {
             "type" to type
         )
         HttpUtil.instance.postUrlWithHeader("WSCX", CacheUtil.getToken(), url, jsonMap, {
-            val resultJson = JSONObject.parseObject(it)
-            resultJson.apply {
-                getJSONObject("msg")?.getJSONArray("data")?.takeIf { it.size >= 0 }?.apply {
-                    if (this.size == 0) {
+            try {
+                val resultJson = JSONObject.parseObject(it)
+                resultJson.apply {
+                    getJSONObject("msg")?.getJSONArray("data")?.takeIf { it.size >= 0 }?.apply {
+                        if (this.size == 0) {
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(false)
+                            mCurrentPage--
+                        } else {
+                            val itemList = ArrayList<CashierModel>()
+                            for (i in 0 until this.size) {
+                                getJSONObject(i)?.apply {
+                                    val id = getString("productId")
+                                    val name = getString("name")
+                                    val price = getString("price")
+                                    val unit = getString("unit")
+                                    val state = getString("state") == "1"
+                                    CashierModel(id, name, price, unit, state).apply {
+                                        itemList.add(this)
+                                    }
+                                }
+                            }
+                            //如果是刷新需要清空之前的数据
+                            if (isRefresh && itemList.size > 0) {
+                                mCashierList.clear()
+                                mCashierList.addAll(itemList)
+                            } else {
+                                mCashierList.addAll(itemList)
+                            }
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(true)
+                            //刷新数据
+                            cashierRecyclerView.adapter?.notifyDataSetChanged()
+                        }
+
+                    } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
-                    } else {
-                        val itemList = ArrayList<CashierModel>()
-                        for (i in 0 until this.size) {
-                            getJSONObject(i)?.apply {
-                                val id = getString("productId")
-                                val name = getString("name")
-                                val price = getString("price")
-                                val unit = getString("unit")
-                                val state = getString("state") == "1"
-                                CashierModel(id, name, price, unit, state).apply {
-                                    itemList.add(this)
-                                }
-                            }
-                        }
-                        //如果是刷新需要清空之前的数据
-                        if (isRefresh && itemList.size > 0) {
-                            mCashierList.clear()
-                            mCashierList.addAll(itemList)
-                        } else {
-                            mCashierList.addAll(itemList)
-                        }
-                        //通知刷新结束
-                        mSmartRefreshLayout?.refreshComplete(true)
-                        //刷新数据
-                        cashierRecyclerView.adapter?.notifyDataSetChanged()
                     }
-
-                } ?: also {
-                    //通知刷新结束
-                    mSmartRefreshLayout?.refreshComplete(false)
-                    mCurrentPage--
                 }
+            } catch (e: Exception) {
+                //请求失败回退请求的页数
+                if (mCurrentPage > 0) mCurrentPage--
+                //通知刷新结束
+                mSmartRefreshLayout?.refreshComplete(false)
             }
         }, {
             //请求失败回退请求的页数
-            mCurrentPage--
+            if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
         })

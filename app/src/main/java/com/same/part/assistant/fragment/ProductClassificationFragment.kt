@@ -76,52 +76,64 @@ class ProductClassificationFragment : Fragment() {
             .append("?page=$page")
             .append("&name=$name")
             .append("&size=$size")
-            .append("&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.size>0 }?.get(0)}")
+            .append(
+                "&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.size > 0 }?.get(
+                    0
+                )}"
+            )
             .append("&appKey=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey}")
             .append("&appSecret=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret}")
         HttpUtil.instance.getUrlWithHeader("WSCX", CacheUtil.getToken(), url.toString(), {
-            val resultJson = JSONObject.parseObject(it)
-            resultJson.apply {
-                getJSONArray("content")?.takeIf { it.size >= 0 }?.apply {
-                    if (this.size == 0) {
+            try {
+                val resultJson = JSONObject.parseObject(it)
+                resultJson.apply {
+                    getJSONArray("content")?.takeIf { it.size >= 0 }?.apply {
+                        if (this.size == 0) {
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(false)
+                            mCurrentPage--
+                        } else {
+                            val itemList = ArrayList<ProductClassificationModel>()
+                            for (i in 0 until this.size) {
+                                getJSONObject(i)?.apply {
+                                    val id = getString("customCategoryId")
+                                    val name = getString("name")
+                                    val parentId =
+                                        getJSONObject("parent")?.getString("customCategoryId")
+                                            .orEmpty()
+                                    ProductClassificationModel(id, name, parentId).apply {
+                                        itemList.add(this)
+                                    }
+                                }
+                            }
+                            //如果是刷新需要清空之前的数据
+                            if (isRefresh && itemList.size > 0) {
+                                mProductClassificationList.clear()
+                                mProductClassificationList.addAll(itemList)
+                            } else {
+                                mProductClassificationList.addAll(itemList)
+                            }
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(true)
+                            //刷新数据
+                            productRecyclerView.adapter?.notifyDataSetChanged()
+                        }
+
+                    } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
-                    } else {
-                        val itemList = ArrayList<ProductClassificationModel>()
-                        for (i in 0 until this.size) {
-                            getJSONObject(i)?.apply {
-                                val id = getString("customCategoryId")
-                                val name = getString("name")
-                                val parentId =
-                                    getJSONObject("parent")?.getString("customCategoryId").orEmpty()
-                                ProductClassificationModel(id, name, parentId).apply {
-                                    itemList.add(this)
-                                }
-                            }
-                        }
-                        //如果是刷新需要清空之前的数据
-                        if (isRefresh && itemList.size > 0) {
-                            mProductClassificationList.clear()
-                            mProductClassificationList.addAll(itemList)
-                        } else {
-                            mProductClassificationList.addAll(itemList)
-                        }
-                        //通知刷新结束
-                        mSmartRefreshLayout?.refreshComplete(true)
-                        //刷新数据
-                        productRecyclerView.adapter?.notifyDataSetChanged()
                     }
-
-                } ?: also {
-                    //通知刷新结束
-                    mSmartRefreshLayout?.refreshComplete(false)
-                    mCurrentPage--
                 }
+            } catch (e: Exception) {
+                //请求失败回退请求的页数
+                if (mCurrentPage > 0) mCurrentPage--
+                //通知刷新结束
+                mSmartRefreshLayout?.refreshComplete(true)
             }
         }, {
             //请求失败回退请求的页数
-            mCurrentPage--
+            if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
         })
