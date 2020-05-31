@@ -7,6 +7,7 @@ import android.text.Html
 import android.text.Spanned
 import android.text.TextUtils
 import android.view.View
+import android.widget.Toast
 import me.hgj.jetpackmvvm.ext.view.clickNoRepeat
 
 /**
@@ -63,9 +64,18 @@ fun View.px2dp(px: Int): Int {
 /**
  * 复制文本到粘贴板
  */
-fun Context.copyToClipboard(text: String, label: String = "JetpackMvvm") {
+fun Context.copyToClipboard(
+    context: Context,
+    text: String,
+    label: String = "JetpackMvvm",
+    needShowToast: Boolean = false,
+    toastMsg: String = ""
+) {
     val clipData = ClipData.newPlainText(label, text)
     clipboardManager?.setPrimaryClip(clipData)
+    if (needShowToast) {
+        Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
+    }
 }
 
 /**

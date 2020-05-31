@@ -45,7 +45,7 @@ class CashierFragment : Fragment() {
             adapter = CustomAdapter(mCashierList)
             layoutManager = LinearLayoutManager(context)
         }
-        //定时刷新
+        //下拉刷新
         mSmartRefreshLayout.apply {
             //下拉刷新
             setOnRefreshListener {

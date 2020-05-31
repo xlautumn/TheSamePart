@@ -1,6 +1,7 @@
 package com.same.part.assistant.data.model
 
 import com.qiniu.android.http.ResponseInfo
+import java.io.Serializable
 
 /**
  * 客户管理数据类
@@ -67,11 +68,14 @@ data class ProductModel(
  * 商品分类数据类
  */
 data class CashierOrderModel(
-    var orderId: String,
-    var amount: String,
-    var payMethod: String,
-    var time: String
-)
+    var no: String,
+    var price: String,
+    var payment: String,
+    var addTime: String,
+    var shopCouponPrice: String,
+    var platformCouponPrice: String,
+    var orderItemList: ArrayList<CashierGoodItemModel> = ArrayList()
+) : Serializable
 
 /**
  * 商品分类数据类
@@ -87,12 +91,12 @@ data class GoodItemModel(
  * 收银订单条目数据类
  */
 data class CashierGoodItemModel(
-    var avatar: String,
+    var img: String,
     var name: String,
-    var number: String,
-    var oldPrice: String,
-    var newPrice: String
-)
+    var quantity: String,
+    var price: String,
+    var oldPrice: String = ""
+) : Serializable
 
 /**
  * 收银订单条目数据类
