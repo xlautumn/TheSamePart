@@ -2,6 +2,7 @@ package com.same.part.assistant.viewmodel.request
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.ShopModel
 import com.same.part.assistant.data.model.ShopUserModel
 import com.same.part.assistant.data.repository.request.HttpRequestManger
@@ -17,8 +18,6 @@ class RequestShopManagerViewModel(application: Application) : BaseViewModel(appl
 
     var updateResult = MutableLiveData<ResultResponseBodyState>()
 
-    var qiniuTokenResult = MutableLiveData<ResultResponseBodyState>()
-
     fun shopModelReq(token: String) {
         request(
             { HttpRequestManger.instance.getShopInfo(token) }
@@ -26,20 +25,11 @@ class RequestShopManagerViewModel(application: Application) : BaseViewModel(appl
         )
     }
 
-    fun saveEditContent(token: String, img: String, name: String, brand: String,shopId:String) {
+    fun saveEditContent(img: String, name: String, brand: String) {
         requestResponseBody(
-            { HttpRequestManger.instance.updateShopInfo(token, img, name, brand,shopId) },
+            { HttpRequestManger.instance.updateShopInfo(CacheUtil.getToken(), img, name, brand, CacheUtil.getShopId()?.toString()?:"") },
             updateResult,true,"上传中"
         )
     }
-
-    fun getQiniuToken(token: String) {
-        requestResponseBody(
-            { HttpRequestManger.instance.getQiniuToken(token) },
-            qiniuTokenResult
-        )
-    }
-
-
 
 }
