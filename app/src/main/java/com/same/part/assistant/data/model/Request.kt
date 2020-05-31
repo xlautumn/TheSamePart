@@ -107,6 +107,25 @@ data class ProductDetailSort(
     var empty: Boolean? = false
 )
 
+data class CreateOrUpdateGoodsInfo(
+    val barcode: String,
+    val img: String,
+    val name: String,
+    val price: String,
+    val productCategoryId: String,
+    val sequence: String,
+    val type: String,
+    val unit: String,
+    val imgs: String = img,
+    val shopId: String = CacheUtil.getShopId()?.toString()?:"",
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret(),
+    val state: Int = 1,
+    val audit_state: Int = 2,
+    val quantity: Int = 2147483647,
+    var id: String = ""
+)
+
 
 
 

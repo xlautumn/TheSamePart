@@ -13,7 +13,7 @@ import retrofit2.http.*
 interface ApiService {
 
     companion object {
-        const val SERVER_URL = "https://tzyf.godoit.vip/easyapi/"
+        const val SERVER_URL = "http:192.168.110.224:8061/"
     }
 
     /**
@@ -80,5 +80,39 @@ interface ApiService {
         @Query("appKey") appkey: String = CacheUtil.getAppKey(),
         @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()): ResponseBody
 
+
+    /**
+     * 添加/更新收银商品
+     */
+    @PUT("amountCommodity/createOrUpdate")
+    suspend fun createOrUpdateCashierGood(
+        @Header("WSCX") token: String,
+        @Body requestShopCategory: CreateOrUpdateGoodsInfo
+    ): ResponseBody
+
+    /**
+     * 获取店铺商品分类列表
+     */
+    @GET("custom-categories")
+    suspend fun getProductClassificationList(
+        @Header("WSCX") token: String,
+        @Query("name") name: String = "",
+        @Query("page") page: String = "",
+        @Query("size") size: String = "${Int.MAX_VALUE}",
+        @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret(),
+        @Query("shopId") shopId: String = CacheUtil.getShopId().toString()
+    ): ResponseBody
+
+    /**
+     * 获取收银商品详情
+     */
+    @GET("amountCommodity/getDetail/{productId}")
+    suspend fun getCashierGoodDetail(
+        @Header("WSCX") token: String,
+        @Path("productId") productId: String,
+        @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
+    ): ApiResponse<CashierDetailMode>
 
 }

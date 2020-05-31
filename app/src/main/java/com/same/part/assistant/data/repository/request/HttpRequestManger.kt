@@ -3,6 +3,7 @@ package com.same.part.assistant.data.repository.request
 import com.same.part.assistant.data.ApiResponse
 import com.same.part.assistant.app.network.NetworkApi
 import com.same.part.assistant.app.network.NetworkApiv2
+import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.*
 import me.hgj.jetpackmvvm.network.AppException
 import okhttp3.ResponseBody
@@ -98,5 +99,32 @@ class HttpRequestManger {
     ): ResponseBody {
         return NetworkApiv2.service.editShopCategory(customCategoryId, requestShopCategory)
     }
+
+    /**
+     * 添加/更新收银商品
+     */
+    suspend fun createOrUpdateCashierGood(
+        token: String, createOrUpdateGoodsInfo: CreateOrUpdateGoodsInfo
+    ): ResponseBody {
+        return NetworkApiv2.service.createOrUpdateCashierGood(token, createOrUpdateGoodsInfo)
+    }
+
+    /**
+     * 获取店铺商品分类列表
+     */
+    suspend fun getProductClassificationList(
+    ): ResponseBody {
+        return NetworkApiv2.service.getProductClassificationList(CacheUtil.getToken())
+    }
+
+    /**
+     * 获取收银商品详情
+     */
+    suspend fun getCashierGoodDetail(
+        productId: String
+    ): ApiResponse<CashierDetailMode> {
+        return NetworkApi.service.getCashierGoodDetail(CacheUtil.getToken(), productId)
+    }
+
 
 }
