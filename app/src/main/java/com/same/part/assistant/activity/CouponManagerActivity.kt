@@ -8,12 +8,20 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.AddCouponActivity.Companion.ADD_COUPON_SUCCESS
 import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.data.model.CouponInfoModel
 import com.same.part.assistant.databinding.ActivityCouponManagerBinding
+import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.viewmodel.request.RequestCouponsViewModel
 import kotlinx.android.synthetic.main.activity_coupon_manager.*
+import kotlinx.android.synthetic.main.activity_coupon_manager.mSmartRefreshLayout
+import kotlinx.android.synthetic.main.fragment_cashier.*
+import kotlinx.android.synthetic.main.fragment_product_classification.*
 import me.hgj.jetpackmvvm.ext.getViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 优惠券管理
@@ -26,9 +34,17 @@ class CouponManagerActivity :
 
     private val mRequestCouponsViewModel: RequestCouponsViewModel by lazy { getViewModel<RequestCouponsViewModel>() }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun eventRefresh(messageEvent: String) {
+        if (ADD_COUPON_SUCCESS == messageEvent) {
+            mSmartRefreshLayout.autoRefresh()
+        }
+    }
+
     override fun layoutId(): Int = R.layout.activity_coupon_manager
 
     override fun initView(savedInstanceState: Bundle?) {
+        EventBus.getDefault().register(this)
         //标题
         mToolbarTitle.text = "优惠券管理"
         //返回按钮
@@ -45,6 +61,13 @@ class CouponManagerActivity :
             adapter = mCouponAdapter
             layoutManager = LinearLayoutManager(context)
         }
+        //刷新
+        mSmartRefreshLayout.apply {
+            //下拉刷新
+            setOnRefreshListener {
+                mRequestCouponsViewModel.getCouponsList()
+            }
+        }
         //获取优惠券数据
         mRequestCouponsViewModel.getCouponsList()
     }
@@ -52,6 +75,7 @@ class CouponManagerActivity :
     override fun createObserver() {
         mRequestCouponsViewModel.couponsListResult.observe(this, Observer {
             mCouponAdapter.setNewInstance(it)
+            mSmartRefreshLayout.refreshComplete()
         })
     }
 
@@ -71,6 +95,11 @@ class CouponManagerActivity :
                 })
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
 }

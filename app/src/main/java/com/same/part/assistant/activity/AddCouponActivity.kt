@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_shop_manager.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
+import org.greenrobot.eventbus.EventBus
 
 /**
  * 添加会员卡
@@ -40,19 +41,26 @@ class AddCouponActivity :
         mTitleBack.setOnClickListener {
             finish()
         }
+
+    }
+
+    override fun createObserver() {
         //添加优惠券
         mRequestCreateCouponViewModel.saveResult.observe(this, Observer { resultState ->
             parseStateResponseBody(resultState, {
                 val jsonObject = JSON.parseObject(it.string())
                 val code = jsonObject.getIntValue("code")
+                ToastUtils.showLong(jsonObject.getString("msg"))
                 if (code == 1) {
                     //保存成功
-
+                    EventBus.getDefault().post(ADD_COUPON_SUCCESS)
+                    finish()
                 }
-                ToastUtils.showLong(jsonObject.getString("msg"))
+
             })
         })
     }
+
 
     inner class ProxyClick {
         //保存
@@ -65,6 +73,10 @@ class AddCouponActivity :
             )
             mRequestCreateCouponViewModel.createCouponActivity(requestCreateCouponInfo)
         }
+    }
+
+    companion object {
+        const val ADD_COUPON_SUCCESS = "ADD_COUPON_SUCCESS"
     }
 
 

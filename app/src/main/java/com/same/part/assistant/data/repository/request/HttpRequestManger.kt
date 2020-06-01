@@ -131,7 +131,7 @@ class HttpRequestManger {
      */
     suspend fun getCouponsList(
     ): ResponseBody {
-        return NetworkApi.service.getCouponsList()
+        return NetworkApiv2.service.getCouponsList()
     }
 
 
@@ -141,7 +141,7 @@ class HttpRequestManger {
     suspend fun createCouponActivity(
         requestCreateCouponInfo: RequestCreateCouponInfo
     ): ResponseBody {
-        return NetworkApi.service.createCouponActivity(requestCreateCouponInfo)
+        return NetworkApiv2.service.createCouponActivity(requestCreateCouponInfo)
     }
 
 
