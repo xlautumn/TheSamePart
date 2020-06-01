@@ -33,6 +33,8 @@ import com.same.part.assistant.viewmodel.state.AddCashierGoodViewModel
 import com.yzq.zxinglibrary.common.Constant
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.activity_add_cashier_good.*
+import kotlinx.android.synthetic.main.activity_add_cashier_good.coverImg
+import kotlinx.android.synthetic.main.activity_add_product_classification.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
@@ -40,6 +42,7 @@ import me.hgj.jetpackmvvm.ext.parseStateResponseBody
 import me.shaohui.bottomdialog.BottomDialog
 import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.EasyPermissions
+import kotlin.sequences.sequence
 
 
 /**
@@ -133,6 +136,8 @@ class AddCashierGoodActivity :
 
                 }.setLayoutRes(R.layout.add_cashier_bottom_dialog).setDimAmount(0.1F)
                     .setCancelOutside(true).setTag("mChooseGoodClassification").show()
+            } else {
+                ToastUtils.showLong("暂无商品分类，请先添加商品分类")
             }
         }
         //是否是称重商品
@@ -189,10 +194,13 @@ class AddCashierGoodActivity :
         }
         //保存
         saveCashier.setOnClickListener {
-            //添加/编辑商品分类(当编辑页面时没有去选择图片时不需要去七牛云上传)
-            val isNeedUploadQiniu =
-                (mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value) || mJumpFromType == JUMP_FROM_ADD_CASHIER_GOOD
-            mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imgs.value)
+            if (judgeCanSave()) {
+                //添加/编辑商品分类(当编辑页面时没有去选择图片时不需要去七牛云上传)
+                val isNeedUploadQiniu =
+                    (mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value) || mJumpFromType == JUMP_FROM_ADD_CASHIER_GOOD
+                mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imgs.value)
+            }
+
         }
         //扫描二维码
         scanBarCode.setOnClickListener {
@@ -349,6 +357,38 @@ class AddCashierGoodActivity :
                 }
             }
         }
+    }
+
+    /**
+     * 判断输入
+     */
+    private fun judgeCanSave(): Boolean = when {
+        mViewModel.imgs.value.isEmpty() -> {
+            ToastUtils.showShort("商品缩略图不可为空！")
+            false
+        }
+        mViewModel.name.value.isEmpty() -> {
+            ToastUtils.showShort("商品名称不可为空！")
+            false
+        }
+        mViewModel.productCategoryId.value.isEmpty() -> {
+            ToastUtils.showShort("商品分类不可为空！")
+            false
+        }
+
+        mViewModel.price.value.isEmpty() -> {
+            ToastUtils.showShort("单价不可为空！")
+            false
+        }
+        mViewModel.sequence.value.isEmpty() -> {
+            ToastUtils.showShort("排序不可为空！")
+            false
+        }
+        mViewModel.productCategoryId.value.isEmpty() && mViewModel.type.value == "否"-> {
+            ToastUtils.showShort("商品条码不可为空！")
+            false
+        }
+        else -> true
     }
 
     /**
