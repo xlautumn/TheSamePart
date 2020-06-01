@@ -11,16 +11,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.AddCashierGoodActivity
 import com.same.part.assistant.activity.AddProductClassificationActivity
+import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.ADDCLASSIFICATION_SUCCESS
+import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.CUSTOMCATEGORYID
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_ADD_SECOND_CATEGORY
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_EDIT
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_TYPE
+import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.PARENT_ID
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
+import kotlinx.android.synthetic.main.fragment_cashier.*
 import kotlinx.android.synthetic.main.fragment_product_classification.*
+import kotlinx.android.synthetic.main.fragment_product_classification.mSmartRefreshLayout
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 商品分类
@@ -30,6 +39,14 @@ class ProductClassificationFragment : Fragment() {
     private var mCurrentPage: Int = 0
 
     private val mProductClassificationList = ArrayList<ProductClassificationModel>()
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun eventRefresh(messageEvent: String) {
+        if (ADDCLASSIFICATION_SUCCESS == messageEvent) {
+            mSmartRefreshLayout.autoRefresh()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +58,7 @@ class ProductClassificationFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        EventBus.getDefault().register(this)
         //列表数据
         productRecyclerView.apply {
             adapter = CustomAdapter(mProductClassificationList)
@@ -171,6 +189,7 @@ class ProductClassificationFragment : Fragment() {
                 startActivity(
                     Intent(context, AddProductClassificationActivity::class.java).apply {
                         putExtra(JUMP_FROM_TYPE, JUMP_FROM_ADD_SECOND_CATEGORY)
+                        putExtra(PARENT_ID, model.id)
                     }
                 )
             }
@@ -179,6 +198,10 @@ class ProductClassificationFragment : Fragment() {
                 startActivity(
                     Intent(context, AddProductClassificationActivity::class.java).apply {
                         putExtra(JUMP_FROM_TYPE, JUMP_FROM_EDIT)
+                        putExtra(CUSTOMCATEGORYID, model.id)
+                        if (model.parentId.isNotEmpty()) {
+                            putExtra(PARENT_ID, model.parentId)
+                        }
                     }
                 )
             }
@@ -190,5 +213,10 @@ class ProductClassificationFragment : Fragment() {
         var productLevel: TextView = itemView.findViewById(R.id.productLevel)
         var addSecondCategory: View = itemView.findViewById(R.id.addSecondCategory)
         var edit: View = itemView.findViewById(R.id.edit)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 }

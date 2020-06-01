@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_add_product_classification.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
+import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.EasyPermissions
 
 /**
@@ -42,6 +43,9 @@ class AddProductClassificationActivity :
     private val mRequestCategoryViewModel: RequestCategoryViewModel by lazy { getViewModel<RequestCategoryViewModel>() }
 
     private val mRequestUploadDataViewModel: RequestUploadDataViewModel by lazy { getViewModel<RequestUploadDataViewModel>() }
+
+    private lateinit var mParentId:String
+    private lateinit var mCustomCategoryId:String
 
     override fun layoutId(): Int = R.layout.activity_add_product_classification
 
@@ -61,11 +65,14 @@ class AddProductClassificationActivity :
                 JUMP_FROM_EDIT
             }
         }
+        mParentId = intent?.getStringExtra(PARENT_ID).orEmpty()
+        mCustomCategoryId = intent?.getStringExtra(CUSTOMCATEGORYID).orEmpty()
+
         //返回按钮
         mTitleBack.setOnClickListener { finish() }
         //编辑页面查询商品分类详情
         if (mJumpFromType == JUMP_FROM_EDIT) {
-            mRequestCategoryViewModel.queryShopCategoryDetail(CacheUtil.getToken(), "42")
+            mRequestCategoryViewModel.queryShopCategoryDetail(CacheUtil.getToken(), mCustomCategoryId)
         }
     }
 
@@ -89,6 +96,11 @@ class AddProductClassificationActivity :
             parseStateResponseBody(resultState, {
                 val jsonObject = JSON.parseObject(it.string())
                 ToastUtils.showLong(jsonObject.getString("msg"))
+                if (jsonObject.getIntValue("code") == 1) {
+                    //返回上级页面刷新
+                    EventBus.getDefault().post(ADDCLASSIFICATION_SUCCESS)
+                    finish()
+                }
             })
         })
         //编辑商品分类
@@ -96,6 +108,11 @@ class AddProductClassificationActivity :
             parseStateResponseBody(resultState, {
                 val jsonObject = JSON.parseObject(it.string())
                 ToastUtils.showLong(jsonObject.getString("msg"))
+                if (jsonObject.getIntValue("code") == 1) {
+                    //返回上级页面刷新
+                    EventBus.getDefault().post(ADDCLASSIFICATION_SUCCESS)
+                    finish()
+                }
             })
         })
         //七牛云
@@ -107,7 +124,7 @@ class AddProductClassificationActivity :
                         mViewModel.categoryName.value,
                         mViewModel.sequence.value,
                         mViewModel.description.value,
-                        "37"
+                        mParentId
                     )
                     mRequestCategoryViewModel.editShopCategory("42", requestShopCategoryInfo)
                 }
@@ -120,11 +137,11 @@ class AddProductClassificationActivity :
                         mViewModel.categoryName.value,
                         mViewModel.sequence.value,
                         mViewModel.description.value,
-                        "37"
+                        mParentId
                     )
                     if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
                         mRequestCategoryViewModel.editShopCategory(
-                            "42",
+                            mCustomCategoryId,
                             requestShopCategoryInfo
                         )
                     } else {//添加商品
@@ -134,6 +151,12 @@ class AddProductClassificationActivity :
                         )
                     }
                 }
+            }
+        })
+        //七牛云上传loading
+        mRequestUploadDataViewModel.uploadingResult.observe(this, Observer {
+            if (it.isNotEmpty()) {
+                showLoading(it)
             }
         })
     }
@@ -156,15 +179,15 @@ class AddProductClassificationActivity :
     }
 
     private fun judgeCanSave(): Boolean = when {
-        mViewModel.imageUrl.value.isNullOrEmpty() -> {
+        mViewModel.imageUrl.value.isEmpty() -> {
             ToastUtils.showShort("分类封面图不可为空！")
             false
         }
-        classificationName.text.isNullOrEmpty()->{
+        mViewModel.categoryName.value.isEmpty()->{
             ToastUtils.showShort("分类名称不可为空！")
             false
         }
-        sequence.text.isNullOrEmpty()->{
+        mViewModel.sequence.value.isEmpty()->{
             ToastUtils.showShort("排序不可为空！")
             false
         }
@@ -214,5 +237,13 @@ class AddProductClassificationActivity :
 
         //从编辑跳转过来
         const val JUMP_FROM_EDIT = "JUMP_FROM_EDIT"
+
+        //一级时为空
+        const val PARENT_ID = "PARENT_ID"
+
+        //编辑id
+        const val CUSTOMCATEGORYID = "CUSTOMCATEGORYID"
+
+        const val ADDCLASSIFICATION_SUCCESS = "ADDCLASSIFICATION_SUCCESS"
     }
 }

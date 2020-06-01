@@ -89,6 +89,10 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
                                         AddProductClassificationActivity.JUMP_FROM_TYPE,
                                         AddProductClassificationActivity.JUMP_FROM_ADD_SECOND_CATEGORY
                                     )
+                                    putExtra(
+                                        AddProductClassificationActivity.PARENT_ID,
+                                        ""
+                                    )
                                 }
                             )
                         }

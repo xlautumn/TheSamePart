@@ -22,7 +22,7 @@ class RequestCategoryViewModel(application: Application) : BaseViewModel(applica
     fun queryShopCategoryDetail(token: String, customCategoryId: String) {
         requestResponseBody(
             { HttpRequestManger.instance.queryShopCategoryDetail(token, customCategoryId) },
-            queryShopCategoryDetailResult
+            queryShopCategoryDetailResult, isShowDialog = true
         )
     }
 
@@ -32,7 +32,7 @@ class RequestCategoryViewModel(application: Application) : BaseViewModel(applica
     fun addShopCategory(token: String, requestShopCategory: RequestShopCategoryInfo) {
         requestResponseBody(
             { HttpRequestManger.instance.addShopCategory(token, requestShopCategory) },
-            addShopCategoryResult
+            addShopCategoryResult, isShowDialog = true
         )
     }
 
@@ -42,7 +42,7 @@ class RequestCategoryViewModel(application: Application) : BaseViewModel(applica
     fun editShopCategory(customCategoryId: String, requestShopCategory: RequestShopCategoryInfo) {
         requestResponseBody(
             { HttpRequestManger.instance.editShopCategory(customCategoryId, requestShopCategory) },
-            editShopCategoryResult
+            editShopCategoryResult, isShowDialog = true
         )
     }
 
