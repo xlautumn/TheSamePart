@@ -128,6 +128,14 @@ class PurchaseProductManager private constructor() {
         })
     }
 
+    /**
+     * @param endTime
+     * @param productCategory
+     * @param quantity
+     * @param productId
+     * @param properties
+     * @param productSkuNumber
+     */
     fun uploadCartProduct(
         endTime: String, productCategory: String, quantity: String, productId: String,
         properties: String, productSkuNumber: String, onSuccess: (() -> Unit)?
@@ -156,11 +164,43 @@ class PurchaseProductManager private constructor() {
     }
 
     fun getProductSpecs(productId: String, onSuccess: (() -> Unit)?) {
-        var url = StringBuilder("${ApiService.SERVER_URL}$productId")
-            .append("?appKey=${CacheUtil.getAppKey()}")
-            .append("&appSecret=${CacheUtil.getAppSecret()}")
+        var url = StringBuilder("${ApiService.SERVER_URL}product/$productId")
+            .append("?appKey=99B9LGSypeHjWB11&appSecret=99osxt7y6szsf211")
+//            .append("?appKey=${CacheUtil.getAppKey()}")
+//            .append("&appSecret=${CacheUtil.getAppSecret()}")
         HttpUtil.instance.getUrl(url.toString(), { result ->
-                val uu =result
+            result.takeIf { it.isNotEmpty() }?.let {
+                JSONObject(it).optJSONObject("content")?.optJSONArray("productSkus")
+                    ?.takeIf { productSkus -> productSkus.length() > 0 }
+                    ?.let { productSkus ->
+                        val propertyList = hashMapOf<String, MutableSet<String>>()
+                        val propertyPriceList = hashMapOf<String, String>()
+                        for (i in 0 until productSkus.length()) {
+                            productSkus.optJSONObject(i)?.also { productSku ->
+                                val propertiesStr = productSku.optString("properties")
+                                JSONArray(propertiesStr).takeIf { properties -> properties.length() > 0 }
+                                    ?.let { properties ->
+                                        var propertyKey = ""
+                                        for (j in 0 until properties.length()) {
+                                            properties.optJSONObject(j)?.let { property ->
+                                                val project = property.optString("project")
+                                                val value = property.optString("value")
+                                                if (!propertyList.containsKey(project)) {
+                                                    //未包含该属性
+                                                    propertyList[project] = mutableSetOf(value)
+                                                } else {
+                                                    propertyList[project]?.add(value)
+                                                }
+                                                propertyKey="$propertyKey$value"
+                                            }
+                                        }
+                                        propertyPriceList[propertyKey] = productSku.optString("price")
+                                    }
+                            }
+                        }
+                        var size = propertyList.size
+                    }
+            }
         })
     }
 }
