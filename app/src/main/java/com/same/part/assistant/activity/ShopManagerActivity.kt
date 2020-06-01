@@ -76,8 +76,14 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
                     saveEditContent(qiuniuModel.img)
                 }
                 qiuniuModel.qiniuResponseInfo != null -> {//七牛云上传失败
+                    dismissLoading()
+                    ToastUtils.showLong("图片上传失败")
                 }
             }
+        })
+        //七牛云上传loading
+        mRequestUploadDataViewModel.uploadingResult.observe(this, Observer {
+            showLoading(it)
         })
         //更新信息
         mRequestShopManagerViewModel.updateResult.observe(this, Observer { resultState ->

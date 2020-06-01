@@ -21,14 +21,22 @@ class RequestShopManagerViewModel(application: Application) : BaseViewModel(appl
     fun shopModelReq(token: String) {
         request(
             { HttpRequestManger.instance.getShopInfo(token) }
-            , shopResult
+            , shopResult,isShowDialog = true
         )
     }
 
     fun saveEditContent(img: String, name: String, brand: String) {
         requestResponseBody(
-            { HttpRequestManger.instance.updateShopInfo(CacheUtil.getToken(), img, name, brand, CacheUtil.getShopId()?.toString()?:"") },
-            updateResult,true,"上传中"
+            {
+                HttpRequestManger.instance.updateShopInfo(
+                    CacheUtil.getToken(),
+                    img,
+                    name,
+                    brand,
+                    CacheUtil.getShopId()?.toString() ?: ""
+                )
+            },
+            updateResult, isShowDialog = true
         )
     }
 
