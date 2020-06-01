@@ -1,6 +1,7 @@
 package com.same.part.assistant.viewmodel.state
 import android.app.Application
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
+import me.hgj.jetpackmvvm.callback.livedata.BooleanLiveData
 import me.hgj.jetpackmvvm.callback.livedata.StringLiveData
 
 class ShopManagerViewModel (application: Application): BaseViewModel(application) {
@@ -19,7 +20,8 @@ class ShopManagerViewModel (application: Application): BaseViewModel(application
 
     var address = StringLiveData("")
 
+    var hasSelectPhoto = BooleanLiveData(false)
 
-    var shopId = StringLiveData("")
+
 
 }

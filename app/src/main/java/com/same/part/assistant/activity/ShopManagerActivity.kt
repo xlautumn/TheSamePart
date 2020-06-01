@@ -8,44 +8,36 @@ import androidx.lifecycle.Observer
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
-import com.qiniu.android.http.ResponseInfo
 import com.same.part.assistant.R
 import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.app.ext.setCanInput
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.app.util.GlobalUtil
-import com.same.part.assistant.app.util.PhotoPickerUtil.PERMISSIONS_REQUEST_LIST
 import com.same.part.assistant.app.util.PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA
 import com.same.part.assistant.app.util.PhotoPickerUtil.RESULT_CODE_PHOTO_PICKER
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
 import com.same.part.assistant.app.util.PhotoPickerUtil.showPhotoPicker
 import com.same.part.assistant.databinding.ActivityShopManagerBinding
-import com.same.part.assistant.utils.QiniuManager
 import com.same.part.assistant.viewmodel.request.RequestShopManagerViewModel
+import com.same.part.assistant.viewmodel.request.RequestUploadDataViewModel
 import com.same.part.assistant.viewmodel.state.ShopManagerViewModel
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.activity_shop_manager.*
-import kotlinx.android.synthetic.main.fragment_home.userAvatar
 import kotlinx.android.synthetic.main.toolbar_title.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
 import pub.devrel.easypermissions.EasyPermissions
-import pub.devrel.easypermissions.PermissionRequest
 
 /**
  * 店铺管理
  */
-class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManagerBinding>(), EasyPermissions.PermissionCallbacks {
-
-    /**
-     * GIF图片的本地完整路径。
-     */
-    private var gifPath: String = ""
+class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManagerBinding>(),
+    EasyPermissions.PermissionCallbacks {
 
     private val mRequestShopManagerViewModel: RequestShopManagerViewModel by lazy { getViewModel<RequestShopManagerViewModel>() }
+
+    private val mRequestUploadDataViewModel: RequestUploadDataViewModel by lazy { getViewModel<RequestUploadDataViewModel>() }
 
     override fun layoutId(): Int = R.layout.activity_shop_manager
 
@@ -61,38 +53,57 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
     }
 
     override fun createObserver() {
+        //店铺信息
         mRequestShopManagerViewModel.shopResult.observe(this, Observer { resultState ->
             parseState(resultState, {
-                mViewModel.imageUrl.postValue(it.img?:"")
+                mViewModel.imageUrl.postValue(it.img ?: "")
                 mViewModel.shopName.postValue(it.name ?: "")
                 mViewModel.shopDesc.postValue(it.brand ?: "")
                 mViewModel.operatorName.postValue(it.linkman ?: "")
                 mViewModel.operatorPhone.postValue(it.mobile ?: "")
-                mViewModel.shopId.postValue(it.shopId.toString())
                 mViewModel.address.postValue(
                     it.province.plus(it.city).plus(it.district).plus(it.address)
                 )
             })
         })
-
-        mRequestShopManagerViewModel.qiniuTokenResult.observe(this, Observer { resultState ->
-            parseStateResponseBody(resultState, {
-                val response: String = it.string()
-                val jsonObject = JSON.parseObject(response)
-                val contentJsonObject = jsonObject.getJSONObject("content")
-                val qiniuToken = contentJsonObject.getString("upToken")
-                uploadQiniu(qiniuToken)
-            })
+        //七牛云
+        mRequestUploadDataViewModel.uploadResult.observe(this, Observer { qiuniuModel ->
+            when {
+                qiuniuModel == null -> {//没有选择图片时
+                    saveEditContent(mViewModel.imageUrl.value)
+                }
+                qiuniuModel.img.isNotEmpty() -> {//选择了图片上传至七牛云
+                    saveEditContent(qiuniuModel.img)
+                }
+                qiuniuModel.qiniuResponseInfo != null -> {//七牛云上传失败
+                }
+            }
         })
-
+        //更新信息
         mRequestShopManagerViewModel.updateResult.observe(this, Observer { resultState ->
             parseStateResponseBody(resultState, {
-                ToastUtils.showLong("更新成功")
-//                val response: String = it.string()
-//                val jsonObject = JSON.parseObject(response)
-//                ToastUtils.showLong(jsonObject.getJSONObject("msg").toString())
+                val jsonObject = JSON.parseObject(it.string())
+                val code = jsonObject.getIntValue("code")
+                if (code == 1) {
+                    tvEdit.text = "编辑"
+                    tvSave.visibility = View.GONE
+                    editDesc.setCanInput(false)
+                    editShopName.setCanInput(false)
+                }
+                ToastUtils.showLong(jsonObject.getString("msg"))
             })
         })
+    }
+
+    /**
+     * 更新
+     */
+    private fun saveEditContent(imgUrl:String) {
+        mRequestShopManagerViewModel.saveEditContent(
+            imgUrl,
+            mViewModel.shopName.value,
+           mViewModel.shopDesc.value
+        )
     }
 
     inner class ProxyClick {
@@ -100,10 +111,15 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
         fun chooseAvatar() {
             choosePhoto(this@ShopManagerActivity)
         }
+
         //保存
         fun save() {
-            mRequestShopManagerViewModel.getQiniuToken(CacheUtil.getToken())
+            mRequestUploadDataViewModel.uploadData(
+                mViewModel.hasSelectPhoto.value,
+                mViewModel.imageUrl.value
+            )
         }
+
         //编辑
         fun edit() {
             if (tvEdit.text == "编辑") {
@@ -117,7 +133,6 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
                 editDesc.setCanInput(false)
                 editShopName.setCanInput(false)
             }
-
         }
     }
 
@@ -143,35 +158,13 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RESULT_CODE_PHOTO_PICKER && resultCode == Activity.RESULT_OK) {
             Matisse.obtainResult(data)?.takeIf { it.isNotEmpty() }?.apply {
-                gifPath = GlobalUtil.getRealFilePath(this@ShopManagerActivity, this[0]) ?: ""
+                val imageUrl  = GlobalUtil.getRealFilePath(this@ShopManagerActivity, this[0]) ?: ""
+                mViewModel.imageUrl.postValue(imageUrl)
+                mViewModel.hasSelectPhoto.postValue(true)
                 Glide.with(this@ShopManagerActivity)
                     .load(this[0])
                     .into(userAvatar)
             }
         }
-    }
-
-    /**
-     * 七牛云上传
-     */
-    private fun uploadQiniu(qiniuToken: String) {
-        val key = GlobalUtil.generateKey(gifPath, "portrait")
-        QiniuManager.upload(gifPath, key, qiniuToken, object : QiniuManager.UploadListener {
-            override fun onSuccess(key: String) {
-                mRequestShopManagerViewModel.saveEditContent(
-                    CacheUtil.getToken(),
-                    QiniuManager.getImgUrl(key),
-                    editShopName.text.toString(),
-                    editDesc.text.toString(),
-                    mViewModel.shopId.value
-                )
-            }
-
-            override fun onFailure(info: ResponseInfo?) {
-            }
-
-            override fun onProgress(percent: Double) {
-            }
-        })
     }
 }

@@ -9,8 +9,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSONObject
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.CashierOrderDetailActivity.Companion.ORDER_DETAIL_KEY
+import com.same.part.assistant.app.network.ApiService
+import com.same.part.assistant.app.util.CacheUtil
+import com.same.part.assistant.data.model.CashierGoodItemModel
 import com.same.part.assistant.data.model.CashierOrderModel
+import com.same.part.assistant.helper.refreshComplete
+import com.same.part.assistant.utils.HttpUtil
 import kotlinx.android.synthetic.main.activity_cashier_order.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
@@ -18,32 +25,11 @@ import kotlinx.android.synthetic.main.toolbar_title.*
  * 收银订单
  */
 class CashierOrderActivity : AppCompatActivity() {
-    private val mCashierOrderList = arrayListOf<CashierOrderModel>().apply {
-        add(
-            CashierOrderModel(
-                "220131108",
-                "￥20.05",
-                "支付宝",
-                "2020-12-23\n11:10:24"
-            )
-        )
-        add(
-            CashierOrderModel(
-                "220131108",
-                "￥20.05",
-                "微信",
-                "2020-12-23\n11:20:24"
-            )
-        )
-        add(
-            CashierOrderModel(
-                "220131108",
-                "￥20.05",
-                "现金支付",
-                "2020-12-23\n11:22:04"
-            )
-        )
-    }
+    //收银订单列表
+    private val mCashierOrderList = ArrayList<CashierOrderModel>()
+
+    //当前请求第几页的数据
+    private var mCurrentPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +45,122 @@ class CashierOrderActivity : AppCompatActivity() {
             adapter = CustomAdapter(mCashierOrderList)
             layoutManager = LinearLayoutManager(context)
         }
+        //下拉刷新
+        mSmartRefreshLayout.apply {
+            //下拉刷新
+            setOnRefreshListener {
+                mCurrentPage = 0
+                loadCashierGoodList(page = mCurrentPage, isRefresh = true)
+            }
+            //上拉加载
+            setOnLoadMoreListener {
+                mCurrentPage++
+                loadCashierGoodList(page = mCurrentPage, isRefresh = false)
+            }
+        }
+        //请求收银商品列表
+        loadCashierGoodList(page = mCurrentPage, isRefresh = true)
+    }
+
+    /**
+     * 请求加载收银商品列表
+     */
+    private fun loadCashierGoodList(
+        page: Int = 0,
+        size: String = "20",
+        isRefresh: Boolean
+    ) {
+        val url = StringBuilder("${ApiService.SERVER_URL}order/getProductOrderList")
+            .append("?shopId=${CacheUtil.getShopId()}")
+            .append("&page=$page")
+            .append("&size=$size")
+            .append("&type=2")
+            .append("&appKey=${CacheUtil.getAppKey()}")
+            .append("&appSecret=${CacheUtil.getAppSecret()}")
+        HttpUtil.instance.getUrl(url.toString(), {
+            try {
+                val resultJson = JSONObject.parseObject(it)
+                resultJson.apply {
+                    getJSONArray("content")?.takeIf { array -> array.size > 0 }?.apply {
+                        if (this.size == 0) {
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(false)
+                            mCurrentPage--
+                        } else {
+                            val orderList = ArrayList<CashierOrderModel>()
+                            for (i in 0 until this.size) {
+                                getJSONObject(i)?.apply {
+                                    val no = getString("no") ?: "--"
+                                    val price = getString("price") ?: "--"
+                                    val payment = getString("payment") ?: "--"
+                                    val addTime = getString("addTime") ?: "--"
+                                    val shopCouponPrice = getString("shopCouponPrice") ?: "0.00"
+                                    val platformCouponPrice =
+                                        getString("platformCouponPrice") ?: "0.00"
+                                    //订单详情条目的列表数据
+                                    val orderItemList = ArrayList<CashierGoodItemModel>()
+                                    getJSONArray("orderItems")?.takeIf { array -> array.size > 0 }
+                                        ?.apply {
+                                            for (index in 0 until this.size) {
+                                                getJSONObject(index)?.apply {
+                                                    val img = getString("img")
+                                                    var name = getString("name")
+                                                    var quantity = getString("quantity")
+                                                    var price = getString("price")
+                                                    CashierGoodItemModel(
+                                                        img,
+                                                        name,
+                                                        quantity,
+                                                        price
+                                                    ).apply {
+                                                        orderItemList.add(this)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    CashierOrderModel(
+                                        no,
+                                        price,
+                                        payment,
+                                        addTime,
+                                        shopCouponPrice,
+                                        platformCouponPrice,
+                                        orderItemList
+                                    ).apply {
+                                        orderList.add(this)
+                                    }
+                                }
+                            }
+                            //如果是刷新需要清空之前的数据
+                            if (isRefresh && orderList.size > 0) {
+                                mCashierOrderList.clear()
+                                mCashierOrderList.addAll(orderList)
+                            } else {
+                                mCashierOrderList.addAll(orderList)
+                            }
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(true)
+                            //刷新数据
+                            mCashierRecyclerView.adapter?.notifyDataSetChanged()
+                        }
+                    } ?: also {
+                        //通知刷新结束
+                        mSmartRefreshLayout?.refreshComplete(false)
+                        mCurrentPage--
+                    }
+                }
+            } catch (e: Exception) {
+                //请求失败回退请求的页数
+                if (mCurrentPage > 0) mCurrentPage--
+                //通知刷新结束
+                mSmartRefreshLayout?.refreshComplete(false)
+            }
+        }, {
+            //请求失败回退请求的页数
+            if (mCurrentPage > 0) mCurrentPage--
+            //通知刷新结束
+            mSmartRefreshLayout?.refreshComplete(true)
+        })
     }
 
 
@@ -79,17 +181,19 @@ class CashierOrderActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: CashierOrderItemHolder, position: Int) {
             val model = dataList[position]
-            holder.orderId.text = model.orderId
-            holder.orderAmount.text = model.amount
-            holder.payMethod.text = model.payMethod
-            holder.time.text = model.time
+            holder.orderId.text = model.no
+            holder.orderAmount.text = model.price
+            holder.payMethod.text = model.payment
+            holder.time.text = model.addTime?.replace(" ", "\n")
             holder.itemView.setOnClickListener {
                 //跳转详情页
                 startActivity(
                     Intent(
                         this@CashierOrderActivity,
                         CashierOrderDetailActivity::class.java
-                    )
+                    ).apply {
+                        putExtra(ORDER_DETAIL_KEY, model)
+                    }
                 )
             }
         }

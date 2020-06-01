@@ -1,6 +1,7 @@
 package com.same.part.assistant.data.model
 
 import com.qiniu.android.http.ResponseInfo
+import java.io.Serializable
 
 /**
  * 客户管理数据类
@@ -41,7 +42,7 @@ data class CashierModel(
     //	审核状态（0待审核，1审核通过，-1审核驳回） 默认值2
     var audit_state: String = "2",
     var quantity: String = "2147483647"
-)
+):Serializable
 
 
 /**
@@ -67,11 +68,14 @@ data class ProductModel(
  * 商品分类数据类
  */
 data class CashierOrderModel(
-    var orderId: String,
-    var amount: String,
-    var payMethod: String,
-    var time: String
-)
+    var no: String,
+    var price: String,
+    var payment: String,
+    var addTime: String,
+    var shopCouponPrice: String,
+    var platformCouponPrice: String,
+    var orderItemList: ArrayList<CashierGoodItemModel> = ArrayList()
+) : Serializable
 
 /**
  * 商品分类数据类
@@ -87,12 +91,12 @@ data class GoodItemModel(
  * 收银订单条目数据类
  */
 data class CashierGoodItemModel(
-    var avatar: String,
+    var img: String,
     var name: String,
-    var number: String,
-    var oldPrice: String,
-    var newPrice: String
-)
+    var quantity: String,
+    var price: String,
+    var oldPrice: String = ""
+) : Serializable
 
 /**
  * 收银订单条目数据类
@@ -383,6 +387,61 @@ data class QiniuMode(
     val img: String,
     val qiniuResponseInfo: ResponseInfo?
 )
+
+/**
+ * 收银商品详情
+ */
+data class CashierDetailMode(
+    val addTime: String,
+    val auditResult: Any,
+    val auditState: Int,
+    val barcode: String,
+    val brand: Any,
+    val coinRate: Double,
+    val content: Any,
+    val costPrice: Double,
+    val count: Int,
+    val deliveryTemplate: Any,
+    val description: Any,
+    val favoriteCount: Int,
+    val groupIds: List<Any>,
+    val ifPlatformCut: Boolean,
+    val ifWarn: Boolean,
+    val img: String,
+    val imgs: String,
+    val linePrice: Double,
+    val monthSales: Int,
+    val name: String,
+    val number: String,
+    val platformCutRate: Double,
+    val pointRate: Double,
+    val postFee: Double,
+    val postType: Any,
+    val price: Double,
+    val productCategory: Any,
+    val productExtends: List<Any>,
+    val customCategoryProductId:Int,
+    val productId: Int,
+    val quantity: Int,
+    val ratio: Double,
+    val sequence: Int,
+    val shop: Shop,
+    val specification: Any,
+    val state: Int,
+    val totalSales: Int,
+    val type: String,
+    val unit: String,
+    val updateTime: String,
+    val volume: Any,
+    val warnQuantity: Int,
+    val weight: Double,
+    val withHoldQuantity: Int
+)
+
+
+
+
+
 
 
 
