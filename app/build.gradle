@@ -85,5 +85,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
     //二维码扫描
     implementation 'com.github.yuzhiqiang1993:zxing:2.2.5'
+    //BaseAdapter
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.2'
 
 }

@@ -135,10 +135,11 @@ data class VipCardInfoModel(
  */
 data class CouponInfoModel(
     var name: String,
+    var issued:String,
     var remain: String,
-    var total: String,
     var used: String,
-    var status: String
+    var status: String,
+    var statements: String
 )
 
 /**

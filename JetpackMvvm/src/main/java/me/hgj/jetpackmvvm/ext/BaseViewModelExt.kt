@@ -176,7 +176,7 @@ fun <T> BaseViewModel.request(
     block: suspend () -> BaseResponse<T>,
     resultState: MutableLiveData<ResultState<T>>,
     isShowDialog: Boolean = false,
-    loadingMessage: String="请求网络中..."
+    loadingMessage: String="加载中..."
 ) {
     viewModelScope.launch {
         runCatching {
@@ -202,7 +202,7 @@ fun  BaseViewModel.requestResponseBody(
     block: suspend () -> ResponseBody,
     resultState: MutableLiveData<ResultResponseBodyState>,
     isShowDialog: Boolean = false,
-    loadingMessage: String="请求网络中..."
+    loadingMessage: String="加载中..."
 ) {
     viewModelScope.launch {
         runCatching {
@@ -229,7 +229,7 @@ fun BaseViewModel.requestResponseBody(
     success: (ResponseBody) -> Unit,
     error: (Exception) -> Unit = {},
     isShowDialog: Boolean = false,
-    loadingMessage: String = "请求网络中..."
+    loadingMessage: String = "加载中..."
 ) {
     //如果需要弹窗 通知Activity/fragment弹窗
     if (isShowDialog) loadingChange.showDialog.postValue(loadingMessage)
@@ -272,7 +272,7 @@ fun <T> BaseViewModel.requestNoCheck(
     block: suspend () -> T,
     resultState: MutableLiveData<ResultState<T>>,
     isShowDialog: Boolean = false,
-    loadingMessage: String="请求网络中..."
+    loadingMessage: String="加载中..."
 ) {
     viewModelScope.launch {
         runCatching {
@@ -300,7 +300,7 @@ fun <T> BaseViewModel.request(
     success: (T) -> Unit,
     error: (AppException) -> Unit = {},
     isShowDialog: Boolean = false,
-    loadingMessage: String = "请求网络中..."
+    loadingMessage: String = "加载中..."
 ) {
     //如果需要弹窗 通知Activity/fragment弹窗
     if (isShowDialog) loadingChange.showDialog.postValue(loadingMessage)
@@ -344,7 +344,7 @@ fun <T> BaseViewModel.requestNoCheck(
     success: (T) -> Unit,
     error: (AppException) -> Unit = {},
     isShowDialog: Boolean = false,
-    loadingMessage: String = "请求网络中..."
+    loadingMessage: String = "加载中..."
 ) {
     //如果需要弹窗 通知Activity/fragment弹窗
     if (isShowDialog) loadingChange.showDialog.postValue(loadingMessage)

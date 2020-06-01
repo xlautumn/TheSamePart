@@ -2,54 +2,33 @@ package com.same.part.assistant.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.ToastUtils
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.same.part.assistant.R
+import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.data.model.CouponInfoModel
+import com.same.part.assistant.databinding.ActivityCouponManagerBinding
+import com.same.part.assistant.viewmodel.request.RequestCouponsViewModel
 import kotlinx.android.synthetic.main.activity_coupon_manager.*
+import me.hgj.jetpackmvvm.ext.getViewModel
 
 /**
  * 优惠券管理
  */
-class CouponManagerActivity : AppCompatActivity() {
-    private val mCouponList = arrayListOf<CouponInfoModel>().apply {
-        add(
-            CouponInfoModel(
-                "中秋优惠券",
-                "50",
-                "200",
-                "20",
-                "0"
-            )
-        )
-        add(
-            CouponInfoModel(
-                "端午优惠券",
-                "50",
-                "200",
-                "20",
-                "1"
-            )
-        )
-        add(
-            CouponInfoModel(
-                "国庆优惠券",
-                "50",
-                "200",
-                "20",
-                "2"
-            )
-        )
-    }
+class CouponManagerActivity :
+    BaseActivity<RequestCouponsViewModel, ActivityCouponManagerBinding>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coupon_manager)
+    //适配器
+    private lateinit var mCouponAdapter: CouponAdapter
+
+    private val mRequestCouponsViewModel: RequestCouponsViewModel by lazy { getViewModel<RequestCouponsViewModel>() }
+
+    override fun layoutId(): Int = R.layout.activity_coupon_manager
+
+    override fun initView(savedInstanceState: Bundle?) {
         //标题
         mToolbarTitle.text = "优惠券管理"
         //返回按钮
@@ -61,56 +40,37 @@ class CouponManagerActivity : AppCompatActivity() {
             startActivity(Intent(this@CouponManagerActivity, AddCouponActivity::class.java))
         }
         //列表数据
+        mCouponAdapter = CouponAdapter(arrayListOf())
         mCouponRecyclerView.apply {
-            adapter = CustomAdapter(mCouponList)
+            adapter = mCouponAdapter
             layoutManager = LinearLayoutManager(context)
         }
+        //获取优惠券数据
+        mRequestCouponsViewModel.getCouponsList()
     }
 
+    override fun createObserver() {
+        mRequestCouponsViewModel.couponsListResult.observe(this, Observer {
+            mCouponAdapter.setNewInstance(it)
+        })
+    }
 
-    class CustomAdapter(var dataList: ArrayList<CouponInfoModel>) :
-        RecyclerView.Adapter<CouponItemHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CouponItemHolder =
-            CouponItemHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.coupon_info_item,
-                    parent,
-                    false
-                )
-            )
+    class CouponAdapter(data: ArrayList<CouponInfoModel>) : BaseQuickAdapter<CouponInfoModel, BaseViewHolder>(R.layout.coupon_info_item, data) {
 
-
-        override fun getItemCount(): Int = dataList.size
-
-
-        override fun onBindViewHolder(holder: CouponItemHolder, position: Int) {
-            val model = dataList[position]
-            holder.couponName.text = model.name
-            holder.couponCount.text = "${model.remain}/${model.total}"
-            holder.couponUse.text = model.used
-            holder.couponStatus.apply {
-                text = when (model.status) {
-                    "0" -> "未开始"
-                    "1" -> "已开始"
-                    else -> "已结束"
-                }
-                setTextColor(
-                    when (model.status) {
-                        "0" -> 0xFF0EB170.toInt()
-                        "1" -> 0xFFE6660F.toInt()
-                        else -> 0xFF999999.toInt()
-                    }
-                )
+        override fun convert(holder: BaseViewHolder, item: CouponInfoModel) {
+            //赋值
+            item.run {
+                holder.setText(R.id.couponName,name )
+                holder.setText(R.id.couponCount, "$issued/$remain")
+                holder.setText(R.id.couponUse, used)
+                holder.setText(R.id.couponStatus, statements)
+                holder.setTextColor(R.id.couponStatus, when (status) {
+                    "0" -> 0xFF0EB170.toInt()
+                    "1" -> 0xFFE6660F.toInt()
+                    else -> 0xFF999999.toInt()
+                })
             }
         }
-
-    }
-
-    class CouponItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var couponName: TextView = itemView.findViewById(R.id.couponName)
-        var couponCount: TextView = itemView.findViewById(R.id.couponCount)
-        var couponUse: TextView = itemView.findViewById(R.id.couponUse)
-        var couponStatus: TextView = itemView.findViewById(R.id.couponStatus)
     }
 
 }

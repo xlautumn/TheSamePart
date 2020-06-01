@@ -78,7 +78,8 @@ interface ApiService {
         @Header("WSCX") token: String,
         @Path("customCategoryId") customCategoryId: String,
         @Query("appKey") appkey: String = CacheUtil.getAppKey(),
-        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()): ResponseBody
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
+    ): ResponseBody
 
 
     /**
@@ -114,5 +115,26 @@ interface ApiService {
         @Query("appKey") appKey: String = CacheUtil.getAppKey(),
         @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
     ): ApiResponse<CashierDetailMode>
+
+
+    /**
+     * 获取店铺优惠劵活动列表
+     */
+    @GET("coupon-activities")
+    suspend fun getCouponsList(
+        @Query("shopId") shopId: String = CacheUtil.getShopId()?.toString() ?: "",
+        @Query("ifPlatform") ifPlatform: Boolean = false,
+        @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
+    ): ResponseBody
+
+
+    /**
+     * 创建优惠劵活动
+     */
+    @POST("biz/coupon-activity")
+    suspend fun createCouponActivity(
+        @Body requestCreateCouponInfo: RequestCreateCouponInfo
+    ): ResponseBody
 
 }

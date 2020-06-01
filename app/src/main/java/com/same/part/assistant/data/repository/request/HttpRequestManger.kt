@@ -126,5 +126,23 @@ class HttpRequestManger {
         return NetworkApi.service.getCashierGoodDetail(CacheUtil.getToken(), productId)
     }
 
+    /**
+     * 获取店铺优惠劵活动列表
+     */
+    suspend fun getCouponsList(
+    ): ResponseBody {
+        return NetworkApi.service.getCouponsList()
+    }
+
+
+    /**
+     * 创建优惠劵活动
+     */
+    suspend fun createCouponActivity(
+        requestCreateCouponInfo: RequestCreateCouponInfo
+    ): ResponseBody {
+        return NetworkApi.service.createCouponActivity(requestCreateCouponInfo)
+    }
+
 
 }

@@ -126,6 +126,21 @@ data class CreateOrUpdateGoodsInfo(
     var id: String = ""
 )
 
+/**
+ * 创建优惠劵活动
+ */
+data class RequestCreateCouponInfo(
+    val title: String,
+    val totalQty: Int,
+    val conditionPrice: Int,
+    val denominations: Int,
+    val ifLimit: Int,
+    val validEndTime: String,
+    val validStartTime: String,
+    val shopId: Int? = CacheUtil.getShopId(),
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret()
+)
 
 
 

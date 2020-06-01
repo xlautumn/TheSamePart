@@ -1,113 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mToolbar"
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.same.part.assistant.viewmodel.state.CouponManagerViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimary"
-        app:contentInsetStart="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/mToolbarBack"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mToolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/mTitleBack"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="15dp"
-                android:src="@drawable/arrow_back" />
+            <RelativeLayout
+                android:id="@+id/mToolbarBack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/mTitleBack"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
+                    android:src="@drawable/arrow_back" />
+
+                <TextView
+                    android:id="@+id/mToolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:textColor="@color/color_FFFFFF"
+                    android:textSize="16dp"
+                    tools:text="优惠券管理" />
+
+                <ImageView
+                    android:id="@+id/mToolbarAdd"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/dip_14"
+                    android:src="@drawable/selector_add" />
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/custom_manager_header"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:background="@color/color_F0F0F0"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mToolbar">
 
             <TextView
-                android:id="@+id/mToolbarTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/color_FFFFFF"
-                android:textSize="16dp"
-                tools:text="优惠券管理" />
+                android:text="名称"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dip_12" />
 
-            <ImageView
-                android:id="@+id/mToolbarAdd"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:padding="@dimen/dip_14"
-                android:src="@drawable/selector_add" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="已发放/剩余"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dip_12" />
 
-        </RelativeLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="已使用"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dip_12" />
 
-    </androidx.appcompat.widget.Toolbar>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="状态"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dip_12" />
 
-    <LinearLayout
-        android:id="@+id/custom_manager_header"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:background="@color/color_F0F0F0"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mToolbar">
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="名称"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/dip_12" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mCouponRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/color_F8F8F8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/custom_manager_header" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="已发放/剩余"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/dip_12" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="已使用"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/dip_12" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="状态"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/dip_12" />
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mCouponRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/color_F8F8F8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_manager_header" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
