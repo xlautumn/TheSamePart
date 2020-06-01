@@ -12,12 +12,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddCashierGoodActivity
+import com.same.part.assistant.activity.AddCashierGoodActivity.Companion.ADD_OR_UPDATE_CASHIER_SUCCESS
+import com.same.part.assistant.activity.AddCashierGoodActivity.Companion.CASHIER_PRODUCT_ID
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CashierModel
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
 import kotlinx.android.synthetic.main.fragment_cashier.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+
 
 /**
  * 收银商品
@@ -25,8 +31,17 @@ import kotlinx.android.synthetic.main.fragment_cashier.*
 class CashierFragment : Fragment() {
     //数据列表
     private val mCashierList = arrayListOf<CashierModel>()
+
     //当前请求第几页的数据
     private var mCurrentPage = 0
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun eventRefresh(messageEvent: String) {
+        if (ADD_OR_UPDATE_CASHIER_SUCCESS == messageEvent) {
+            mSmartRefreshLayout.autoRefresh()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +55,7 @@ class CashierFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        EventBus.getDefault().register(this)
         //列表数据
         cashierRecyclerView.apply {
             adapter = CustomAdapter(mCashierList)
@@ -164,6 +180,7 @@ class CashierFragment : Fragment() {
                                 AddCashierGoodActivity.JUMP_FROM_TYPE,
                                 AddCashierGoodActivity.JUMP_FROM_EDIT
                             )
+                            putExtra(CASHIER_PRODUCT_ID, model.id)
                         }
                     )
                 }
@@ -177,6 +194,12 @@ class CashierFragment : Fragment() {
         var cashierPrice: TextView = itemView.findViewById(R.id.cashierPrice)
         var cashierUnit: TextView = itemView.findViewById(R.id.cashierUnit)
         var edit: TextView = itemView.findViewById(R.id.edit)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
 }

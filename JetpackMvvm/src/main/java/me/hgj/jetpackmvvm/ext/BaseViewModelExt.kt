@@ -12,10 +12,7 @@ import me.hgj.jetpackmvvm.ext.util.loge
 import me.hgj.jetpackmvvm.network.AppException
 import me.hgj.jetpackmvvm.network.BaseResponse
 import me.hgj.jetpackmvvm.network.ExceptionHandle
-import me.hgj.jetpackmvvm.state.ResultResponseBodyState
-import me.hgj.jetpackmvvm.state.ResultState
-import me.hgj.jetpackmvvm.state.paresException
-import me.hgj.jetpackmvvm.state.paresResult
+import me.hgj.jetpackmvvm.state.*
 import okhttp3.ResponseBody
 
 /**
@@ -212,6 +209,7 @@ fun  BaseViewModel.requestResponseBody(
             resultState.value =  ResultResponseBodyState.onAppSuccess(it)
         }.onFailure {
             it.message?.loge("JetpackMvvm")
+            resultState.paresResponseBodyException(it)
         }
     }
 }

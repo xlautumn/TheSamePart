@@ -76,7 +76,7 @@ dependencies {
     //开关
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
     //七牛云
-    api 'com.qiniu:qiniu-android-sdk:7.3.3'
+    implementation 'com.qiniu:qiniu-android-sdk:7.6.1'
     //网络请求框架
     implementation("com.squareup.okhttp3:okhttp:4.7.2")
     //底部弹框

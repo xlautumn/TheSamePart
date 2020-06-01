@@ -36,14 +36,14 @@ class RequestAddCashierGoodViewModel(application: Application) : BaseViewModel(a
                     createOrUpdateGoodsInfo
                 )
             },
-            createOrUpdateCashierGoodsResult
+            createOrUpdateCashierGoodsResult, isShowDialog = true
         )
     }
 
     /**
      * 编辑时需查询商品分类和详情，添加时只查商品分类
      */
-    fun queryCashierGood(isEditPage: Boolean,productId: String) {
+    fun queryCashierGood(isEditPage: Boolean, productId: String) {
         //查商品分类
         requestResponseBody(
             { HttpRequestManger.instance.getProductClassificationList() },
@@ -79,7 +79,8 @@ class RequestAddCashierGoodViewModel(application: Application) : BaseViewModel(a
                 } catch (e: Exception) {
 
                 }
-            })
+            }, isShowDialog = isEditPage
+        )
     }
 
     /**
@@ -89,9 +90,10 @@ class RequestAddCashierGoodViewModel(application: Application) : BaseViewModel(a
         request(
             {
                 HttpRequestManger.instance.getCashierGoodDetail(
-                    productId)
+                    productId
+                )
             }
-            , cashierGoodsDetailInfoResult
+            , cashierGoodsDetailInfoResult, isShowDialog = true
         )
     }
 

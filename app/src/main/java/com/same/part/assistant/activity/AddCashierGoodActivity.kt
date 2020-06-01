@@ -38,6 +38,7 @@ import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
 import me.shaohui.bottomdialog.BottomDialog
+import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.EasyPermissions
 
 
@@ -51,6 +52,11 @@ class AddCashierGoodActivity :
      * 跳转来源
      */
     private lateinit var mJumpFromType: String
+
+    /**
+     * 收银商品productId
+     */
+    private lateinit var mCashierEditId: String
 
     /**
      * 商品分类列表数据
@@ -99,6 +105,9 @@ class AddCashierGoodActivity :
                     JUMP_FROM_EDIT
                 }
             }
+        //收银商品productId
+        mCashierEditId = intent?.getStringExtra(CASHIER_PRODUCT_ID).orEmpty()
+
         //返回按钮
         mTitleBack.setOnClickListener {
             finish()
@@ -140,8 +149,10 @@ class AddCashierGoodActivity :
                             selectedIfWeightGood.text = option
                             //此时选择的是称重商品
                             if (position == 0) {
+                                mViewModel.unit.postValue( mWeightGoodUnitList[0])
                                 mScannerBarcode.visibility = View.GONE
                             } else {
+                                mViewModel.unit.postValue(mNotWeightGoodUnitList[0])
                                 mScannerBarcode.visibility = View.VISIBLE
                             }
                         }
@@ -160,7 +171,7 @@ class AddCashierGoodActivity :
                 it.findViewById<RecyclerView>(R.id.recyclerview).apply {
                     layoutManager = LinearLayoutManager(this@AddCashierGoodActivity)
                     val list =
-                        if (selectedIfWeightGood.text == mIfWeightGoodList[0]) mWeightGoodUnitList else mNotWeightGoodUnitList
+                        if (mViewModel.type.value == mIfWeightGoodList[0]) mWeightGoodUnitList else mNotWeightGoodUnitList
                     adapter = CustomAdapter(list) { position ->
                         if (position >= 0 && position < list.size) {
                             mViewModel.unit.postValue(list[position])
@@ -182,14 +193,13 @@ class AddCashierGoodActivity :
             val isNeedUploadQiniu =
                 (mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value) || mJumpFromType == JUMP_FROM_ADD_CASHIER_GOOD
             mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imgs.value)
-
         }
         //扫描二维码
         scanBarCode.setOnClickListener {
             ScanBarCodeUtil.startScanCode(this)
         }
         //加载商品分类数据
-        mRequestAddCashierGoodViewModel.queryCashierGood(mJumpFromType == JUMP_FROM_EDIT, "2057")
+        mRequestAddCashierGoodViewModel.queryCashierGood(mJumpFromType == JUMP_FROM_EDIT, mCashierEditId)
     }
 
     override fun createObserver() {
@@ -226,6 +236,13 @@ class AddCashierGoodActivity :
                     }
                 })
             })
+
+        mRequestAddCashierGoodViewModel.loadingChange.showDialog.observe(this, Observer {
+            if (it.isNotEmpty()) {
+                showLoading(it)
+            }
+        })
+
         //更新成功
         mRequestAddCashierGoodViewModel.createOrUpdateCashierGoodsResult.observe(
             this,
@@ -233,6 +250,11 @@ class AddCashierGoodActivity :
                 parseStateResponseBody(resultState, {
                     val jsonObject = JSON.parseObject(it.string())
                     ToastUtils.showLong(jsonObject.getString("msg"))
+                    if (jsonObject.getIntValue("code") == 1) {
+                        //返回上级页面刷新
+                        EventBus.getDefault().post(ADD_OR_UPDATE_CASHIER_SUCCESS)
+                        finish()
+                    }
                 })
             })
         //七牛云
@@ -245,8 +267,15 @@ class AddCashierGoodActivity :
                     createOrUpdateCashierGood(qiuniuModel.img)
                 }
                 qiuniuModel.qiniuResponseInfo != null -> {//七牛云上传失败
-
+                    dismissLoading()
+                    ToastUtils.showLong("图片上传失败")
                 }
+            }
+        })
+        //七牛云上传loading
+        mRequestUploadDataViewModel.uploadingResult.observe(this, Observer {
+            if (it.isNotEmpty()) {
+                showLoading(it)
             }
         })
     }
@@ -337,7 +366,7 @@ class AddCashierGoodActivity :
             mViewModel.unit.value
         )
         if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
-            requestShopCategoryInfo.id = "2057"
+            requestShopCategoryInfo.id = mCashierEditId
         }
         mRequestAddCashierGoodViewModel.createOrUpdateCashierGood(requestShopCategoryInfo)
     }
@@ -355,5 +384,11 @@ class AddCashierGoodActivity :
 
         //从编辑跳转过来
         const val JUMP_FROM_EDIT = "JUMP_FROM_EDIT"
+
+        //添加收银商品成功
+        const val ADD_OR_UPDATE_CASHIER_SUCCESS = "ADD_CASHIER_SUCCESS"
+
+        //收银商品productId
+        const val CASHIER_PRODUCT_ID = "CASHIER_PRODUCT_ID"
     }
 }

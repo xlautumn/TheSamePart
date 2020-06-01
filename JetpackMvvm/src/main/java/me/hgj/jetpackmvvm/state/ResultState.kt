@@ -60,3 +60,8 @@ fun <T> MutableLiveData<ResultState<T>>.paresException(e: Throwable) {
     this.value = ResultState.onAppError(ExceptionHandle.handleException(e))
 }
 
+
+fun  MutableLiveData<ResultResponseBodyState>.paresResponseBodyException(e: Throwable) {
+    this.value = ResultResponseBodyState.onAppError(ExceptionHandle.handleException(e))
+}
+
