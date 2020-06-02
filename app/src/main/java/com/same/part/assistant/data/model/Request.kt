@@ -126,7 +126,6 @@ data class CreateOrUpdateGoodsInfo(
     var id: String = ""
 )
 
-<<<<<<< HEAD
 /**
  * 创建优惠劵活动
  */
@@ -201,14 +200,11 @@ data class RequestPay(
     }
 }
 
-
-=======
 data class PropertyData(
     var project: String?="",
     var name: String? = "",
     var isSelected: Boolean = false
 )
->>>>>>> 采购规格弹窗实现
 
 
 
