@@ -10,8 +10,8 @@
         android:background="@drawable/shape_choose_spec_dialog_top_bg"
         android:paddingTop="@dimen/dip_3"
         android:paddingBottom="@dimen/dip_3"
-        android:paddingLeft="@dimen/dip_20"
-        android:paddingRight="@dimen/dip_20">
+        android:paddingLeft="@dimen/dip_15"
+        android:paddingRight="@dimen/dip_15">
 
         <TextView
             android:id="@+id/dialog_good_name"
@@ -43,19 +43,16 @@
         android:paddingTop="@dimen/dip_5"
         android:paddingRight="@dimen/dip_20"
         android:paddingBottom="@dimen/dip_5"
-        android:text="重量"
+        android:visibility="gone"
+        android:text=""
         android:textColor="@android:color/darker_gray"
         android:textSize="16dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ListView
         android:id="@+id/product_attribute_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:paddingLeft="@dimen/dip_20"
-        android:paddingTop="@dimen/dip_10"
-        android:paddingRight="@dimen/dip_20"
-        android:paddingBottom="@dimen/dip_10" />
+        android:background="@android:color/white" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -8,25 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
+import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.commonsware.cwac.merge.MergeAdapter
 import com.same.part.assistant.R
 import com.same.part.assistant.adapter.ChooseSpecsDialogAdapter
+import com.same.part.assistant.data.model.PropertyData
 import com.same.part.assistant.utils.Util
 import kotlinx.android.synthetic.main.layout_dialog_choose_specs.*
 
-class ChooseSpecsDialogFragment : DialogFragment() {
+class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment() {
 
     companion object {
         private val TAG = ChooseSpecsDialogFragment::class.java.simpleName
 
         const val PARAMS_TITLE = "params_title"
 
-        fun create(title: String): ChooseSpecsDialogFragment {
-            return ChooseSpecsDialogFragment().apply {
+        fun create(title: String, context: Context): ChooseSpecsDialogFragment {
+            return ChooseSpecsDialogFragment(context).apply {
                 arguments = Bundle().also {
                     //Bundle中添加数据
                     it.putString(PARAMS_TITLE, title)
@@ -36,14 +38,15 @@ class ChooseSpecsDialogFragment : DialogFragment() {
     }
 
     private var mTitleContent: String? = null
-    private var mContext: Context? = null
-    private var mAdapter: ChooseSpecsDialogAdapter? = null
-    private lateinit var mDataView: RecyclerView
+    private var mPropertyList = LinkedHashMap<String, MutableSet<PropertyData>>()
+    private var mPropertyPriceList = LinkedHashMap<String, String>()
+    private lateinit var mDataView: ListView
+    private lateinit var mMergeAdapter: MergeAdapter
 
     private var mData: List<String> = ArrayList<String>().apply {
-        add("10kg")
-        add("20kg")
-        add("30kg")
+        add("圣女果")
+        add("樱桃")
+        add("车厘子")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +75,6 @@ class ChooseSpecsDialogFragment : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mContext = activity
         mContext?.let {
             dialog?.window?.decorView?.setPadding(Util.dip2px(it, 25f), 0,
                 Util.dip2px(it, 25f), 0)
@@ -82,24 +84,21 @@ class ChooseSpecsDialogFragment : DialogFragment() {
             //TODO 加入购物车，调用加入购物车的接口
             dismiss()
         }
-        //设置监听等动作
+        mergeAdapter()
         mDataView.apply {
-            layoutManager = GridLayoutManager(mContext, 2)
-            //adapter需要重新处理
-            mAdapter = mContext?.let { ChooseSpecsDialogAdapter(it) }
-            mAdapter?.setChooseSpecsDialogListener {
-                onItemClick {position ->
-                    mAdapter?.notifyDataSetChanged()
-                    //填充已选规格
-                    var specs = mData[position]
-                    selectedSpecs.text = "已选规格：$specs"
-                    //TODO 根据价格及所选规格计算 总价
-                    selectedPrice.text = "￥$specs"
-                }
-            }
-            adapter = mAdapter
+            adapter = mMergeAdapter
         }
-        mAdapter?.setData(mData)
+    }
+
+    private fun mergeAdapter() {
+        mMergeAdapter = MergeAdapter()
+        mPropertyList.forEach {
+            val titleView = createRightTitleView(it.key)
+            mMergeAdapter.addView(titleView)
+            //添加adapter
+            val adapter = ChooseSpecsDialogAdapter(mContext,it.value)
+            mMergeAdapter.addAdapter(adapter)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -123,4 +122,24 @@ class ChooseSpecsDialogFragment : DialogFragment() {
         show(manager, TAG)
     }
 
+    fun setData(
+        propertyList: LinkedHashMap<String, MutableSet<PropertyData>>?,
+        propertyPriceList: LinkedHashMap<String, String>?
+    ) {
+        propertyList?.let { properties ->
+            propertyPriceList?.let { propertyPrice ->
+                mPropertyList.clear()
+                mPropertyPriceList.clear()
+                mPropertyList.putAll(properties)
+                mPropertyPriceList.putAll(propertyPrice)
+            }
+        }
+    }
+
+    private fun createRightTitleView(title: String?): View {
+        var view = LayoutInflater.from(mContext).inflate(R.layout.layout_property_title_item, null)
+        var propertyTitle: TextView = view.findViewById(R.id.tv_property_title)
+        propertyTitle.text = title ?: ""
+        return view
+    }
 }
