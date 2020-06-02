@@ -33,7 +33,7 @@ class RequestCouponsViewModel(application: Application) : BaseViewModel(applicat
                             couponList.add(
                                 CouponInfoModel(
                                     getString("title"),
-                                    getString("totalQty"),
+                                    getString("totalTake"),
                                     getString("stockQty"),
                                     getString("totalUsed"),
                                     getString("state"),

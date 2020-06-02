@@ -79,20 +79,23 @@ class CouponManagerActivity :
         })
     }
 
-    class CouponAdapter(data: ArrayList<CouponInfoModel>) : BaseQuickAdapter<CouponInfoModel, BaseViewHolder>(R.layout.coupon_info_item, data) {
+    class CouponAdapter(data: ArrayList<CouponInfoModel>) :
+        BaseQuickAdapter<CouponInfoModel, BaseViewHolder>(R.layout.coupon_info_item, data) {
 
         override fun convert(holder: BaseViewHolder, item: CouponInfoModel) {
             //赋值
             item.run {
-                holder.setText(R.id.couponName,name )
+                holder.setText(R.id.couponName, name)
                 holder.setText(R.id.couponCount, "$issued/$remain")
                 holder.setText(R.id.couponUse, used)
                 holder.setText(R.id.couponStatus, statements)
-                holder.setTextColor(R.id.couponStatus, when (status) {
-                    "0" -> 0xFF0EB170.toInt()
-                    "1" -> 0xFFE6660F.toInt()
-                    else -> 0xFF999999.toInt()
-                })
+                holder.setTextColor(
+                    R.id.couponStatus, when (status) {
+                        "0" -> 0xFF0EB170.toInt()
+                        "1" -> 0xFFE6660F.toInt()
+                        else -> 0xFF999999.toInt()
+                    }
+                )
             }
         }
     }
