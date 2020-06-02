@@ -12,7 +12,8 @@ import com.same.part.assistant.data.model.PropertyData
 
 class ChooseSpecsDialogAdapter(
     private var mContext: Context,
-    private var mData: MutableSet<PropertyData>
+    private var mData: MutableSet<PropertyData>,
+    private var mListener: ((Int, PropertyData) -> Unit)?
 ) :
     BaseAdapter() {
     class ViewHolder() {
@@ -33,14 +34,16 @@ class ChooseSpecsDialogAdapter(
                 holder.propertiesView = view.findViewById(R.id.propertiesView)
                 holder.propertiesView.apply {
                     layoutManager = GridLayoutManager(mContext,3)
-                    adapter = PropertiesAdapter(mData)
+                    adapter = PropertiesAdapter(mData) { position, propertyData ->
+                        //获取到点击事件
+                        mListener?.invoke(position,propertyData)
+                    }
                 }
             }
         } else {
             view = convertView
             holder = convertView.tag as ViewHolder
         }
-        //todo 设置
         return view
     }
 

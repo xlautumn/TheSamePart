@@ -4,6 +4,7 @@ import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CategoryData
 import com.same.part.assistant.data.model.ProductDetailData
+import com.same.part.assistant.data.model.ProductSku
 import com.same.part.assistant.data.model.PropertyData
 import com.same.part.assistant.utils.HttpUtil
 import org.json.JSONArray
@@ -167,7 +168,7 @@ class PurchaseProductManager private constructor() {
     fun getProductSpecs(
         productId: String, onSuccess: ((
             LinkedHashMap<String, MutableSet<PropertyData>>?,
-            LinkedHashMap<String, String>?
+            LinkedHashSet<ProductSku>?
         ) -> Unit)?
     ) {
         var url = StringBuilder("${ApiService.SERVER_URL}product/$productId")
@@ -176,7 +177,7 @@ class PurchaseProductManager private constructor() {
 //            .append("&appSecret=${CacheUtil.getAppSecret()}")
         HttpUtil.instance.getUrl(url.toString(), { result ->
             val propertyList = linkedMapOf<String, MutableSet<PropertyData>>()
-            val propertyPriceList = linkedMapOf<String, String>()
+            val propertyPriceList = linkedSetOf<ProductSku>()
             result.takeIf { it.isNotEmpty() }?.let {
                 JSONObject(it).optJSONObject("content")?.optJSONArray("productSkus")
                     ?.takeIf { productSkus -> productSkus.length() > 0 }
@@ -186,7 +187,7 @@ class PurchaseProductManager private constructor() {
                                 val propertiesStr = productSku.optString("properties")
                                 JSONArray(propertiesStr).takeIf { properties -> properties.length() > 0 }
                                     ?.let { properties ->
-                                        var propertyKey = ""
+                                        val propertyKey = linkedSetOf<String>()
                                         for (j in 0 until properties.length()) {
                                             properties.optJSONObject(j)?.let { property ->
                                                 val project = property.optString("project")
@@ -200,11 +201,17 @@ class PurchaseProductManager private constructor() {
                                                 } else {
                                                     propertyList[project]?.add(propertyData)
                                                 }
-                                                propertyKey = "$propertyKey$value"
+                                                propertyKey.add(value)
                                             }
                                         }
-                                        propertyPriceList[propertyKey] =
-                                            productSku.optString("price")
+                                        propertyPriceList.add(
+                                            ProductSku(
+                                                productSku.optString("productSkuId"),
+                                                productSku.optString("price"),
+                                                propertyKey
+
+                                            )
+                                        )
                                     }
                             }
                         }

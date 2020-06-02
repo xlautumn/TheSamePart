@@ -201,9 +201,15 @@ data class RequestPay(
 }
 
 data class PropertyData(
-    var project: String?="",
-    var name: String? = "",
+    var project: String="",
+    var name: String = "",
     var isSelected: Boolean = false
+)
+
+data class ProductSku(
+    val productSkuId: String = "",
+    val price: String = "",
+    val properties: LinkedHashSet<String>
 )
 
 

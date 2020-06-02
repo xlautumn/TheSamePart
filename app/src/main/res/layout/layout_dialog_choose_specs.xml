@@ -54,50 +54,49 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dip_45"
+        android:layout_height="wrap_content"
         android:background="@drawable/shape_choose_spec_dialog_bottom_bg"
-        android:paddingLeft="@dimen/dip_20">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dip_15">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/selectedSpecs"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dip_5"
+            android:paddingBottom="@dimen/dip_5"
+            android:text="已选规格:"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/dip_12" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_40">
 
             <TextView
                 android:id="@+id/selectedPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dialog-bottom-left"
+                android:layout_centerVertical="true"
+                android:text="￥"
                 android:textColor="@color/color_E76612"
                 android:textSize="@dimen/dip_12" />
 
             <TextView
-                android:id="@+id/selectedSpecs"
+                android:id="@+id/addCart"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="已选规格"
-                android:textColor="@color/color_999999"
-                android:textSize="@dimen/dip_11" />
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/addCart"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/shape_choose_spec_dialog_cart_bottom_bg"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dip_10"
-            android:paddingRight="@dimen/dip_10"
-            android:text="加入购物车"
-            android:textColor="@color/color_FFFFFF"
-            android:textSize="16dp" />
-
-    </RelativeLayout>
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/shape_choose_spec_dialog_cart_bottom_bg"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dip_10"
+                android:paddingRight="@dimen/dip_10"
+                android:text="加入购物车"
+                android:textColor="@color/color_FFFFFF"
+                android:textSize="@dimen/dip_16" />
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

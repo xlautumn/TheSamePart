@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager
 import com.commonsware.cwac.merge.MergeAdapter
 import com.same.part.assistant.R
 import com.same.part.assistant.adapter.ChooseSpecsDialogAdapter
+import com.same.part.assistant.data.model.ProductSku
 import com.same.part.assistant.data.model.PropertyData
 import com.same.part.assistant.utils.Util
 import kotlinx.android.synthetic.main.layout_dialog_choose_specs.*
@@ -39,15 +40,10 @@ class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment(
 
     private var mTitleContent: String? = null
     private var mPropertyList = LinkedHashMap<String, MutableSet<PropertyData>>()
-    private var mPropertyPriceList = LinkedHashMap<String, String>()
+    private var mProductSkuList = LinkedHashSet<ProductSku>()
     private lateinit var mDataView: ListView
     private lateinit var mMergeAdapter: MergeAdapter
-
-    private var mData: List<String> = ArrayList<String>().apply {
-        add("圣女果")
-        add("樱桃")
-        add("车厘子")
-    }
+    private var mSelectProperties = hashMapOf<String,String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,19 +71,17 @@ class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment(
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mContext?.let {
-            dialog?.window?.decorView?.setPadding(Util.dip2px(it, 25f), 0,
-                Util.dip2px(it, 25f), 0)
-        }
+        dialog?.window?.decorView?.setPadding(
+            Util.dip2px(mContext, 25f), 0,
+            Util.dip2px(mContext, 25f), 0
+        )
         addCart.setOnClickListener {
-            Toast.makeText(mContext,"加入购物车了~~",Toast.LENGTH_LONG).show()
+            Toast.makeText(mContext, "加入购物车了~~", Toast.LENGTH_LONG).show()
             //TODO 加入购物车，调用加入购物车的接口
             dismiss()
         }
         mergeAdapter()
-        mDataView.apply {
-            adapter = mMergeAdapter
-        }
+        mDataView.adapter = mMergeAdapter
     }
 
     private fun mergeAdapter() {
@@ -96,7 +90,28 @@ class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment(
             val titleView = createRightTitleView(it.key)
             mMergeAdapter.addView(titleView)
             //添加adapter
-            val adapter = ChooseSpecsDialogAdapter(mContext,it.value)
+            val adapter = ChooseSpecsDialogAdapter(mContext, it.value) { position, propertyData ->
+                mSelectProperties[propertyData.project] = propertyData.name
+                mProductSkuList.forEach { productSku ->
+                    var matchCount=0
+                    var selectStr="已选规格:"
+                    val selectSize = mSelectProperties.size
+                    productSku.properties.takeIf { properties -> properties.size == selectSize }
+                        ?.also { properties ->
+                            mSelectProperties.forEach { selected ->
+                                if (properties.contains(selected.value)) {
+                                    selectStr += if (selectStr.endsWith(":")) selected.value else "、${selected.value}"
+                                    matchCount++
+                                }
+                            }
+                        }
+
+                    if (matchCount == selectSize) {
+                        selectedSpecs.text = selectStr
+                        selectedPrice.text = "￥${productSku.price}"
+                    }
+                }
+            }
             mMergeAdapter.addAdapter(adapter)
         }
     }
@@ -104,7 +119,7 @@ class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         var dialog = super.onCreateDialog(savedInstanceState)
         dialog.window?.apply {
-            decorView.setPadding(0,0,0,0)
+            decorView.setPadding(0, 0, 0, 0)
             setBackgroundDrawableResource(android.R.color.transparent)
             requestFeature(Window.FEATURE_NO_TITLE)
         }
@@ -124,14 +139,14 @@ class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment(
 
     fun setData(
         propertyList: LinkedHashMap<String, MutableSet<PropertyData>>?,
-        propertyPriceList: LinkedHashMap<String, String>?
+        propertyPriceList: LinkedHashSet<ProductSku>?
     ) {
         propertyList?.let { properties ->
             propertyPriceList?.let { propertyPrice ->
                 mPropertyList.clear()
-                mPropertyPriceList.clear()
+                mProductSkuList.clear()
                 mPropertyList.putAll(properties)
-                mPropertyPriceList.putAll(propertyPrice)
+                mProductSkuList.addAll(propertyPrice)
             }
         }
     }
