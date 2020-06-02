@@ -7,6 +7,7 @@ import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.*
 import me.hgj.jetpackmvvm.network.AppException
 import okhttp3.ResponseBody
+import retrofit2.http.*
 
 /**
  * 从网络中获取数据
@@ -144,5 +145,73 @@ class HttpRequestManger {
         return NetworkApiv2.service.createCouponActivity(requestCreateCouponInfo)
     }
 
+    /**
+     * 获取购物车列表
+     */
+    @GET("/carts/group-by-shop")
+    suspend fun getCartList(
+        appKey: String = CacheUtil.getAppKey(),
+        appSecret: String = CacheUtil.getAppSecret(),
+        userId: Int = CacheUtil.getUserId() ?: 0,
+        shopId: Int = CacheUtil.getShopId() ?: 0
+    ): ApiResponse<String> {
+        return NetworkApi.service.getCartList(appKey, appSecret, userId, shopId)
+    }
 
+    /**
+     * 创建购物车
+     */
+    suspend fun createCart(requestCreateCart: RequestCreateCart): ResponseBody {
+        return NetworkApi.service.createCart(requestCreateCart)
+    }
+
+    /**
+     * 修改购物车数量
+     */
+    suspend fun updateCart(
+        cartId: String,
+        quantity:Int
+    ): ResponseBody {
+        return NetworkApi.service.updateCart(cartId, RequestUpdateCart(quantity = quantity))
+    }
+
+    /**
+     * 批量删除购物车
+     */
+    suspend fun delCarts(
+        appKey: String = CacheUtil.getAppKey(),
+        appSecret: String = CacheUtil.getAppSecret(),
+        cartIds: String
+    ): ResponseBody {
+        return NetworkApi.service.delCarts(
+            appKey, appSecret, cartIds
+        )
+    }
+
+    /**
+     * 创建商品订单
+     */
+    suspend fun createOrder( addressId: String,
+                             cartIds: String,
+                             category: String,
+                             orderRemarks: List<RequestCreateOrder.OrderRemark>,
+                             userId: String): ResponseBody {
+        return NetworkApi.service.createOrder(RequestCreateOrder(
+            addressId = addressId,
+            cartIds = cartIds,
+            category = category,
+            orderRemarks = orderRemarks,
+            userId = userId
+        ))
+    }
+
+    /**
+     * 下单到支付或者微信
+     */
+    suspend fun getPaySign(
+        productOrderId: String,
+        requestPay: RequestPay
+    ): ApiResponse<String> {
+        return NetworkApi.service.getPaySign(productOrderId, requestPay)
+    }
 }

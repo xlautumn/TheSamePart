@@ -14,7 +14,9 @@ import com.same.part.assistant.adapter.PurchaseProductAdapter
 import com.same.part.assistant.adapter.PurchaseFirstLevelAdapter
 import com.same.part.assistant.data.model.CategoryData
 import com.same.part.assistant.manager.PurchaseProductManager
+import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import kotlinx.android.synthetic.main.fragment_purchase.*
+import me.hgj.jetpackmvvm.ext.getViewModel
 
 /**
  * 采购
@@ -27,6 +29,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     private var mSecondLevelAdapter: PurchaseSecondLevelAdapter? = null
     private var mFirstLevelAdapter: PurchaseFirstLevelAdapter? = null
     private var mProductAdapter: PurchaseProductAdapter? = null
+    private  val requestCartViewModel: RequestCartViewModel by lazy { getViewModel<RequestCartViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +48,6 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         firstLevelList.apply {
             mFirstLevelAdapter = activity?.let { PurchaseFirstLevelAdapter(it) }
             setOnItemClickListener { parent, view, position, id ->
@@ -65,7 +67,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             adapter = mSecondLevelAdapter
         }
         productList.apply {
-            mProductAdapter = activity?.let { PurchaseProductAdapter(it) }
+            mProductAdapter = activity?.let { PurchaseProductAdapter(it,requestCartViewModel) }
             adapter = mProductAdapter
             mProductAdapter
         }
@@ -134,7 +136,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.statement -> {
-                //TODO 结算
+//                requestCartViewModel.createOrder()
             }
             R.id.rootDetail -> {
                 cartDetailArrow.rotation = 0f

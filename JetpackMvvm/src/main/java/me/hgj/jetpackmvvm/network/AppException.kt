@@ -1,5 +1,7 @@
 package me.hgj.jetpackmvvm.network
 
+import retrofit2.HttpException
+
 /**
  * 作者　: hegaojian
  * 时间　: 2019/12/17
@@ -13,13 +15,16 @@ class AppException : Exception {
 
     constructor(errCode: String?, error: String?, errorLog: String? = "") : super(error) {
         this.errorMsg = error ?: "请求失败，请稍后再试"
-        this.errCode = errCode?:"0"
-        this.errorLog = errorLog?:this.errorMsg
+        this.errCode = errCode ?: "0"
+        this.errorLog = errorLog ?: this.errorMsg
     }
 
-    constructor(error: Error,e: Throwable?) {
+    constructor(error: Error, e: Throwable?) {
         errCode = error.getKey().toString()
-        errorMsg = error.getValue()
+        val message = if (e is HttpException) {
+            e.response()?.errorBody()?.string()?:error.getValue()
+        } else error.getValue()
+        errorMsg = message
         errorLog = e?.message
     }
 }

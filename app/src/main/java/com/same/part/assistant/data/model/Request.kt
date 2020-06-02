@@ -44,8 +44,8 @@ data class RequestShopCategoryInfo(
  * appKey  appSecret
  */
 data class RequestAppInfo(
-    val appKey: String = CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey?:"",
-    val appSecret: String = CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret?:""
+    val appKey: String = CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey ?: "",
+    val appSecret: String = CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret ?: ""
 )
 
 data class CategoryData(
@@ -78,7 +78,7 @@ data class ProductData(
 )
 
 data class ProductDetailData(
-    var productId: String? = "",
+    var productId: String = "",
     var name: String? = "",
     var price: String? = "",
     var img: String? = "",
@@ -117,7 +117,7 @@ data class CreateOrUpdateGoodsInfo(
     val type: String,
     val unit: String,
     val imgs: String = img,
-    val shopId: String = CacheUtil.getShopId()?.toString()?:"",
+    val shopId: String = CacheUtil.getShopId()?.toString() ?: "",
     val appKey: String = CacheUtil.getAppKey(),
     val appSecret: String = CacheUtil.getAppSecret(),
     val state: Int = 1,
@@ -141,6 +141,65 @@ data class RequestCreateCouponInfo(
     val appKey: String = CacheUtil.getAppKey(),
     val appSecret: String = CacheUtil.getAppSecret()
 )
+
+/**
+ * 创建购物车
+ */
+data class RequestCreateCart(
+    val accessToken: String = CacheUtil.getToken(),//登录token
+    val category: String = "采购商品",//类型描述，默认填写采购商品
+    val endTime: String = "",//存活截止时间
+    val productId: String,//商品ID
+    val productSkuNumber: String,//规格编号，统一规格传空，多规格数据格式：productId（商品id）- productSkuId（商品规格id）
+    val properties: String,//备注属性（逗号）
+    val quantity: Int//数量（所有同件商品的）
+)
+
+/**
+ * 修改购物车
+ */
+data class RequestUpdateCart(
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret(),
+    val quantity: Int
+)
+
+/**
+ * 创建商品订单
+ */
+data class RequestCreateOrder(
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret(),
+    val addressId: String,
+    val cartIds: String,
+    val category: String,//在线付款，货到付款
+    val deliveryType: String = "物流配送",
+    val orderRemarks: List<OrderRemark>,
+    val orderType: String = "1",//1 采购订单
+    val userId: String
+) {
+    data class OrderRemark(
+        val properties: String,
+        val remark: String,
+        val shopId: String
+    )
+}
+
+/**
+ * 下单到支付或者微信
+ */
+data class RequestPay(
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret(),
+    val payment: String,
+    val userMoney: String? = null
+) {
+    companion object {
+        const val PAYMENT_WECHAT = "微信"
+        const val PAYMENT_ALIPAY = "支付宝"
+    }
+}
+
 
 
 

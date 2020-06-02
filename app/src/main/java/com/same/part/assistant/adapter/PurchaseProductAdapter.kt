@@ -13,9 +13,10 @@ import com.same.part.assistant.R
 import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.dialog.ChooseSpecsDialogFragment
 import com.same.part.assistant.manager.PurchaseProductManager
+import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import java.util.*
 
-class PurchaseProductAdapter(private var mContext: FragmentActivity) :
+class PurchaseProductAdapter(private var mContext: FragmentActivity,private val requestCartViewModel: RequestCartViewModel) :
     BaseAdapter() {
 
     private var mProductModels = ArrayList<ProductDetailData>()
@@ -96,12 +97,11 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity) :
                     }
                 }
                 goodViewHolder.cartIncrease?.setOnClickListener(View.OnClickListener {
-                    //TODO 购买数量 增加
+                    requestCartViewModel.addProduct(this)
 
                 })
                 goodViewHolder.cartReduce?.setOnClickListener(View.OnClickListener {
-                    //TODO 购买数量减少
-
+                    requestCartViewModel.minusProduct(this)
                 })
             }
         }

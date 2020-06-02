@@ -225,7 +225,7 @@ fun  BaseViewModel.requestResponseBody(
 fun BaseViewModel.requestResponseBody(
     block: suspend () -> ResponseBody,
     success: (ResponseBody) -> Unit,
-    error: (Exception) -> Unit = {},
+    error: (AppException) -> Unit = {},
     isShowDialog: Boolean = false,
     loadingMessage: String = "加载中..."
 ) {
@@ -253,7 +253,7 @@ fun BaseViewModel.requestResponseBody(
             //打印错误消息
             it.message?.loge("JetpackMvvm")
             //失败回调
-            error(it)
+            error(ExceptionHandle.handleException(it))
         }
     }
 }

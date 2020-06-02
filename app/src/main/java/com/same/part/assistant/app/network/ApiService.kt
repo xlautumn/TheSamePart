@@ -137,4 +137,54 @@ interface ApiService {
         @Body requestCreateCouponInfo: RequestCreateCouponInfo
     ): ResponseBody
 
+    /**
+     * 获取购物车列表
+     */
+    @GET("carts/group-by-shop")
+    suspend fun getCartList(
+        @Query("appKey") appKey: String,
+        @Query("appSecret") appSecret: String,
+        @Query("userId") userId: Int,
+        @Query("shopId") shopId:Int
+    ): ApiResponse<String>
+
+    /**
+     * 创建购物车
+     */
+    @POST("cart")
+    suspend fun createCart(@Body requestCreateCart: RequestCreateCart): ResponseBody
+
+    /**
+     * 修改购物车数量
+     */
+    @POST("cart/{cartId}/quantity")
+    suspend fun updateCart(
+        @Path("cartId") cartId: String,
+        @Body requestUpdateCart: RequestUpdateCart
+    ): ResponseBody
+
+    /**
+     * 批量删除购物车
+     */
+    @DELETE("wscx/carts/{cartIds}")
+    suspend fun delCarts(
+        @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret(),
+        @Path("cartIds") cartIds: String
+    ): ResponseBody
+
+    /**
+     * 创建商品订单
+     */
+    @POST("cart/product-order")
+    suspend fun createOrder(@Body requestCreateOrder: RequestCreateOrder): ResponseBody
+
+    /**
+     * 下单到支付或者微信
+     */
+    @PUT("product-order/{productOrderId}}/mobile-pay")
+    suspend fun getPaySign(
+        @Path("productOrderId") productOrderId: String,
+        @Body requestPay: RequestPay
+    ): ApiResponse<String>
 }
