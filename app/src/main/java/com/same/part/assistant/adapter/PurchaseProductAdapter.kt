@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.data.model.ProductDetailData
+import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.dialog.ChooseSpecsDialogFragment
 import com.same.part.assistant.manager.PurchaseProductManager
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
@@ -97,11 +98,11 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                     }
                 }
                 goodViewHolder.cartIncrease?.setOnClickListener(View.OnClickListener {
-                    requestCartViewModel.addProduct(this)
+                    requestCartViewModel.addShopProduct(ShopProduct(this))
 
                 })
                 goodViewHolder.cartReduce?.setOnClickListener(View.OnClickListener {
-                    requestCartViewModel.minusProduct(this)
+                    requestCartViewModel.minusShopProduct(ShopProduct(this))
                 })
             }
         }
