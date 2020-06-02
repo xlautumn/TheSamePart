@@ -76,7 +76,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                     //规格查询
 //                    PurchaseProductManager.INSTANCE.getProductSpecs(productId?:"") {
                     PurchaseProductManager.INSTANCE.getProductSpecs("2063") { propertyList, propertyPriceList ->
-                        val dialogFragment = ChooseSpecsDialogFragment(mContext)
+                        val dialogFragment = ChooseSpecsDialogFragment.create(name?:"",mContext)
                         dialogFragment.setData(propertyList,propertyPriceList)
                         dialogFragment.showDialog(mContext.supportFragmentManager)
                     }

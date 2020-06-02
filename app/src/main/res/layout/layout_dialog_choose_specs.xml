@@ -14,7 +14,7 @@
         android:paddingRight="@dimen/dip_15">
 
         <TextView
-            android:id="@+id/dialog_good_name"
+            android:id="@+id/dialogProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

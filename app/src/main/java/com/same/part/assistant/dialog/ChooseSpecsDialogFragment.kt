@@ -21,7 +21,7 @@ import com.same.part.assistant.data.model.PropertyData
 import com.same.part.assistant.utils.Util
 import kotlinx.android.synthetic.main.layout_dialog_choose_specs.*
 
-class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment() {
+class ChooseSpecsDialogFragment private constructor(private var mContext: Context) : DialogFragment() {
 
     companion object {
         private val TAG = ChooseSpecsDialogFragment::class.java.simpleName
@@ -75,6 +75,7 @@ class ChooseSpecsDialogFragment(private var mContext: Context) : DialogFragment(
             Util.dip2px(mContext, 25f), 0,
             Util.dip2px(mContext, 25f), 0
         )
+        dialogProductName.text=mTitleContent
         addCart.setOnClickListener {
             Toast.makeText(mContext, "加入购物车了~~", Toast.LENGTH_LONG).show()
             //TODO 加入购物车，调用加入购物车的接口
