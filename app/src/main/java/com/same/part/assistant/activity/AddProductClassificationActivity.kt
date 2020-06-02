@@ -171,8 +171,7 @@ class AddProductClassificationActivity :
         fun save() {
             if (judgeCanSave()) {
                 //添加/编辑商品分类(当编辑页面时没有去选择图片时不需要去七牛云上传)
-                val isNeedUploadQiniu =
-                    mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value
+                val isNeedUploadQiniu = (mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value) || mJumpFromType == JUMP_FROM_ADD_SECOND_CATEGORY
                 mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imageUrl.value)
             }
         }
