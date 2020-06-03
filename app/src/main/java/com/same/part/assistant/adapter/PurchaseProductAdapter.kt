@@ -3,10 +3,7 @@ package com.same.part.assistant.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
@@ -78,6 +75,10 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                     PurchaseProductManager.INSTANCE.getProductSpecs("2063") { propertyList, propertyPriceList ->
                         val dialogFragment = ChooseSpecsDialogFragment.create(name?:"",mContext)
                         dialogFragment.setData(propertyList,propertyPriceList)
+                        dialogFragment.setListener { productSku ->
+                            //加入购物车的请求
+                            Toast.makeText(mContext, "执行加入购物车操作：${productSku.productSkuId}", Toast.LENGTH_LONG).show()
+                        }
                         dialogFragment.showDialog(mContext.supportFragmentManager)
                     }
                 })

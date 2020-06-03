@@ -44,6 +44,8 @@ class ChooseSpecsDialogFragment private constructor(private var mContext: Contex
     private lateinit var mDataView: ListView
     private lateinit var mMergeAdapter: MergeAdapter
     private var mSelectProperties = hashMapOf<String,String>()
+    private var mSelectProductSku: ProductSku?=null
+    private var mAddCartListener: ((ProductSku)->Unit)?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,9 +79,10 @@ class ChooseSpecsDialogFragment private constructor(private var mContext: Contex
         )
         dialogProductName.text=mTitleContent
         addCart.setOnClickListener {
-            Toast.makeText(mContext, "加入购物车了~~", Toast.LENGTH_LONG).show()
-            //TODO 加入购物车，调用加入购物车的接口
-            dismiss()
+            mSelectProductSku?.let {
+                mAddCartListener?.invoke(it)
+                dismiss()
+            }?:Toast.makeText(mContext, "请选择产品规格", Toast.LENGTH_LONG).show()
         }
         mergeAdapter()
         mDataView.adapter = mMergeAdapter
@@ -110,6 +113,7 @@ class ChooseSpecsDialogFragment private constructor(private var mContext: Contex
                     if (matchCount == selectSize) {
                         selectedSpecs.text = selectStr
                         selectedPrice.text = "￥${productSku.price}"
+                        mSelectProductSku = productSku
                     }
                 }
             }
@@ -157,5 +161,9 @@ class ChooseSpecsDialogFragment private constructor(private var mContext: Contex
         var propertyTitle: TextView = view.findViewById(R.id.tv_property_title)
         propertyTitle.text = title ?: ""
         return view
+    }
+
+    fun setListener(listener: ((ProductSku)->Unit)?){
+        mAddCartListener=listener
     }
 }
