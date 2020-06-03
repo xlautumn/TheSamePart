@@ -133,8 +133,8 @@ data class CreateOrUpdateGoodsInfo(
 data class RequestCreateCouponInfo(
     val title: String,
     val totalQty: Int,
-    val conditionPrice: Int,
-    val denominations: Int,
+    val conditionPrice: Double,
+    val denominations: Double,
     val ifLimit: Int,
     val validEndTime: String,
     val validStartTime: String,

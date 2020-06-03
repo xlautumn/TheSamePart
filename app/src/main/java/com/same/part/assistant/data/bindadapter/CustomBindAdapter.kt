@@ -2,6 +2,7 @@ package com.same.part.assistant.data.bindadapter
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -27,6 +28,16 @@ object CustomBindAdapter {
                     view.setImageDrawable(resource)
                 }
             })
+    }
+
+    @BindingAdapter(value = ["thresholdNum"])
+    @JvmStatic
+    fun thresholdNum(textView: TextView, num: String) {
+        textView.text = if (num == "0") {
+            "无使用门槛"
+        } else {
+            "满${num}元使用"
+        }
     }
 
 

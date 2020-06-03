@@ -52,7 +52,7 @@
         <activity android:name=".activity.OrderSubmitActivity" />
         <activity android:name=".activity.PurchaseOrderDetailActivity" />
         <activity android:name=".activity.AddCashierGoodActivity" />
-
+        <activity android:name=".activity.ChannelActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.same.part.assistant.fileProvider"

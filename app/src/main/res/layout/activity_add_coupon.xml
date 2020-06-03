@@ -211,6 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
+                android:onClick="@{()->click.chooseUsingThreshold()}"
                 android:orientation="horizontal"
                 android:paddingHorizontal="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -230,8 +231,8 @@
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/arrow_next_page"
                     android:drawablePadding="5dp"
+                    app:thresholdNum="@{viewmodel.usingThreshold}"
                     android:gravity="center_vertical"
-                    android:text="无使用门槛"
                     android:textSize="11dp" />
 
             </LinearLayout>
@@ -246,19 +247,36 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/llUseThreshold" />
 
-            <TextView
-                android:id="@+id/useTime"
+            <LinearLayout
+                android:id="@+id/llStartTime"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:drawableRight="@drawable/arrow_next_page"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:onClick="@{()->click.chooseTime(true)}"
                 android:paddingHorizontal="15dp"
-                android:text="用券时间"
-                android:textColor="@color/color_333333"
-                android:textSize="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lineSix" />
+                app:layout_constraintTop_toBottomOf="@+id/llUseThreshold">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="用券开始时间"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="@{viewmodel.startTime}"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -268,7 +286,48 @@
                 android:background="@color/color_D2D2D2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/useTime" />
+                app:layout_constraintTop_toBottomOf="@+id/llStartTime" />
+
+            <LinearLayout
+                android:id="@+id/llEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:onClick="@{()->click.chooseTime(false)}"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llUseThreshold">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="用券结束时间"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewmodel.endTime}"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@color/color_D2D2D2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/useEndTime" />
 
             <TextView
                 android:id="@+id/pickUpChannel"

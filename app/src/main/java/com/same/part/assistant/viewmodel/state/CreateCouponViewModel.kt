@@ -2,6 +2,8 @@ package com.same.part.assistant.viewmodel.state
 
 import android.app.Application
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
+import me.hgj.jetpackmvvm.callback.databind.IntObservableField
+import me.hgj.jetpackmvvm.callback.databind.StringObservableField
 import me.hgj.jetpackmvvm.callback.livedata.IntLiveData
 import me.hgj.jetpackmvvm.callback.livedata.StringLiveData
 
@@ -11,21 +13,25 @@ import me.hgj.jetpackmvvm.callback.livedata.StringLiveData
 class CreateCouponViewModel(application: Application) : BaseViewModel(application) {
 
     /** 名称 */
-    var name = StringLiveData("")
+    var name = StringObservableField()
 
     /** 发放总量 */
-    var distributionTotal = StringLiveData("")
+    var distributionTotal = StringObservableField()
 
     /** 减免金额 */
-    var creditAmount = StringLiveData("")
+    var creditAmount = StringObservableField()
 
     /** 使用门槛 */
-    var usingThreshold = StringLiveData("")
-
-    /** 用券时间 */
-    var useCouponTime = StringLiveData("")
+    var usingThreshold =StringObservableField("0")
 
     /** 优惠券领取渠道 */
-    var couponReceiveChannel = StringLiveData("")
+    var couponReceiveChannel = IntObservableField(1)
+
+    /** 开始时间 */
+    var startTime = StringObservableField()
+
+    /** 结束 */
+    var endTime = StringObservableField()
+
 
 }
