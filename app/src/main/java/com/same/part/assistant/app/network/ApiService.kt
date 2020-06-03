@@ -157,7 +157,7 @@ interface ApiService {
     /**
      * 修改购物车数量
      */
-    @POST("cart/{cartId}/quantity")
+    @PUT("cart/{cartId}/quantity")
     suspend fun updateCart(
         @Path("cartId") cartId: String,
         @Body requestUpdateCart: RequestUpdateCart

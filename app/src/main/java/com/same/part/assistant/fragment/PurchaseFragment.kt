@@ -15,6 +15,7 @@ import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
 import com.same.part.assistant.adapter.PurchaseFirstLevelAdapter
 import com.same.part.assistant.data.model.CategoryData
+import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.manager.PurchaseProductManager
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import kotlinx.android.synthetic.main.fragment_purchase.*
@@ -31,7 +32,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     private var mSecondLevelAdapter: PurchaseSecondLevelAdapter? = null
     private var mFirstLevelAdapter: PurchaseFirstLevelAdapter? = null
     private var mProductAdapter: PurchaseProductAdapter? = null
-    private val mCartProductAdapter: CartProductAdapter by lazy { CartProductAdapter() }
+    private val mCartProductAdapter: CartProductAdapter by lazy { CartProductAdapter(ProxyClick()) }
     private val requestCartViewModel: RequestCartViewModel by lazy { getViewModel<RequestCartViewModel>() }
 
     override fun onCreateView(
@@ -71,7 +72,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             adapter = mSecondLevelAdapter
         }
         productList.apply {
-            mProductAdapter = activity?.let { PurchaseProductAdapter(it, requestCartViewModel) }
+            mProductAdapter = activity?.let { PurchaseProductAdapter(it, ProxyClick()) }
             adapter = mProductAdapter
             mProductAdapter
         }
@@ -89,7 +90,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         requestCartViewModel.cartProductList.observe(viewLifecycleOwner, Observer {
             mCartProductAdapter.setData(it)
             totalMoney.text = requestCartViewModel.totalPrice
-            statement.text = getString(R.string.purchase_statement,it.size)
+            statement.text = getString(R.string.purchase_statement,requestCartViewModel.totalNum)
         })
 
         requestCartViewModel.getCartList()
@@ -185,6 +186,22 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                 //清空购物车
                 requestCartViewModel.clearCarts()
             }
+        }
+    }
+
+    inner class ProxyClick{
+        /**
+         * 添加购物车
+         */
+        fun addShopProduct(shopProduct: ShopProduct){
+            requestCartViewModel.addShopProduct(shopProduct)
+        }
+
+        /**
+         * 减少购物车数量
+         */
+        fun minusShopProduct(shopProduct: ShopProduct) {
+            requestCartViewModel.minusShopProduct(shopProduct)
         }
     }
 }

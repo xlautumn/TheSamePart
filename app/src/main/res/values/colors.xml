@@ -40,4 +40,6 @@
     <color name="color_D4D3D4">#D4D3D4</color>
     <color name="color_9F9F9F">#9F9F9F</color>
 
+    <color name="color_shadow_bg">#99999999</color>
+
 </resources>

@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONArray
+import com.alibaba.fastjson.JSONObject
 import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.data.model.*
@@ -35,14 +37,24 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
      * 获取购物车id字符串
      */
     private val cartIds
-       get() = _cartProductList.value?.let { it.joinToString(separator = ",") { it.cartId } }?:""
+        get() = _cartProductList.value?.let { it.joinToString(separator = ",") { it.cartId } } ?: ""
 
     val totalPrice
         get() = _cartProductList.value?.fold(
             "0.00",
-            fun(acc: String, chopProduct: CartProduct): String =
-                CalculateUtil.add(acc, chopProduct.price)
+            fun(acc: String, cartProduct: CartProduct): String =
+                CalculateUtil.add(
+                    acc,
+                    CalculateUtil.multiply(
+                        cartProduct.price,
+                        cartProduct.shopProduct.num.toString()
+                    )
+                )
         ).let { Util.format2(it) }
+
+    val totalNum
+        get() = _cartProductList.value?.fold(0,
+            { acc: Int, cartProduct: CartProduct -> acc + cartProduct.shopProduct.num })
 
     /**
      * 创建订单请求结果
@@ -61,9 +73,9 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
      * 添加购物车
      */
     fun addShopProduct(shopProduct: ShopProduct) {
-        val productId = shopProduct.productDetailData.productId
-        if (_cartProductMap.containsKey(productId)) {
-            _cartProductMap[productId]?.apply {
+        val productKey = shopProduct.getProductKey()
+        if (_cartProductMap.containsKey(productKey)) {
+            _cartProductMap[productKey]?.apply {
                 updateCart(this, this.shopProduct.num + 1)
             }
         } else {
@@ -100,7 +112,9 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                 jsonObject.getJSONObject("content")?.apply {
                     val cartId = this.getString("cartId")
                     val price = this.getString("price")
-                    val cartProduct = CartProduct(shopProduct, cartId, price)
+                    val skuProperties = this.getString("skuProperties")
+                    val cartProduct = CartProduct(shopProduct, cartId, price,skuProperties)
+                    cartProduct.shopProduct.productDetailData.cartNum = shopProduct.num
                     _cartProductMap[shopProduct.getProductKey()] = cartProduct
                     _cartProductList.value?.add(cartProduct)
                     _cartProductList.value = _cartProductList.value
@@ -123,7 +137,9 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                 jsonObject.getJSONObject("content")?.apply {
                     val quantity = this.getString("quantity")
                     val price = getString("price")
-                    cartProduct.shopProduct.num = quantity.toInt()
+                    val num = quantity.toFloat().toInt()
+                    cartProduct.shopProduct.productDetailData.cartNum = num
+                    cartProduct.shopProduct.num = num
                     cartProduct.price = price
                     _cartProductList.value = _cartProductList.value
                 }
@@ -147,6 +163,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                 val response: String = it.string()
                 val jsonObject = JSON.parseObject(response)
                 if (jsonObject.getInteger("code") == 1) {
+                    cartProduct.shopProduct.productDetailData.cartNum = 0
                     _cartProductMap.remove(cartProduct.shopProduct.getProductKey())
                     _cartProductList.value?.remove(cartProduct)
                     _cartProductList.value = _cartProductList.value
@@ -232,18 +249,19 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
             },
             success = {
                 val result = it.string()
-                val jsonObject = JSON.parseObject(result)
-                val hasCode = jsonObject.containsKey("code")
-                if (hasCode){
-                    val code = jsonObject.getString("code")
-                    if (TextUtils.equals("0",code)){
+
+                val resultObject = JSON.parse(result)
+
+                if (resultObject is JSONObject) {
+                    val code = resultObject.getString("code")
+                    if (TextUtils.equals("0", code)) {
                         //暂无数据
                         _cartProductList.postValue(_cartProductList.value)
-                    }else{
-                        val message = jsonObject.getString("message")
+                    } else {
+                        val message = resultObject.getString("message")
                         ToastUtils.showShort(message)
                     }
-                }else {
+                } else if (resultObject is JSONArray) {
                     val getCartListResponse =
                         GsonUtils.fromJson(result, GetCartListResponse::class.java)
 
@@ -273,10 +291,16 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                                 it.properties
                             ),
                             it.cartId,
-                            it.price
+                            it.price,
+                            it.skuProperties
                         )
-                    }?.let {
-                        _cartProductList.value?.addAll(it)
+                    }?.let { cartList ->
+                        cartList.distinctBy { cartProduct -> cartProduct.shopProduct.getProductKey() }
+                            .forEach { cartProduct ->
+                                _cartProductMap[cartProduct.shopProduct.getProductKey()] =
+                                    cartProduct
+                            }
+                        _cartProductList.value?.addAll(cartList)
                         _cartProductList.postValue(_cartProductList.value)
                     }
                 }

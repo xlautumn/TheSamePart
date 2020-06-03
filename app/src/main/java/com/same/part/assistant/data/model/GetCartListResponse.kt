@@ -25,7 +25,7 @@ data class Cart(
     val name: String,
     val price: String,
     val product: Product,
-    val productSku: ProductSku,
+    val productSku: ProductSkuX,
     val properties: String,
     val quantity: String,
     val shop: Shop,
@@ -35,6 +35,37 @@ data class Cart(
     val updateTime: String,
     val user: User
 )
+
+
+data class ProductSkuX(
+    val addTime: String,
+    val barcode: Any,
+    val costPrice: String,
+    val finalPrice: FinalPrice,
+    val img: String,
+    val linePrice: String,
+    val number: String,
+    val price: String,
+    val productSkuId: String,
+    val properties: String,
+    val quantity: Int,
+    val state: Int,
+    val totalSales: Int,
+    val updateTime: String,
+    val volume: Any,
+    val warnQuantity: Int,
+    val weight: String,
+    val withHoldQuantity: Int
+){
+    data class FinalPrice(
+        val linePrice: Double,
+        val price: Double,
+        val type: String
+    )
+}
+
+
+
 
 
 data class Product(
@@ -66,7 +97,7 @@ data class Product(
     val productCategory: String,
     val productExtends: List<ProductExtend>,
     val productId: String,
-    val productSku: List<ProductSku>,
+    val productSku: List<ProductSkuX>,
     val quantity: Int,
     val ratio: Double,
     val sequence: Int,

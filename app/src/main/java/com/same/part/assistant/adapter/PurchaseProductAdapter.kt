@@ -10,11 +10,12 @@ import com.same.part.assistant.R
 import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.dialog.ChooseSpecsDialogFragment
+import com.same.part.assistant.fragment.PurchaseFragment
 import com.same.part.assistant.manager.PurchaseProductManager
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import java.util.*
 
-class PurchaseProductAdapter(private var mContext: FragmentActivity,private val requestCartViewModel: RequestCartViewModel) :
+class PurchaseProductAdapter(private var mContext: FragmentActivity,private val proxyClick: PurchaseFragment.ProxyClick) :
     BaseAdapter() {
 
     private var mProductModels = ArrayList<ProductDetailData>()
@@ -80,12 +81,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                             dialogFragment.setData(it, propertyPriceList)
                             dialogFragment.setListener { productSku ->
                                 //加入购物车的请求
-                                Toast.makeText(
-                                    mContext,
-                                    "执行加入购物车操作：${productSku.productSkuId}",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                requestCartViewModel.addShopProduct(ShopProduct(this,productSkuNumber = productSku.number))
+                                proxyClick.addShopProduct(ShopProduct(this,productSkuNumber = productSku.number))
                             }
                             dialogFragment.showDialog(mContext.supportFragmentManager)
                         }
@@ -108,11 +104,11 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                     }
                 }
                 goodViewHolder.cartIncrease?.setOnClickListener(View.OnClickListener {
-                    requestCartViewModel.addShopProduct(ShopProduct(this))
+                    proxyClick.addShopProduct(ShopProduct(this))
 
                 })
                 goodViewHolder.cartReduce?.setOnClickListener(View.OnClickListener {
-                    requestCartViewModel.minusShopProduct(ShopProduct(this))
+                    proxyClick.minusShopProduct(ShopProduct(this))
                 })
             }
         }

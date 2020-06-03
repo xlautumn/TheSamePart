@@ -1,12 +1,16 @@
 package com.same.part.assistant.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.same.part.assistant.data.model.CartProduct
+import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.databinding.CartProductItemBinding
+import com.same.part.assistant.fragment.PurchaseFragment
 
-class CartProductAdapter : RecyclerView.Adapter<CartProductViewHolder>() {
+class CartProductAdapter(private val proxyClick: PurchaseFragment.ProxyClick) : RecyclerView.Adapter<CartProductViewHolder>() {
 
     private val data: ArrayList<CartProduct> = arrayListOf()
 
@@ -16,7 +20,8 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductViewHolder>() {
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            proxyClick
         )
     }
 
@@ -35,11 +40,29 @@ class CartProductAdapter : RecyclerView.Adapter<CartProductViewHolder>() {
     }
 }
 
-class CartProductViewHolder(private val binding: CartProductItemBinding) :
+class CartProductViewHolder(private val binding: CartProductItemBinding,private val proxyClick: PurchaseFragment.ProxyClick) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(cartProduct: CartProduct) {
-        binding.tvProductName.text = cartProduct.shopProduct.productDetailData.name
+        cartProduct.shopProduct.productDetailData.apply {
+            binding.goodAvatar.takeIf { !img.isNullOrEmpty() }?.let {
+                Glide.with(binding.root.context)
+                    .load(img)
+                    .into(it)
+            }
+
+            binding.goodName.text = this.name
+            binding.tvPrice.text = "￥${this.price}"
+            binding.tvCartNum.text = cartProduct.shopProduct.num.toString()
+            binding.goodTag.text = cartProduct.getProperties().joinToString(separator = "/")
+            binding.cartIncrease.setOnClickListener(View.OnClickListener {
+                proxyClick.addShopProduct(ShopProduct(this,1,cartProduct.shopProduct.productSkuNumber,cartProduct.shopProduct.properties))
+
+            })
+            binding.cartReduce.setOnClickListener(View.OnClickListener {
+                proxyClick.minusShopProduct(ShopProduct(this,productSkuNumber = cartProduct.shopProduct.productSkuNumber))
+            })
+        }
     }
 
 }
