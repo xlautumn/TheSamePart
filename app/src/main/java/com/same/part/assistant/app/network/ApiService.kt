@@ -146,7 +146,7 @@ interface ApiService {
         @Query("appSecret") appSecret: String,
         @Query("userId") userId: Int,
         @Query("shopId") shopId:Int
-    ): ApiResponse<String>
+    ): ResponseBody
 
     /**
      * 创建购物车
@@ -166,11 +166,11 @@ interface ApiService {
     /**
      * 批量删除购物车
      */
-    @DELETE("wscx/carts/{cartIds}")
+    @DELETE("carts/{cartIds}")
     suspend fun delCarts(
+        @Path("cartIds") cartIds: String,
         @Query("appKey") appKey: String = CacheUtil.getAppKey(),
-        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret(),
-        @Path("cartIds") cartIds: String
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
     ): ResponseBody
 
     /**

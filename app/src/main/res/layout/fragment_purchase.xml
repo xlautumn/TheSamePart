@@ -91,13 +91,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cartDetailList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/root_bottom"
+        app:layout_constraintBottom_toTopOf="@+id/root_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <RelativeLayout
+            android:id="@+id/rl_title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dip_50"
             android:background="@android:color/white"
@@ -154,9 +155,11 @@
             android:maxHeight="300dp"
             android:paddingLeft="@dimen/dip_15"
             android:paddingRight="@dimen/dip_15"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

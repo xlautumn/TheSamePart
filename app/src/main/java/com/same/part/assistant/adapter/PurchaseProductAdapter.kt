@@ -74,10 +74,10 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                     PurchaseProductManager.INSTANCE.getProductSpecs(
                         productId
                     ) { propertyList, propertyPriceList ->
-                        propertyList?.takeIf { list -> list.isNotEmpty() }?.apply {
+                        propertyList?.takeIf { list -> list.isNotEmpty() }?.let {
                             val dialogFragment =
                                 ChooseSpecsDialogFragment.create(name ?: "", mContext)
-                            dialogFragment.setData(propertyList, propertyPriceList)
+                            dialogFragment.setData(it, propertyPriceList)
                             dialogFragment.setListener { productSku ->
                                 //加入购物车的请求
                                 Toast.makeText(
@@ -85,6 +85,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                                     "执行加入购物车操作：${productSku.productSkuId}",
                                     Toast.LENGTH_LONG
                                 ).show()
+                                requestCartViewModel.addShopProduct(ShopProduct(this,productSkuNumber = productSku.number))
                             }
                             dialogFragment.showDialog(mContext.supportFragmentManager)
                         }
