@@ -26,6 +26,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/orderStatement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dip_3"
@@ -44,6 +45,7 @@
                 android:paddingRight="@dimen/dip_15">
 
                 <TextView
+                    android:id="@+id/shippingAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/icon_address"
@@ -54,6 +56,7 @@
                     android:textSize="@dimen/dip_12" />
 
                 <TextView
+                    android:id="@+id/shippingPerson"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dip_20"
@@ -81,6 +84,7 @@
                     android:textSize="@dimen/dip_12" />
 
                 <TextView
+                    android:id="@+id/orderPayment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dip_15"
@@ -336,6 +340,7 @@
             android:textSize="@dimen/dip_12" />
 
         <TextView
+            android:id="@+id/orderTotal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

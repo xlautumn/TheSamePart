@@ -99,11 +99,11 @@ class CashierOrderDetailActivity : AppCompatActivity() {
                 holderCashier.goodPriceOld.apply {
                     visibility = View.VISIBLE
                     paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                    text = model.oldPrice
+                    text = "￥${model.oldPrice}"
                 }
 
             }
-            holderCashier.goodPriceNew.text = model.price
+            holderCashier.goodPriceNew.text = "￥${model.price}"
         }
     }
 

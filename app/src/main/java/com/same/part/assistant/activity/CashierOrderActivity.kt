@@ -92,7 +92,7 @@ class CashierOrderActivity : AppCompatActivity() {
                                 getJSONObject(i)?.apply {
                                     val no = getString("no") ?: "--"
                                     val price = getString("price") ?: "--"
-                                    val payment = getString("payment") ?: "--"
+                                    val payment = (getString("payment") ?: "--").ifEmpty { "--" }
                                     val addTime = getString("addTime") ?: "--"
                                     val shopCouponPrice = getString("shopCouponPrice") ?: "0.00"
                                     val platformCouponPrice =
@@ -182,7 +182,7 @@ class CashierOrderActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: CashierOrderItemHolder, position: Int) {
             val model = dataList[position]
             holder.orderId.text = model.no
-            holder.orderAmount.text = model.price
+            holder.orderAmount.text = "￥${model.price}"
             holder.payMethod.text = model.payment
             holder.time.text = model.addTime?.replace(" ", "\n")
             holder.itemView.setOnClickListener {

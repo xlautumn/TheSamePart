@@ -42,7 +42,7 @@ data class CashierModel(
     //	审核状态（0待审核，1审核通过，-1审核驳回） 默认值2
     var audit_state: String = "2",
     var quantity: String = "2147483647"
-):Serializable
+) : Serializable
 
 
 /**
@@ -78,6 +78,30 @@ data class CashierOrderModel(
 ) : Serializable
 
 /**
+ * 采购订单数据类
+ */
+data class PurchaseOrderModel(
+    var no: String,
+    var time: String,
+    var price: String,
+    var state: String,
+    var payState: String,
+    var statements: String,
+    var province: String,
+    var city: String,
+    var district: String,
+    var address: String,
+    var addrName: String,
+    var addrMobile: String,
+    var payment: String,
+    var nickname: String,
+    var nicktel: String,
+    var nickDeliveryTime: String,
+    var nickServiceTime: String,
+    var orderItemList: ArrayList<CashierGoodItemModel> = ArrayList()
+) : Serializable
+
+/**
  * 商品分类数据类
  */
 data class GoodItemModel(
@@ -109,15 +133,6 @@ data class PurchaseGoodItemModel(
     var newPrice: String
 )
 
-/**
- * 采购订单数据类
- */
-data class PurchaseOrderModel(
-    var id: String,
-    var price: String,
-    var time: String,
-    var status: String
-)
 
 /**
  * 会员管理数据类
@@ -135,7 +150,7 @@ data class VipCardInfoModel(
  */
 data class CouponInfoModel(
     var name: String,
-    var issued:String,
+    var issued: String,
     var remain: String,
     var used: String,
     var status: String,
@@ -146,7 +161,7 @@ data class CouponInfoModel(
  * 账号数据类
  */
 data class AccountModel(
-    var id:String,
+    var id: String,
     var name: String,
     var mobile: String,
     var role: String
@@ -422,7 +437,7 @@ data class CashierDetailMode(
     val price: Double,
     val productCategory: Any,
     val productExtends: List<Any>,
-    val customCategoryProductId:Int,
+    val customCategoryProductId: Int,
     val productId: Int,
     val quantity: Int,
     val ratio: Double,

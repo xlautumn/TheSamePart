@@ -9,41 +9,30 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSONObject
 import com.same.part.assistant.R
-import com.same.part.assistant.activity.*
+import com.same.part.assistant.activity.PurchaseOrderActivity
+import com.same.part.assistant.activity.PurchaseOrderActivity.Companion.TITLES
+import com.same.part.assistant.activity.PurchaseOrderDetailActivity
+import com.same.part.assistant.activity.PurchaseOrderDetailActivity.Companion.ORDER_DETAIL_KEY
+import com.same.part.assistant.app.network.ApiService
+import com.same.part.assistant.app.util.CacheUtil
+import com.same.part.assistant.data.model.CashierGoodItemModel
 import com.same.part.assistant.data.model.PurchaseOrderModel
+import com.same.part.assistant.helper.refreshComplete
+import com.same.part.assistant.utils.HttpUtil
+import kotlinx.android.synthetic.main.fragment_cashier.mSmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_order_status_tab.*
 
 /**
  * 采购订单状态页面
  */
 class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: String) : Fragment() {
-    private val mOrderStatusList = arrayListOf<PurchaseOrderModel>().apply {
-        add(
-            PurchaseOrderModel(
-                "546464646465",
-                "￥1313",
-                "2020-05-17 22:14:15",
-                "0"
-            )
-        )
-        add(
-            PurchaseOrderModel(
-                "5164133311",
-                "￥13313",
-                "2020-05-17 22:14:15",
-                "1"
-            )
-        )
-        add(
-            PurchaseOrderModel(
-                "515131331311",
-                "￥133",
-                "2020-05-17 22:14:15",
-                "2"
-            )
-        )
-    }
+    //采购订单列表
+    private val mOrderStatusList = ArrayList<PurchaseOrderModel>()
+
+    //当前请求第几页的数据
+    private var mCurrentPage = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +48,164 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
             layoutManager = LinearLayoutManager(context)
             adapter = CustomAdapter(mOrderStatusList)
         }
+
+        //下拉刷新
+        mSmartRefreshLayout.apply {
+            //下拉刷新
+            setOnRefreshListener {
+                mCurrentPage = 0
+                loadPurchaseOrderList(state = getStatus(), page = mCurrentPage, isRefresh = true)
+            }
+            //上拉加载
+            setOnLoadMoreListener {
+                mCurrentPage++
+                loadPurchaseOrderList(state = getStatus(), page = mCurrentPage, isRefresh = false)
+            }
+        }
+        //请求数据
+        loadPurchaseOrderList(state = getStatus(), page = mCurrentPage, isRefresh = true)
     }
+
+    /**
+     * 加载订单列表
+     */
+    private fun loadPurchaseOrderList(
+        state: Int,
+        page: Int = 0,
+        size: String = "20",
+        type: String = "1",
+        isRefresh: Boolean
+    ) {
+        val url = StringBuilder("${ApiService.SERVER_URL}order/getProductOrderList")
+            .append("?state=$state")
+            .append("&page=$page")
+            .append("&size=$size")
+//            .append("&userId=${CacheUtil.getUserId()}")
+            .append("&userId=21273")
+            .append("&type=$type")
+            .append("&appKey=${CacheUtil.getAppKey()}")
+            .append("&appSecret=${CacheUtil.getAppSecret()}")
+        HttpUtil.instance.getUrl(url.toString(), {
+            try {
+                val resultJson = JSONObject.parseObject(it)
+                resultJson.apply {
+                    getJSONArray("content")?.takeIf { array -> array.size > 0 }?.apply {
+                        if (this.size == 0) {
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(false)
+                            mCurrentPage--
+                        } else {
+                            val orderList = ArrayList<PurchaseOrderModel>()
+                            for (i in 0 until this.size) {
+                                getJSONObject(i)?.apply {
+                                    val no = getString("no") ?: "--"
+                                    val addTime = getString("addTime") ?: "--"
+                                    val totalPrice = getString("price") ?: "--"
+                                    val status = getString("state") ?: "--"
+                                    val payState = getString("payState") ?: "--"
+                                    val statements = getString("statements").orEmpty()
+                                    val province = getString("province").orEmpty()
+                                    val city = getString("city").orEmpty()
+                                    val district = getString("district").orEmpty()
+                                    val address = getString("address").orEmpty()
+                                    val addrName = getString("addrName") ?: "--"
+                                    val addrMobile = getString("addrMobile") ?: "--"
+                                    val payment = (getString("payment") ?: "--").ifEmpty { "--" }
+                                    val nickname = getString("nickname") ?: "--"
+                                    val nicktel = getString("nicktel") ?: "--"
+                                    val nickDeliveryTime = getString("nickDeliveryTime") ?: "--"
+                                    val nickServiceTime = getString("nickServiceTime") ?: "--"
+                                    //订单详情条目的列表数据
+                                    val orderItemList = ArrayList<CashierGoodItemModel>()
+                                    getJSONArray("orderItems")?.takeIf { array -> array.size > 0 }
+                                        ?.apply {
+                                            for (index in 0 until this.size) {
+                                                getJSONObject(index)?.apply {
+                                                    val img = getString("img")
+                                                    val name = getString("name")
+                                                    val quantity = getString("quantity")
+                                                    val price = getString("price")
+                                                    CashierGoodItemModel(
+                                                        img,
+                                                        name,
+                                                        quantity,
+                                                        price
+                                                    ).apply {
+                                                        orderItemList.add(this)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    PurchaseOrderModel(
+                                        no,
+                                        addTime,
+                                        totalPrice,
+                                        status,
+                                        payState,
+                                        statements,
+                                        province,
+                                        city,
+                                        district,
+                                        address,
+                                        addrName,
+                                        addrMobile,
+                                        payment,
+                                        nickname,
+                                        nicktel,
+                                        nickDeliveryTime,
+                                        nickServiceTime,
+                                        orderItemList
+                                    ).apply {
+                                        orderList.add(this)
+                                    }
+                                }
+                            }
+                            //如果是刷新需要清空之前的数据
+                            if (isRefresh && orderList.size > 0) {
+                                mOrderStatusList.clear()
+                                mOrderStatusList.addAll(orderList)
+                            } else {
+                                mOrderStatusList.addAll(orderList)
+                            }
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(true)
+                            //刷新数据
+                            mOrderRecyclerView.adapter?.notifyDataSetChanged()
+                        }
+                    } ?: also {
+                        //通知刷新结束
+                        mSmartRefreshLayout?.refreshComplete(false)
+                        mCurrentPage--
+                    }
+                }
+            } catch (e: Exception) {
+                //请求失败回退请求的页数
+                if (mCurrentPage > 0) mCurrentPage--
+                //通知刷新结束
+                mSmartRefreshLayout?.refreshComplete(false)
+            }
+        }, {
+            //请求失败回退请求的页数
+            if (mCurrentPage > 0) mCurrentPage--
+            //通知刷新结束
+            mSmartRefreshLayout?.refreshComplete(true)
+        })
+
+    }
+
+    /**
+     * 获取订单状态
+     * 待付款0、待发货3、待收货2、已完成1、已取消-1
+     */
+    private fun getStatus(): Int = when (title) {
+        TITLES[0] -> 0
+        TITLES[1] -> 3
+        TITLES[2] -> 2
+        TITLES[3] -> -1
+        TITLES[4] -> 1
+        else -> 0
+    }
+
 
     inner class CustomAdapter(var dataList: ArrayList<PurchaseOrderModel>) :
         RecyclerView.Adapter<OrderStatusItemHolder>() {
@@ -82,11 +228,32 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
         override fun onBindViewHolder(holder: OrderStatusItemHolder, position: Int) {
             val model = dataList[position]
             holder.orderTime.text = "订单时间：${model.time}"
-            holder.orderId.text = "订单编号：${model.id}"
-            holder.orderPrice.text = model.price
+            holder.orderId.text = "订单编号：${model.no}"
+            holder.orderPrice.text = "￥${model.price}"
+            //待付款0、待发货3、待收货2、已完成1、已取消-1
+            if (model.state in listOf("0", "2")) {
+                holder.orderOperation.visibility = View.VISIBLE
+                //0是待付款，1是已付款
+                if (model.payState == "1") {
+                    holder.orderOperation.text = "确认收货"
+                } else {
+                    holder.orderOperation.text = "去支付"
+                }
+
+            } else {
+                holder.orderOperation.visibility = View.GONE
+            }
+            if (model.state in listOf("1", "-1")) {
+                holder.orderStatus.setTextColor(0xFF999999.toInt())
+            } else {
+                holder.orderStatus.setTextColor(0xFFE76612.toInt())
+            }
+            holder.orderStatus.text = model.statements
             holder.itemView.setOnClickListener {
                 //跳转详情页
-                startActivity(Intent(mContext, PurchaseOrderDetailActivity::class.java))
+                startActivity(Intent(mContext, PurchaseOrderDetailActivity::class.java).apply {
+                    putExtra(ORDER_DETAIL_KEY, model)
+                })
             }
         }
     }
@@ -95,6 +262,7 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
         var orderId: TextView = itemView.findViewById(R.id.orderId)
         var orderPrice: TextView = itemView.findViewById(R.id.orderPrice)
         var orderTime: TextView = itemView.findViewById(R.id.orderTime)
+        var orderStatus: TextView = itemView.findViewById(R.id.orderStatus)
         var orderOperation: TextView = itemView.findViewById(R.id.orderOperation)
     }
 }
