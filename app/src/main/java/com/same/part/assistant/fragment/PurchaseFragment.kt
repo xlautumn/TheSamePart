@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
+import com.same.part.assistant.adapter.CartProductAdapter
 import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
 import com.same.part.assistant.adapter.PurchaseFirstLevelAdapter
@@ -29,7 +31,8 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     private var mSecondLevelAdapter: PurchaseSecondLevelAdapter? = null
     private var mFirstLevelAdapter: PurchaseFirstLevelAdapter? = null
     private var mProductAdapter: PurchaseProductAdapter? = null
-    private  val requestCartViewModel: RequestCartViewModel by lazy { getViewModel<RequestCartViewModel>() }
+    private val mCartProductAdapter: CartProductAdapter by lazy { CartProductAdapter() }
+    private val requestCartViewModel: RequestCartViewModel by lazy { getViewModel<RequestCartViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +47,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         statement.setOnClickListener(this)
         rootDetail.setOnClickListener(this)
+        right_btn.setOnClickListener(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -67,9 +71,13 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             adapter = mSecondLevelAdapter
         }
         productList.apply {
-            mProductAdapter = activity?.let { PurchaseProductAdapter(it,requestCartViewModel) }
+            mProductAdapter = activity?.let { PurchaseProductAdapter(it, requestCartViewModel) }
             adapter = mProductAdapter
             mProductAdapter
+        }
+
+        pop_list_view.apply {
+            adapter = mCartProductAdapter
         }
         PurchaseProductManager.INSTANCE.syncPurchaseCategoryData {
             refreshCategory(0)
@@ -77,6 +85,14 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         PurchaseProductManager.INSTANCE.getCartProductList {
 
         }
+
+        requestCartViewModel.cartProductList.observe(viewLifecycleOwner, Observer {
+            mCartProductAdapter.setData(it)
+            totalMoney.text = requestCartViewModel.totalPrice
+            statement.text = getString(R.string.purchase_statement,it.size)
+        })
+
+        requestCartViewModel.getCartList()
     }
 
     private fun refreshSecondCategory(position: Int) {
@@ -164,6 +180,10 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                     cartDetailList.visibility = View.GONE
                     cartDetailArrow.rotation = 0f
                 }
+            }
+            R.id.right_btn ->{
+                //清空购物车
+                requestCartViewModel.clearCarts()
             }
         }
     }

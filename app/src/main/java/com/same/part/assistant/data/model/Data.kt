@@ -17,4 +17,4 @@ data class ShopProduct(
 /**
  * 购物车中的商品
  */
-data class CartProduct(val shopProduct: ShopProduct, val cartId: String)
+data class CartProduct(val shopProduct: ShopProduct, val cartId: String,var price:String)

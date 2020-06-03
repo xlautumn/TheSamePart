@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">同方云商</string>
+    <string name="purchase_statement">去结算(%1$d)</string>
 </resources>

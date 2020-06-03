@@ -4,6 +4,7 @@ import com.same.part.assistant.data.ApiResponse
 import com.same.part.assistant.app.network.NetworkApi
 import com.same.part.assistant.app.network.NetworkApiv2
 import com.same.part.assistant.app.util.CacheUtil
+import com.same.part.assistant.data.DEFAULT_SHOP_ID
 import com.same.part.assistant.data.model.*
 import me.hgj.jetpackmvvm.network.AppException
 import okhttp3.ResponseBody
@@ -153,8 +154,9 @@ class HttpRequestManger {
         appKey: String = CacheUtil.getAppKey(),
         appSecret: String = CacheUtil.getAppSecret(),
         userId: Int = CacheUtil.getUserId() ?: 0,
-        shopId: Int = CacheUtil.getShopId() ?: 0
-    ): ApiResponse<String> {
+//        shopId: Int = CacheUtil.getShopId() ?: 0
+        shopId: Int = DEFAULT_SHOP_ID
+    ): ResponseBody {
         return NetworkApi.service.getCartList(appKey, appSecret, userId, shopId)
     }
 
@@ -184,7 +186,7 @@ class HttpRequestManger {
         cartIds: String
     ): ResponseBody {
         return NetworkApi.service.delCarts(
-            appKey, appSecret, cartIds
+            cartIds,appKey, appSecret
         )
     }
 

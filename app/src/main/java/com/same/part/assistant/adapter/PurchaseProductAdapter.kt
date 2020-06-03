@@ -78,6 +78,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                         dialogFragment.setListener { productSku ->
                             //加入购物车的请求
                             Toast.makeText(mContext, "执行加入购物车操作：${productSku.productSkuId}", Toast.LENGTH_LONG).show()
+                            requestCartViewModel.addShopProduct(ShopProduct(this,productSkuNumber = productSku.number))
                         }
                         dialogFragment.showDialog(mContext.supportFragmentManager)
                     }

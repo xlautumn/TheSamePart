@@ -26,6 +26,7 @@ data class RequestUpdateShopInfo(
     val img: String,
     val name: String
 )
+
 /**
  * 添加/编辑商品分类
  */
@@ -201,15 +202,17 @@ data class RequestPay(
 }
 
 data class PropertyData(
-    var project: String="",
+    var project: String = "",
     var name: String = "",
     var isSelected: Boolean = false
 )
 
 data class ProductSku(
     val productSkuId: String = "",
+    val number: String = "",
     val price: String = "",
-    val properties: LinkedHashSet<String>
+    val properties: LinkedHashSet<String>,
+    val weight :String = "0"
 )
 
 

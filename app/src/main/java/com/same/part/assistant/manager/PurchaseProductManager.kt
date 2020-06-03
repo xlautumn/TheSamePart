@@ -207,8 +207,10 @@ class PurchaseProductManager private constructor() {
                                         propertyPriceList.add(
                                             ProductSku(
                                                 productSku.optString("productSkuId"),
+                                                productSku.optString("number"),
                                                 productSku.optString("price"),
-                                                propertyKey
+                                                propertyKey,
+                                                productSku.optString("weight")
 
                                             )
                                         )
