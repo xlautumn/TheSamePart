@@ -172,9 +172,8 @@ class PurchaseProductManager private constructor() {
         ) -> Unit)?
     ) {
         var url = StringBuilder("${ApiService.SERVER_URL}product/$productId")
-            .append("?appKey=99B9LGSypeHjWB11&appSecret=99osxt7y6szsf211")
-//            .append("?appKey=${CacheUtil.getAppKey()}")
-//            .append("&appSecret=${CacheUtil.getAppSecret()}")
+            .append("?appKey=${CacheUtil.getAppKey()}")
+            .append("&appSecret=${CacheUtil.getAppSecret()}")
         HttpUtil.instance.getUrl(url.toString(), { result ->
             val propertyList = linkedMapOf<String, MutableSet<PropertyData>>()
             val propertyPriceList = linkedSetOf<ProductSku>()

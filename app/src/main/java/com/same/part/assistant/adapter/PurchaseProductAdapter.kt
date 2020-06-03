@@ -71,15 +71,23 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                 goodViewHolder.chooseSpecs?.visibility = View.VISIBLE
                 goodViewHolder.chooseSpecs?.setOnClickListener(View.OnClickListener {
                     //规格查询
-//                    PurchaseProductManager.INSTANCE.getProductSpecs(productId?:"") {
-                    PurchaseProductManager.INSTANCE.getProductSpecs("2063") { propertyList, propertyPriceList ->
-                        val dialogFragment = ChooseSpecsDialogFragment.create(name?:"",mContext)
-                        dialogFragment.setData(propertyList,propertyPriceList)
-                        dialogFragment.setListener { productSku ->
-                            //加入购物车的请求
-                            Toast.makeText(mContext, "执行加入购物车操作：${productSku.productSkuId}", Toast.LENGTH_LONG).show()
+                    PurchaseProductManager.INSTANCE.getProductSpecs(
+                        productId
+                    ) { propertyList, propertyPriceList ->
+                        propertyList?.takeIf { list -> list.isNotEmpty() }?.apply {
+                            val dialogFragment =
+                                ChooseSpecsDialogFragment.create(name ?: "", mContext)
+                            dialogFragment.setData(propertyList, propertyPriceList)
+                            dialogFragment.setListener { productSku ->
+                                //加入购物车的请求
+                                Toast.makeText(
+                                    mContext,
+                                    "执行加入购物车操作：${productSku.productSkuId}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            dialogFragment.showDialog(mContext.supportFragmentManager)
                         }
-                        dialogFragment.showDialog(mContext.supportFragmentManager)
                     }
                 })
             } else {
