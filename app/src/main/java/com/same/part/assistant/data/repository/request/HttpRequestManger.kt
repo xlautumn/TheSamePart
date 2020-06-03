@@ -216,4 +216,22 @@ class HttpRequestManger {
     ): ApiResponse<String> {
         return NetworkApi.service.getPaySign(productOrderId, requestPay)
     }
+
+
+    /**
+     * 获取店铺账号列表
+     */
+    suspend fun getShopAccounts(
+    ): ResponseBody {
+        return NetworkApiv2.service.getShopAccounts()
+    }
+
+
+    /**
+     * 修改账号密码
+     */
+    suspend fun changeAccountPwd(changePwdInfo: ChangePwdInfo
+    ): ApiResponse<ChangePwdModel> {
+        return NetworkApi.service.changeAccountPwd(changePwdInfo)
+    }
 }

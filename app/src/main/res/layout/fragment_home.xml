@@ -59,7 +59,7 @@
                     android:layout_marginStart="11dp"
                     android:layout_weight="1"
                     android:drawableEnd="@drawable/home_right_arrorw"
-                    android:text="美伢的美食店铺"
+                    android:text="@={vm.name}"
                     android:textColor="@color/color_333333"
                     android:textSize="17dp" />
 

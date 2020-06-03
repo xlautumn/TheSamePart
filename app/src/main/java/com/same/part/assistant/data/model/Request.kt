@@ -215,6 +215,13 @@ data class ProductSku(
     val weight :String = "0"
 )
 
+data class ChangePwdInfo(
+    val id: String,
+    val password: String
+)
+
+
+
 
 
 

@@ -107,5 +107,31 @@ object CacheUtil {
             ?.get(0)?.user?.userId
     }
 
+    /**
+     * 获取头像
+     */
+    fun getShopImg(): String? {
+        return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
+            ?.get(0)?.shop?.img
+    }
+
+    /**
+     * 获取手机号
+     */
+    fun getShopPhone(): String? {
+        return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
+            ?.get(0)?.shop?.phone
+    }
+
+    /**
+     * 获取手机号
+     */
+    fun getShopName(): String? {
+        return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
+            ?.get(0)?.shop?.name
+    }
+
+
+
 
 }

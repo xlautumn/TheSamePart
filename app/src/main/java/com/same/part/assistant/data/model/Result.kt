@@ -146,6 +146,7 @@ data class CouponInfoModel(
  * 账号数据类
  */
 data class AccountModel(
+    var id:String,
     var name: String,
     var mobile: String,
     var role: String
@@ -438,6 +439,43 @@ data class CashierDetailMode(
     val weight: Double,
     val withHoldQuantity: Int
 )
+
+/**
+ * 修改密码
+ */
+data class ChangePwdModel(
+    val accessToken: Any,
+    val addTime: String,
+    val age: Any,
+    val birthAttrib: Any,
+    val birthday: Any,
+    val bloodType: Any,
+    val city: Any,
+    val constellation: Any,
+    val district: Any,
+    val email: Any,
+    val hobby: Any,
+    val inviter: Any,
+    val male: Any,
+    val marital: Any,
+    val mobile: Any,
+    val nickname: String,
+    val openId: Any,
+    val password: String,
+    val photo: String,
+    val points: Int,
+    val province: Any,
+    val realname: Any,
+    val tags: Any,
+    val type: String,
+    val updateTime: String,
+    val userExtends: List<Any>,
+    val userId: Int,
+    val username: String,
+    val version: Int
+)
+
+
 
 
 

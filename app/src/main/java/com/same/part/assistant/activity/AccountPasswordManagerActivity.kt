@@ -2,46 +2,30 @@ package com.same.part.assistant.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.ChangePasswordActivity.Companion.USER_ID_KEY
 import com.same.part.assistant.data.model.AccountModel
+import com.same.part.assistant.viewmodel.request.RequsetAccountsViewmodel
 import kotlinx.android.synthetic.main.activity_account_password.*
 import kotlinx.android.synthetic.main.toolbar_title.*
+import me.hgj.jetpackmvvm.ext.getViewModel
 
 
 /**
  * 账号密码管理
  */
 class AccountPasswordManagerActivity : AppCompatActivity() {
-    private val mAccountList = arrayListOf<AccountModel>().apply {
-        add(
-            AccountModel(
-                "DUODUO",
-                "13666666666",
-                "店主"
-            )
-        )
-        add(
-            AccountModel(
-                "HUAHUA",
-                "13888888888",
-                "收银员"
-            )
-        )
-        add(
-            AccountModel(
-                "HEHE",
-                "13999999999",
-                "收银员"
-            )
-        )
-    }
+
+    //适配器
+    private val mAccountAdapter: AccountAdapter by lazy { AccountAdapter(arrayListOf()) }
+
+    //店铺账号列表
+    private val mRequsetAccountsViewmodel: RequsetAccountsViewmodel by lazy { getViewModel<RequsetAccountsViewmodel>() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,51 +38,39 @@ class AccountPasswordManagerActivity : AppCompatActivity() {
         }
         //列表数据
         mAccountRecyclerView.apply {
-            adapter = CustomAdapter(mAccountList)
+            adapter = mAccountAdapter
             layoutManager = LinearLayoutManager(context)
         }
-    }
-
-
-    inner class CustomAdapter(var dataList: ArrayList<AccountModel>) :
-        RecyclerView.Adapter<AccountItemHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountItemHolder =
-            AccountItemHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.account_list_item,
-                    parent,
-                    false
+        mAccountAdapter.apply {
+            addChildClickViewIds(R.id.accountOperation)
+            setOnItemChildClickListener { adapter, view, position ->
+                startActivity(
+                    Intent(
+                        this@AccountPasswordManagerActivity,
+                        ChangePasswordActivity::class.java
+                    ).apply {
+                        putExtra(USER_ID_KEY, mAccountAdapter.data[position].id)
+                    }
                 )
-            )
-
-
-        override fun getItemCount(): Int = dataList.size
-
-
-        override fun onBindViewHolder(holder: AccountItemHolder, position: Int) {
-            val model = dataList[position]
-            holder.accountName.text = model.name
-            holder.accountMobile.text = model.mobile
-            holder.accountRole.text = model.role
-            holder.accountOperation.apply {
-                setOnClickListener {
-                    startActivity(
-                        Intent(
-                            this@AccountPasswordManagerActivity,
-                            ChangePasswordActivity::class.java
-                        )
-                    )
-                }
             }
         }
-
+        mRequsetAccountsViewmodel.queryAccounts()
+        mRequsetAccountsViewmodel.accountsResult.observe(this, Observer {
+            mAccountAdapter.setNewInstance(it)
+        })
     }
 
-    class AccountItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var accountName: TextView = itemView.findViewById(R.id.accountName)
-        var accountMobile: TextView = itemView.findViewById(R.id.accountMobile)
-        var accountRole: TextView = itemView.findViewById(R.id.accountRole)
-        var accountOperation: TextView = itemView.findViewById(R.id.accountOperation)
+    inner class AccountAdapter(data: ArrayList<AccountModel>) :
+        BaseQuickAdapter<AccountModel, BaseViewHolder>(R.layout.account_list_item, data) {
+
+        override fun convert(holder: BaseViewHolder, item: AccountModel) {
+            //赋值
+            item.run {
+                holder.setText(R.id.accountName, name)
+                holder.setText(R.id.accountMobile, mobile)
+                holder.setText(R.id.accountRole, role)
+            }
+        }
     }
 
 }

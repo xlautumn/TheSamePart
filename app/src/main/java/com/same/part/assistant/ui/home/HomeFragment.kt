@@ -22,8 +22,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         mDatabind.vm = mViewModel
         mDatabind.click = ProxyClick()
         shareViewModel.shopUserModel.value?.run {
-            mViewModel.imageUrl.postValue(UserShopDTO[0].user.photo)
-            mViewModel.name.postValue(UserShopDTO[0].shop.name)
+            mViewModel.imageUrl.set(UserShopDTO[0].shop.img)
+            mViewModel.name.set(UserShopDTO[0].shop.name)
         }
 
     }

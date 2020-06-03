@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.*
+import com.same.part.assistant.app.util.CacheUtil
 import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.fragment_my.userAvatar
 
@@ -26,13 +27,14 @@ class MyFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Glide.with(this)
-            .load("https://p5.gexing.com/GSF/touxiang/20200514/15/6ytxkxypkc25dybo9gy21c8s7.jpg@!200x200_3?recache=20131108")
-            .into(userAvatar)
         //用户名
-        userName.text = "DUODUO"
+        userName.text = CacheUtil.getShopName()
         //手机号
-        userMobile.text = "13666666666"
+        userMobile.text = CacheUtil.getShopPhone()
+        //头像
+        Glide.with(this)
+            .load(CacheUtil.getShopImg())
+            .into(userAvatar)
         //收银订单
         cashierOrder.setOnClickListener {
             startActivity(Intent(activity, CashierOrderActivity::class.java))

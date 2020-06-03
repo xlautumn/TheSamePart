@@ -187,4 +187,24 @@ interface ApiService {
         @Path("productOrderId") productOrderId: String,
         @Body requestPay: RequestPay
     ): ApiResponse<String>
+
+
+    /**
+     * 获取店铺账号列表
+     */
+    @GET("shopUser/getShopUser/{shopId}")
+    suspend fun getShopAccounts(
+        @Header("WSCX") token: String = CacheUtil.getToken(),
+        @Path("shopId") shopId: Int = CacheUtil.getShopId()?:0
+    ): ResponseBody
+
+    /**
+     * 修改账号密码
+     */
+    @POST("shopUser/updateShopUser")
+    suspend fun changeAccountPwd(
+        @Body changePwdInfo: ChangePwdInfo,
+        @Header("WSCX") token: String = CacheUtil.getToken()
+    ): ApiResponse<ChangePwdModel>
+
 }
