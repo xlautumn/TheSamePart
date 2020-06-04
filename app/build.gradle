@@ -15,10 +15,20 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            storeFile file(storeFile_)
+            storePassword storePassword_
+            keyAlias keyAlias_
+            keyPassword keyPassword_
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -87,5 +97,6 @@ dependencies {
     implementation 'com.github.yuzhiqiang1993:zxing:2.2.5'
     //BaseAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.2'
-
+    //版本升级
+    implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.4'
 }
