@@ -7,12 +7,11 @@ import com.gyf.immersionbar.ImmersionBar
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.MainActivity
 import com.same.part.assistant.app.base.BaseActivity
-import com.same.part.assistant.databinding.ActivityLoginBinding
 import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.app.util.CacheUtil
+import com.same.part.assistant.databinding.ActivityLoginBinding
 import com.same.part.assistant.viewmodel.request.RequestLoginViewModel
 import com.same.part.assistant.viewmodel.state.LoginViewModel
-import kotlinx.android.synthetic.main.activity_login.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
 
