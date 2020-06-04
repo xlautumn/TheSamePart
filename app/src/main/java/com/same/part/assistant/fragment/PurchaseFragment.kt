@@ -1,5 +1,6 @@
 package com.same.part.assistant.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.OrderSettlementActivity
 import com.same.part.assistant.adapter.CartProductAdapter
 import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
@@ -19,7 +21,7 @@ import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.manager.PurchaseProductManager
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import kotlinx.android.synthetic.main.fragment_purchase.*
-import me.hgj.jetpackmvvm.ext.getViewModel
+import me.hgj.jetpackmvvm.ext.getAppViewModel
 
 /**
  * 采购
@@ -33,7 +35,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     private var mFirstLevelAdapter: PurchaseFirstLevelAdapter? = null
     private var mProductAdapter: PurchaseProductAdapter? = null
     private val mCartProductAdapter: CartProductAdapter by lazy { CartProductAdapter(ProxyClick()) }
-    private val requestCartViewModel: RequestCartViewModel by lazy { getViewModel<RequestCartViewModel>() }
+    private val requestCartViewModel: RequestCartViewModel by lazy { getAppViewModel<RequestCartViewModel>() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,7 +95,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             statement.text = getString(R.string.purchase_statement,requestCartViewModel.totalNum)
         })
 
-        requestCartViewModel.getCartList()
+        requestCartViewModel.requestCartList()
     }
 
     private fun refreshSecondCategory(position: Int) {
@@ -153,7 +155,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.statement -> {
-//                requestCartViewModel.createOrder()
+                startActivity(Intent(context,OrderSettlementActivity::class.java))
             }
             R.id.rootDetail -> {
                 cartDetailArrow.rotation = 0f

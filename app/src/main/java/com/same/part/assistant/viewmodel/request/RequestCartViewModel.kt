@@ -69,6 +69,9 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
     val paySignResult: LiveData<ResultState<String>> = _paySignResult
 
 
+    fun getCartList():ArrayList<CartProduct>{
+       return cartProductList.value?: arrayListOf()
+    }
     /**
      * 添加购物车
      */
@@ -242,7 +245,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
     /**
      * 请求购物车列表
      */
-    fun getCartList() {
+    fun requestCartList() {
         requestResponseBody(
             {
                 HttpRequestManger.instance.getCartList()

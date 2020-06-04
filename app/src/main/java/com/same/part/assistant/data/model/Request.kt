@@ -147,6 +147,8 @@ data class RequestCreateCouponInfo(
  * 创建购物车
  */
 data class RequestCreateCart(
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret(),
     val accessToken: String = CacheUtil.getToken(),//登录token
     val category: String = "采购商品",//类型描述，默认填写采购商品
     val endTime: String = "",//存活截止时间

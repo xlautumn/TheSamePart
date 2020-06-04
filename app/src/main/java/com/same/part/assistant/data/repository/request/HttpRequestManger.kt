@@ -149,7 +149,6 @@ class HttpRequestManger {
     /**
      * 获取购物车列表
      */
-    @GET("/carts/group-by-shop")
     suspend fun getCartList(
         appKey: String = CacheUtil.getAppKey(),
         appSecret: String = CacheUtil.getAppSecret(),
