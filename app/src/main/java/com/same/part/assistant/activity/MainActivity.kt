@@ -16,6 +16,7 @@ import com.same.part.assistant.R
 import com.same.part.assistant.fragment.GoodsFragment
 import com.same.part.assistant.fragment.MyFragment
 import com.same.part.assistant.fragment.PurchaseFragment
+import com.same.part.assistant.helper.detectVersion
 import com.same.part.assistant.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,7 +37,11 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             addOnTabSelectedListener(this@MainActivity)
         }
         setupTabLayout()
+
+        //版本检测
+        detectVersion(this)
     }
+
 
     class TabAdapter(fragmentManager: FragmentManager) :
         FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
