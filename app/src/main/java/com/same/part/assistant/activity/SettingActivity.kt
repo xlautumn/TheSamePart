@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.same.part.assistant.R
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.helper.detectVersion
 import com.same.part.assistant.helper.getVersionName
@@ -36,10 +37,12 @@ class SettingActivity : AppCompatActivity() {
         currentVersion.text = "V${getVersionName(this)}"
         //退出登录
         accountQuit.setOnClickListener {
-            CacheUtil.setShopUserModel(null)
-            startActivity(Intent(this, LoginActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            })
+            showMessage(message = "请确认是否退出？", title = "温馨提示", positiveAction = {
+                CacheUtil.setShopUserModel(null)
+                startActivity(Intent(this, LoginActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                })
+            }, positiveButtonText = "确定", negativeAction = {}, negativeButtonText = "取消")
         }
     }
 }
