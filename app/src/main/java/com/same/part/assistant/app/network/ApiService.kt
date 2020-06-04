@@ -13,11 +13,10 @@ import retrofit2.http.*
 interface ApiService {
 
     companion object {
-        //        const val SERVER_URL = "https://tzyf.godoit.vip/easyapi/"
-//        const val SERVER_URL = "https://test.tfsq.vip/"
-//                const val SERVER_URL = "http://192.168.110.164:8061/"
-//        const val SERVER_URL = "http://192.168.110.224:8061/"
-        const val SERVER_URL = "https://product.tfsq.vip/"
+        //生产
+        const val SERVER_URL = "https://product.tfsq.vip/easyapi/"
+        //测试
+//        const val SERVER_URL = "https://test.tfsq.vip/easyapi/"
     }
 
     /**
