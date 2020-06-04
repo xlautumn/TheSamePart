@@ -13,7 +13,10 @@ import retrofit2.http.*
 interface ApiService {
 
     companion object {
-        const val SERVER_URL = "https://tzyf.godoit.vip/easyapi/"
+        //生产
+        const val SERVER_URL = "https://product.tfsq.vip/easyapi/"
+        //测试
+//        const val SERVER_URL = "https://test.tfsq.vip/easyapi/"
     }
 
     /**
@@ -145,7 +148,7 @@ interface ApiService {
         @Query("appKey") appKey: String,
         @Query("appSecret") appSecret: String,
         @Query("userId") userId: Int,
-        @Query("shopId") shopId:Int
+        @Query("shopId") shopId: Int
     ): ResponseBody
 
     /**
@@ -195,7 +198,7 @@ interface ApiService {
     @GET("shopUser/getShopUser/{shopId}")
     suspend fun getShopAccounts(
         @Header("WSCX") token: String = CacheUtil.getToken(),
-        @Path("shopId") shopId: Int = CacheUtil.getShopId()?:0
+        @Path("shopId") shopId: Int = CacheUtil.getShopId() ?: 0
     ): ResponseBody
 
     /**
