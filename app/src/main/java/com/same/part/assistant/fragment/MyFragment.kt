@@ -12,11 +12,15 @@ import com.same.part.assistant.R
 import com.same.part.assistant.activity.*
 import com.same.part.assistant.app.base.BaseFragment
 import com.same.part.assistant.app.util.CacheUtil
+import com.same.part.assistant.data.model.ShopInfoEvent
 import com.same.part.assistant.databinding.FragmentHomeBinding
 import com.same.part.assistant.databinding.FragmentMyBinding
 import com.same.part.assistant.viewmodel.state.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_my.*
 import kotlinx.android.synthetic.main.fragment_my.userAvatar
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 我的
@@ -26,6 +30,7 @@ class MyFragment : BaseFragment<HomeViewModel, FragmentMyBinding>(){
     override fun layoutId(): Int = R.layout.fragment_my
 
     override fun initView(savedInstanceState: Bundle?) {
+        EventBus.getDefault().register(this)
         mDatabind.vm = mViewModel
         //收银订单
         cashierOrder.setOnClickListener {
@@ -58,14 +63,15 @@ class MyFragment : BaseFragment<HomeViewModel, FragmentMyBinding>(){
         mViewModel.name.set(shareViewModel.shopName.value)
     }
 
-    override fun createObserver() {
-        shareViewModel.shopPortrait.observe(viewLifecycleOwner, Observer {
-            mViewModel.imageUrl.set(it)
-        })
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun eventRefresh(event: ShopInfoEvent) {
+        mViewModel.imageUrl.set(event.img)
+        mViewModel.name.set(event.name)
+    }
 
-        shareViewModel.shopName.observe(viewLifecycleOwner, Observer {
-            mViewModel.name.set(it)
-        })
+    override fun onDestroyView() {
+        super.onDestroyView()
+        EventBus.getDefault().unregister(this)
     }
 
 }
