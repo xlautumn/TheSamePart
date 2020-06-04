@@ -11,14 +11,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
-import com.alibaba.fastjson.JSONObject
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.app.base.BaseActivity
-import com.same.part.assistant.app.ext.showMessage
-import com.same.part.assistant.app.network.ApiService
-import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.app.util.GlobalUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
@@ -26,7 +22,6 @@ import com.same.part.assistant.data.model.CreateOrUpdateGoodsInfo
 import com.same.part.assistant.app.util.ScanBarCodeUtil
 import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.databinding.ActivityAddCashierGoodBinding
-import com.same.part.assistant.utils.HttpUtil
 import com.same.part.assistant.viewmodel.request.RequestAddCashierGoodViewModel
 import com.same.part.assistant.viewmodel.request.RequestUploadDataViewModel
 import com.same.part.assistant.viewmodel.state.AddCashierGoodViewModel
@@ -34,7 +29,6 @@ import com.yzq.zxinglibrary.common.Constant
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.activity_add_cashier_good.*
 import kotlinx.android.synthetic.main.activity_add_cashier_good.coverImg
-import kotlinx.android.synthetic.main.activity_add_product_classification.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
@@ -42,7 +36,6 @@ import me.hgj.jetpackmvvm.ext.parseStateResponseBody
 import me.shaohui.bottomdialog.BottomDialog
 import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.EasyPermissions
-import kotlin.sequences.sequence
 
 
 /**
@@ -134,7 +127,7 @@ class AddCashierGoodActivity :
                         }
                     }
 
-                }.setLayoutRes(R.layout.add_cashier_bottom_dialog).setDimAmount(0.1F)
+                }.setLayoutRes(R.layout.bottom_dialog_list).setDimAmount(0.4F)
                     .setCancelOutside(true).setTag("mChooseGoodClassification").show()
             } else {
                 ToastUtils.showLong("暂无商品分类，请先添加商品分类")
@@ -165,7 +158,7 @@ class AddCashierGoodActivity :
                     }
                 }
 
-            }.setLayoutRes(R.layout.add_cashier_bottom_dialog).setDimAmount(0.1F)
+            }.setLayoutRes(R.layout.bottom_dialog_list).setDimAmount(0.4F)
                 .setCancelOutside(true).setTag("mChooseIfWeightGood").show()
         }
         //选择计量单位
@@ -185,7 +178,7 @@ class AddCashierGoodActivity :
                     }
                 }
 
-            }.setLayoutRes(R.layout.add_cashier_bottom_dialog).setDimAmount(0.1F)
+            }.setLayoutRes(R.layout.bottom_dialog_list).setDimAmount(0.4F)
                 .setCancelOutside(true).setTag("mChooseUnit").show()
         }
         //头像选择
@@ -339,7 +332,7 @@ class AddCashierGoodActivity :
         ): ChooseItemHolder =
             ChooseItemHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.choose_cashier_good_classification_item,
+                    R.layout.choose_list_item,
                     parent,
                     false
                 )

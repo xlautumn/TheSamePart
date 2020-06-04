@@ -74,15 +74,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="面额"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/dip_12" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
             android:text="折扣"
             android:textColor="@color/color_333333"
             android:textSize="@dimen/dip_12" />
@@ -106,15 +97,22 @@
             android:textSize="@dimen/dip_12" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mVipRecyclerView"
-        android:layout_width="match_parent"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/mSmartRefreshLayout"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/color_F8F8F8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_manager_header" />
+        android:background="@color/color_F8F8F8"
+        app:layout_constraintTop_toBottomOf="@+id/custom_manager_header">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mVipRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

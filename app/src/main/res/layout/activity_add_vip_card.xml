@@ -1,203 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_F8F8F8">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include
-        android:id="@+id/toolbar_title"
-        layout="@layout/toolbar_title" />
+<data>
 
-    <LinearLayout
-        android:id="@+id/llTop"
-        android:layout_width="@dimen/dip_0"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dip_15"
-        android:layout_marginTop="@dimen/dip_10"
-        android:layout_marginRight="@dimen/dip_15"
-        android:background="@drawable/shape_rect_white_solid"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
+    <variable
+        name="viewmodel"
+        type="com.same.part.assistant.viewmodel.state.AddVipCardViewModel" />
+    <variable
+        name="click"
+        type="com.same.part.assistant.activity.AddVipCardActivity.ProxyClick" />
+</data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_F8F8F8">
+
+        <include
+            android:id="@+id/toolbar_title"
+            layout="@layout/toolbar_title" />
 
         <LinearLayout
-            android:id="@+id/llName"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="名称        "
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="（必填，长度限制6个字符）"
-                android:lines="1"
-                android:paddingLeft="5dp"
-                android:textSize="11dp" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:id="@+id/llTop"
+            android:layout_width="@dimen/dip_0"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginTop="@dimen/dip_10"
             android:layout_marginRight="@dimen/dip_15"
-            android:background="@color/color_D2D2D2" />
+            android:background="@drawable/shape_rect_white_solid"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
 
-        <LinearLayout
-            android:id="@+id/llDenomination"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp">
+            <LinearLayout
+                android:id="@+id/llName"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="面额        "
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名称        "
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="（必填，例如0.00）"
-                android:lines="1"
-                android:paddingLeft="5dp"
-                android:textSize="11dp" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:text="@={viewmodel.name}"
+                    android:hint="（必填，长度限制6个字符）"
+                    android:lines="1"
+                    android:paddingLeft="5dp"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@color/color_D2D2D2" />
+
+            <LinearLayout
+                android:id="@+id/llDenomination"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="领取方式"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->click.chooseWay()}"
+                    app:receiveWay="@{viewmodel.receiveWay}"
+                    android:textSize="11dp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@color/color_D2D2D2" />
+
+            <LinearLayout
+                android:id="@+id/llDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="折扣        "
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:inputType="numberDecimal|number"
+                    android:text="@={viewmodel.discount}"
+                    android:hint="（必填，数字，例如95代表9.5折）"
+                    android:lines="1"
+                    android:paddingLeft="5dp"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@color/color_D2D2D2" />
+
+            <LinearLayout
+                android:id="@+id/llSort"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="描述        "
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="请输入描述信息"
+                    android:lines="1"
+                    android:text="@={viewmodel.description}"
+                    android:paddingLeft="5dp"
+                    android:textSize="11dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@color/color_D2D2D2" />
+            <LinearLayout
+                android:id="@+id/llUse"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="是否可用"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是"
+                    android:textSize="11dp"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginRight="@dimen/dip_15"
-            android:background="@color/color_D2D2D2" />
 
-        <LinearLayout
-            android:id="@+id/llDiscount"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp">
+        <TextView
+            android:layout_width="285dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="42dp"
+            android:background="@drawable/shape_half_circle_primary_color_rect"
+            android:gravity="center"
+            android:text="保存"
+            android:textColor="@color/color_FFFFFF"
+            android:onClick="@{()->click.save()}"
+            android:textSize="13dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llTop" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="折扣        "
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="（必填，数字，例如95代表9.5折）"
-                android:lines="1"
-                android:paddingLeft="5dp"
-                android:textSize="11dp" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginRight="@dimen/dip_15"
-            android:background="@color/color_D2D2D2" />
-
-        <LinearLayout
-            android:id="@+id/llUse"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="是否可用"
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginRight="@dimen/dip_15"
-            android:background="@color/color_D2D2D2" />
-
-        <LinearLayout
-            android:id="@+id/llSort"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="排序        "
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="（必填,数字，数字越小越靠前）"
-                android:lines="1"
-                android:paddingLeft="5dp"
-                android:textSize="11dp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_width="285dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="42dp"
-        android:background="@drawable/shape_half_circle_primary_color_rect"
-        android:gravity="center"
-        android:text="保存"
-        android:textColor="@color/color_FFFFFF"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llTop" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

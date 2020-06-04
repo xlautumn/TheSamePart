@@ -14,9 +14,9 @@ interface ApiService {
 
     companion object {
         //生产
-        const val SERVER_URL = "https://product.tfsq.vip/easyapi/"
+//        const val SERVER_URL = "https://product.tfsq.vip/easyapi/"
         //测试
-//        const val SERVER_URL = "https://test.tfsq.vip/easyapi/"
+        const val SERVER_URL = "https://test.tfsq.vip/easyapi/"
     }
 
     /**
@@ -209,5 +209,49 @@ interface ApiService {
         @Body changePwdInfo: ChangePwdInfo,
         @Header("WSCX") token: String = CacheUtil.getToken()
     ): ApiResponse<ChangePwdModel>
+
+
+    /**
+     * 获取店铺会员卡列表
+     */
+    @GET("cards")
+    suspend fun getMemberCardList(
+        @Query("page") page: Int,
+        @Query("size") size: Int = 10,
+        @Query("shopId") shopId: String = CacheUtil.getShopId()?.toString() ?: "",
+        @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
+    ): ResponseBody
+
+
+    /**
+     * 创建店铺会员卡
+     */
+    @POST("biz/card")
+    suspend fun createMemberCard(
+        @Body createMemberCard: CreateMemberCard
+    ): ResponseBody
+
+
+    /**
+     * 编辑店铺会员卡
+     */
+    @PUT("biz/card/{cardId}")
+    suspend fun editMemberCard(
+        @Path("cardId") cardId: String,
+        @Body createMemberCard: CreateMemberCard
+    ): ResponseBody
+
+
+    /**
+     * 获取店铺客户列表
+     */
+    @GET("biz/customers")
+    suspend fun getCustomerList(
+        @Query("shopId") shopId: String = CacheUtil.getShopId()?.toString() ?: "",
+        @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
+    ): ResponseBody
+
 
 }

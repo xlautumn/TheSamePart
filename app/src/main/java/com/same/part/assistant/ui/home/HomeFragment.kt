@@ -2,6 +2,7 @@ package com.same.part.assistant.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.BusinessManagerActivity
 import com.same.part.assistant.activity.CustomManagerActivity
@@ -21,19 +22,21 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun initView(savedInstanceState: Bundle?) {
         mDatabind.vm = mViewModel
         mDatabind.click = ProxyClick()
-        shareViewModel.shopUserModel.value?.run {
-            mViewModel.imageUrl.set(UserShopDTO[0].shop.img)
-            mViewModel.name.set(UserShopDTO[0].shop.name)
-        }
-
     }
 
     override fun lazyLoadData() {
-
+        mViewModel.imageUrl.set(shareViewModel.shopPortrait.value)
+        mViewModel.name.set(shareViewModel.shopName.value)
     }
 
     override fun createObserver() {
+        shareViewModel.shopPortrait.observe(viewLifecycleOwner, Observer {
+            mViewModel.imageUrl.set(it)
+        })
 
+        shareViewModel.shopName.observe(viewLifecycleOwner, Observer {
+            mViewModel.name.set(it)
+        })
     }
 
     inner class ProxyClick {

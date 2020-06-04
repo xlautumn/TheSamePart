@@ -1,11 +1,15 @@
 package com.same.part.assistant.activity
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
@@ -20,7 +24,6 @@ import com.same.part.assistant.databinding.ActivityAddCouponBinding
 import com.same.part.assistant.viewmodel.request.RequestCreateCouponViewModel
 import com.same.part.assistant.viewmodel.state.CreateCouponViewModel
 import kotlinx.android.synthetic.main.activity_add_coupon.*
-import kotlinx.android.synthetic.main.dialog_item_pay_way.view.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
@@ -86,7 +89,7 @@ class AddCouponActivity :
     inner class ProxyClick {
         //保存
         fun save() {
-            if(checkOptions()) {
+            if (checkOptions()) {
                 val requestCreateCouponInfo = RequestCreateCouponInfo(
                     mViewModel.name.get(),
                     mViewModel.distributionTotal.get().toInt(),
@@ -102,24 +105,11 @@ class AddCouponActivity :
 
         //选择时间
         fun chooseTime(isStartTime: Boolean) {
-            val dateStr = if (isStartTime) {
-                mViewModel.startTime.get()
-            } else {
-                mViewModel.endTime.get()
-            }
-            val currentDate = if (dateStr.isEmpty()) {
-                null
-            } else {
-                Calendar.getInstance().apply {
-                    time = DatetimeUtil.getCustomTime(dateStr)
-                }
-            }
             MaterialDialog(this@AddCouponActivity)
                 .lifecycleOwner(this@AddCouponActivity).show {
                     cornerRadius(dp2px(3).toFloat())
                     datePicker(
-                        minDate = Calendar.getInstance(),
-                        currentDate = currentDate
+                        minDate = Calendar.getInstance()
                     ) { dialog, date ->
                         val time = DatetimeUtil.formatDate(
                             date.time,
@@ -169,7 +159,8 @@ class AddCouponActivity :
             ToastUtils.showShort("请填写用券结束时间")
             return false
         }
-        val isVaildTime = DatetimeUtil.dateToStamp(mViewModel.endTime.get()) < DatetimeUtil.dateToStamp(mViewModel.startTime.get())
+        val isVaildTime =
+            DatetimeUtil.dateToStamp(mViewModel.endTime.get()) < DatetimeUtil.dateToStamp(mViewModel.startTime.get())
         if (isVaildTime) {
             ToastUtils.showShort("用券结束时间请大于用券开始时间")
             return false

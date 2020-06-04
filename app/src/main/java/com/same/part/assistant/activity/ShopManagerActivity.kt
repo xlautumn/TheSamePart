@@ -92,7 +92,6 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
                 val code = jsonObject.getIntValue("code")
                 if (code == 1) {
                     tvEdit.text = "编辑"
-                    tvSave.visibility = View.GONE
                     editDesc.setCanInput(false)
                     editShopName.setCanInput(false)
                 }
@@ -110,6 +109,8 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
             mViewModel.shopName.value,
            mViewModel.shopDesc.value
         )
+        shareViewModel.shopPortrait.postValue(imgUrl)
+        shareViewModel.shopName.postValue( mViewModel.shopName.value)
     }
 
     inner class ProxyClick {
@@ -130,12 +131,10 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
         fun edit() {
             if (tvEdit.text == "编辑") {
                 tvEdit.text = "取消"
-                tvSave.visibility = View.VISIBLE
                 editDesc.setCanInput(true)
                 editShopName.setCanInput(true)
             } else {
                 tvEdit.text = "编辑"
-                tvSave.visibility = View.GONE
                 editDesc.setCanInput(false)
                 editShopName.setCanInput(false)
             }

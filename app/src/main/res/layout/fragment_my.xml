@@ -1,186 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_F8F8F8">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+<data>
+
+    <variable
+        name="vm"
+        type="com.same.part.assistant.viewmodel.state.HomeViewModel" />
+
+</data>
+    <androidx.core.widget.NestedScrollView
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/color_F8F8F8">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/userInfo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/userAvatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/icn_head_img"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/userInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.466" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dip_7"
-                android:textColor="@color/color_FFFFFF"
-                android:textSize="@dimen/dip_14"
-                app:layout_constraintBottom_toTopOf="@+id/userMobile"
-                app:layout_constraintStart_toEndOf="@+id/userAvatar"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="DUODUO" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userAvatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/icn_head_img"
+                    app:circleImageUrl="@{vm.imageUrl}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.466" />
 
-            <TextView
-                android:id="@+id/userMobile"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dip_7"
+                    android:textColor="@color/color_FFFFFF"
+                    android:text="@={vm.name}"
+                    android:textSize="@dimen/dip_14"
+                    app:layout_constraintBottom_toTopOf="@+id/userMobile"
+                    app:layout_constraintStart_toEndOf="@+id/userAvatar"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/userMobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dip_7"
+                    android:textColor="@color/color_FFFFFF"
+                    android:textSize="@dimen/dip_12"
+                    android:text="@={vm.phone}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/userAvatar"
+                    app:layout_constraintTop_toBottomOf="@+id/userName"
+                    tools:text="13666666666" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/area_order"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dip_7"
-                android:textColor="@color/color_FFFFFF"
-                android:textSize="@dimen/dip_12"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/userAvatar"
-                app:layout_constraintTop_toBottomOf="@+id/userName"
-                tools:text="13666666666" />
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginTop="@dimen/dip_10"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@drawable/shape_rect_white_solid"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userInfo">
+
+                <TextView
+                    android:id="@+id/cashierOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/icon_cashier_order"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:drawablePadding="@dimen/dip_10"
+                    android:padding="15dp"
+                    android:text="收银订单"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="@dimen/dip_15"
+                    android:layout_marginRight="@dimen/dip_15"
+                    android:background="@color/color_CCCCCC" />
+
+                <TextView
+                    android:id="@+id/purchaseOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/icon_purchase_order"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:drawablePadding="@dimen/dip_10"
+                    android:padding="15dp"
+                    android:text="采购订单"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/area_manager"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginTop="@dimen/dip_5"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@drawable/shape_rect_white_solid"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/area_order">
+
+                <TextView
+                    android:id="@+id/vipCardManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/icon_vip_manager"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:drawablePadding="@dimen/dip_10"
+                    android:padding="15dp"
+                    android:text="会员卡管理"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="@dimen/dip_15"
+                    android:layout_marginRight="@dimen/dip_15"
+                    android:background="@color/color_CCCCCC" />
+
+                <TextView
+                    android:id="@+id/couponManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/icon_coupon_manager"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:drawablePadding="@dimen/dip_10"
+                    android:padding="15dp"
+                    android:text="优惠券管理"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dip_15"
+                android:layout_marginTop="@dimen/dip_5"
+                android:layout_marginRight="@dimen/dip_15"
+                android:background="@drawable/shape_rect_white_solid"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/area_manager">
+
+                <TextView
+                    android:id="@+id/setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/icon_setting"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:drawablePadding="@dimen/dip_10"
+                    android:padding="15dp"
+                    android:text="设置"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.core.widget.NestedScrollView>
 
-        <LinearLayout
-            android:id="@+id/area_order"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginTop="@dimen/dip_10"
-            android:layout_marginRight="@dimen/dip_15"
-            android:background="@drawable/shape_rect_white_solid"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userInfo">
-
-            <TextView
-                android:id="@+id/cashierOrder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/icon_cashier_order"
-                android:drawableRight="@drawable/arrow_next_page"
-                android:drawablePadding="@dimen/dip_10"
-                android:padding="15dp"
-                android:text="收银订单"
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="@dimen/dip_15"
-                android:layout_marginRight="@dimen/dip_15"
-                android:background="@color/color_CCCCCC" />
-
-            <TextView
-                android:id="@+id/purchaseOrder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/icon_purchase_order"
-                android:drawableRight="@drawable/arrow_next_page"
-                android:drawablePadding="@dimen/dip_10"
-                android:padding="15dp"
-                android:text="采购订单"
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/area_manager"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginTop="@dimen/dip_5"
-            android:layout_marginRight="@dimen/dip_15"
-            android:background="@drawable/shape_rect_white_solid"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/area_order">
-
-            <TextView
-                android:id="@+id/vipCardManager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/icon_vip_manager"
-                android:drawableRight="@drawable/arrow_next_page"
-                android:drawablePadding="@dimen/dip_10"
-                android:padding="15dp"
-                android:text="会员卡管理"
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="@dimen/dip_15"
-                android:layout_marginRight="@dimen/dip_15"
-                android:background="@color/color_CCCCCC" />
-
-            <TextView
-                android:id="@+id/couponManager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/icon_coupon_manager"
-                android:drawableRight="@drawable/arrow_next_page"
-                android:drawablePadding="@dimen/dip_10"
-                android:padding="15dp"
-                android:text="优惠券管理"
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginTop="@dimen/dip_5"
-            android:layout_marginRight="@dimen/dip_15"
-            android:background="@drawable/shape_rect_white_solid"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/area_manager">
-
-            <TextView
-                android:id="@+id/setting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/icon_setting"
-                android:drawableRight="@drawable/arrow_next_page"
-                android:drawablePadding="@dimen/dip_10"
-                android:padding="15dp"
-                android:text="设置"
-                android:textColor="@color/color_333333"
-                android:textSize="12dp" />
-
-        </LinearLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+</layout>

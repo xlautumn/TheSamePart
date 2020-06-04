@@ -133,18 +133,6 @@ data class PurchaseGoodItemModel(
     var newPrice: String
 )
 
-
-/**
- * 会员管理数据类
- */
-data class VipCardInfoModel(
-    var name: String,
-    var denomination: String,
-    var discount: String,
-    var userCount: String,
-    var operation: Boolean
-)
-
 /**
  * 优惠券数据类
  */
@@ -489,6 +477,24 @@ data class ChangePwdModel(
     val username: String,
     val version: Int
 )
+
+/**
+ * 会员管理数据类
+ */
+data class MemberCardState(
+    val hasMore: Boolean,
+    val isRefresh:Boolean,
+    val memberCardList: ArrayList<MemberCardModel>
+)
+
+data class MemberCardModel(
+    val cardId: Int,
+    val name: String,
+    val discount: Int,
+    val userCount: Int,
+    val description: String
+):Serializable
+
 
 
 
