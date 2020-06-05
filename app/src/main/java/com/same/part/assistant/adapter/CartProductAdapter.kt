@@ -52,7 +52,7 @@ class CartProductViewHolder(private val binding: CartProductItemBinding,private 
             }
 
             binding.goodName.text = this.name
-            binding.tvPrice.text = "￥${this.price}"
+            binding.tvPrice.text = "￥${cartProduct.price}"
             binding.tvCartNum.text = cartProduct.shopProduct.num.toString()
             binding.goodTag.text = cartProduct.getProperties().joinToString(separator = "/")
             binding.cartIncrease.setOnClickListener(View.OnClickListener {

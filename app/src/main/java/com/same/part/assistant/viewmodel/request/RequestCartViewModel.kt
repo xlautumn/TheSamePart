@@ -36,7 +36,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
     /**
      * 获取购物车id字符串
      */
-    private val cartIds
+     val cartIds
         get() = _cartProductList.value?.let { it.joinToString(separator = ",") { it.cartId } } ?: ""
 
     val totalPrice
@@ -230,17 +230,17 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
         )
     }
 
-    fun getPaySign(
-        productOrderId: String,
-        requestPay: RequestPay
-    ) {
-        request(
-            {
-                HttpRequestManger.instance.getPaySign(productOrderId, requestPay)
-            },
-            _paySignResult
-        )
-    }
+//    fun getPaySign(
+//        productOrderId: String,
+//        requestPay: RequestPay
+//    ) {
+//        request(
+//            {
+//                HttpRequestManger.instance.getPaySign(productOrderId, requestPay)
+//            },
+//            _paySignResult
+//        )
+//    }
 
     /**
      * 请求购物车列表

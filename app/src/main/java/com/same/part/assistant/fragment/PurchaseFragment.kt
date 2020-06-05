@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.OrderSettlementActivity
+import com.same.part.assistant.activity.OrderSubmitActivity
 import com.same.part.assistant.adapter.CartProductAdapter
 import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
@@ -93,6 +94,9 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             mCartProductAdapter.setData(it)
             totalMoney.text = requestCartViewModel.totalPrice
             statement.text = getString(R.string.purchase_statement,requestCartViewModel.totalNum)
+            if (it.isEmpty() && cartDetailList.visibility == View.VISIBLE) {
+                hideCartDetail()
+            }
         })
 
         requestCartViewModel.requestCartList()
@@ -155,33 +159,15 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.statement -> {
-                startActivity(Intent(context,OrderSettlementActivity::class.java))
+                startActivity(Intent(context, OrderSettlementActivity::class.java))
             }
             R.id.rootDetail -> {
                 cartDetailArrow.rotation = 0f
                 if (cartDetailList.visibility == View.GONE) {
-                    val show = TranslateAnimation(
-                        Animation.RELATIVE_TO_SELF, 0.0f,
-                        Animation.RELATIVE_TO_SELF, 0.0f,
-                        Animation.RELATIVE_TO_SELF, 1.0f,
-                        Animation.RELATIVE_TO_SELF, 0.0f
-                    )
-                    show.duration = ANIMATION_DURATION
-                    cartDetailList.startAnimation(show)
-                    cartDetailList.visibility = View.VISIBLE
-                    cartDetailArrow.rotation = -90f
+                    showCartDetail()
 
                 } else if (cartDetailList.visibility == View.VISIBLE) {
-                    val hidden = TranslateAnimation(
-                        Animation.RELATIVE_TO_SELF, 0.0f,
-                        Animation.RELATIVE_TO_SELF, 0.0f,
-                        Animation.RELATIVE_TO_SELF, 0.0f,
-                        Animation.RELATIVE_TO_SELF, 1.0f
-                    )
-                    hidden.duration = ANIMATION_DURATION
-                    cartDetailList.startAnimation(hidden)
-                    cartDetailList.visibility = View.GONE
-                    cartDetailArrow.rotation = 0f
+                    hideCartDetail()
                 }
             }
             R.id.right_btn ->{
@@ -189,6 +175,38 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                 requestCartViewModel.clearCarts()
             }
         }
+    }
+
+    /**
+     * 隐藏购物车详情
+     */
+    private fun hideCartDetail() {
+        val hidden = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, 1.0f
+        )
+        hidden.duration = ANIMATION_DURATION
+        cartDetailList.startAnimation(hidden)
+        cartDetailList.visibility = View.GONE
+        cartDetailArrow.rotation = 0f
+    }
+
+    /**
+     * 显示购物车详情
+     */
+    private fun showCartDetail() {
+        val show = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, 0.0f,
+            Animation.RELATIVE_TO_SELF, 1.0f,
+            Animation.RELATIVE_TO_SELF, 0.0f
+        )
+        show.duration = ANIMATION_DURATION
+        cartDetailList.startAnimation(show)
+        cartDetailList.visibility = View.VISIBLE
+        cartDetailArrow.rotation = -90f
     }
 
     inner class ProxyClick{

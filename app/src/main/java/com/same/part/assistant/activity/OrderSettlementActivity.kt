@@ -1,7 +1,11 @@
 package com.same.part.assistant.activity
 
-import android.graphics.Paint
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,18 +14,59 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.alipay.sdk.app.PayTask
+import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.data.model.CartProduct
+import com.same.part.assistant.data.model.PayResult
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
+import com.same.part.assistant.viewmodel.request.RequestCreateOrderViewModel
 import kotlinx.android.synthetic.main.order_settlement_activity.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getAppViewModel
+import me.hgj.jetpackmvvm.ext.getViewModel
 import me.shaohui.bottomdialog.BottomDialog
+import kotlin.math.log
 
 class OrderSettlementActivity : AppCompatActivity() {
     private val requestCartViewModel: RequestCartViewModel by lazy { getAppViewModel<RequestCartViewModel>() }
+    private val requestCreateOrderViewModel: RequestCreateOrderViewModel by lazy { getViewModel<RequestCreateOrderViewModel>() }
+
+    private val SDK_PAY_FLAG = 1
+
+    @SuppressLint("HandlerLeak")
+    private val mHandler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                SDK_PAY_FLAG -> {
+                    val payResult =
+                        PayResult(msg.obj as Map<String?, String?>)
+
+                    /**
+                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    val resultInfo: String = payResult.getResult() // 同步返回需要验证的信息
+                    val resultStatus: String = payResult.getResultStatus()
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        ToastUtils.showShort(payResult.toString())
+                        Log.i("resultInfo",resultInfo)
+
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        ToastUtils.showShort(payResult.toString())
+                    }
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.order_settlement_activity)
@@ -33,9 +78,46 @@ class OrderSettlementActivity : AppCompatActivity() {
         }
 
         ll_payment.setOnClickListener { showPaymentDialog() }
+        tv_confirm.setOnClickListener { commitOrder() }
         orderRecyclerView.apply {
             adapter = OrderAdapter(requestCartViewModel.getCartList())
         }
+
+        requestCreateOrderViewModel.createOrderResult.observe(this, Observer {
+            requestCreateOrderViewModel.getPaySign(
+                it.content.productOrders[0].productOrderId,
+                "支付宝"
+            )
+        })
+
+        requestCreateOrderViewModel.getPaySignResult.observe(this, Observer {
+
+            alipay(it.content)
+
+        })
+    }
+
+    private fun alipay(orderInfo: String) {
+
+        val payRunnable = Runnable {
+            val alipay = PayTask(this)
+            val result =
+                alipay.payV2(orderInfo, true)
+            Log.i("msp", result.toString())
+            val msg = Message()
+            msg.what = SDK_PAY_FLAG
+            msg.obj = result
+            mHandler.sendMessage(msg)
+        }
+
+        // 必须异步调用
+        val payThread = Thread(payRunnable)
+        payThread.start()
+    }
+
+    private fun commitOrder() {
+        val cartIds = requestCartViewModel.cartIds
+        requestCreateOrderViewModel.createOrder(cartIds)
     }
 
     private fun showPaymentDialog() {
