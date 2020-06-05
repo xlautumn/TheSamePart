@@ -37,6 +37,9 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             addOnTabSelectedListener(this@MainActivity)
         }
         setupTabLayout()
+        //初始化的时候隐藏加号和搜索
+        mToolbarAdd.visibility = View.GONE
+        mToolbarSearch.visibility = View.GONE
 
         //版本检测
         detectVersion(this)

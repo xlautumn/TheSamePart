@@ -9,9 +9,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSONObject
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
+import com.same.part.assistant.app.network.ApiService
+import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CustomInfoModel
+import com.same.part.assistant.helper.refreshComplete
+import com.same.part.assistant.utils.HttpUtil
 import kotlinx.android.synthetic.main.activity_custom_manager.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
@@ -54,9 +59,45 @@ class CustomManagerActivity : AppCompatActivity() {
         }
         //列表数据
         mManagerRecyclerView.apply {
-            adapter = CustomAdapter(mCustomList)
             layoutManager = LinearLayoutManager(context)
+            adapter = CustomAdapter(mCustomList)
         }
+        //下拉刷新
+        mSmartRefreshLayout.apply {
+            //下拉刷新
+            setOnRefreshListener {
+                loadCustomManagerList()
+            }
+            //上拉加载
+            setOnLoadMoreListener {
+                //通知刷新结束
+                mSmartRefreshLayout?.refreshComplete(false)
+            }
+        }
+        //加载客户管理列表
+        loadCustomManagerList()
+    }
+
+    private fun loadCustomManagerList() {
+        val url = StringBuilder("${ApiService.SERVER_URL}biz/customers")
+            .append("?shopId=${CacheUtil.getShopId()}")
+            .append("&appKey=${CacheUtil.getAppKey()}")
+            .append("&appSecret=${CacheUtil.getAppSecret()}")
+        HttpUtil.instance.getUrl(url.toString(), {
+            try {
+                val resultJson = JSONObject.parseObject(it)
+                resultJson.apply {
+                    getJSONArray("content")?.takeIf { array -> array.size > 0 }?.apply {
+                        val listItems = ArrayList<CustomInfoModel>()
+                        for (i in 0 until this.size) {
+
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        })
     }
 
 

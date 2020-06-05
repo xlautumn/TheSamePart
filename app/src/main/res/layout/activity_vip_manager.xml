@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@color/color_FEFEFE"
         android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/dip_13"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,26 +28,18 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="头像"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333"/>
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
+
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="昵称"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="ID"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333" />
+            android:text="手机号"
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -54,30 +47,43 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="会员卡"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333" />
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="余额"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333"/>
+            android:text="折扣"
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
+
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mManagerRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_marginTop="7dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginEnd="13dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_white_color_rect"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/mSmartRefreshLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/color_F8F8F8"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_manager_header" />
+        app:layout_constraintTop_toBottomOf="@+id/custom_manager_header"
+        app:srlEnableLoadMore="false">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mManagerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="13dp"
+            android:background="@drawable/shape_white_color_rect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/custom_manager_header" />
 
 
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

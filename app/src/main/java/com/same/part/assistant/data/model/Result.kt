@@ -16,11 +16,10 @@ data class CustomInfoModel(
  * 会员管理数据类
  */
 data class VipInfoModel(
-    var avatarUrl: String,
-    var nickname: String,
-    var userId: String,
-    var vipCard: String,
-    var vipBalance: String
+    var name: String,
+    var photo: String,
+    var discount: String,
+    var mobile: String
 )
 
 /**
@@ -483,7 +482,7 @@ data class ChangePwdModel(
  */
 data class MemberCardState(
     val hasMore: Boolean,
-    val isRefresh:Boolean,
+    val isRefresh: Boolean,
     val memberCardList: ArrayList<MemberCardModel>
 )
 
@@ -493,7 +492,7 @@ data class MemberCardModel(
     val discount: Int,
     val userCount: Int,
     val description: String
-):Serializable
+) : Serializable
 
 
 
