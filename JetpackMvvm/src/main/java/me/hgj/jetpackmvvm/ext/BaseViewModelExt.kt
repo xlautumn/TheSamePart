@@ -258,6 +258,52 @@ fun BaseViewModel.requestResponseBody(
     }
 }
 
+/**
+ * T 接口返回的类型
+ * R 真正需要的类型
+ * paresResult: (T) -> Triple<R?, //真正需要的数据
+ * String, //code
+ * String> //错误信息
+ */
+fun <T, R> BaseViewModel.requestTR(
+    block: suspend () -> T,
+    resultState: MutableLiveData<ResultState<R>>,
+    paresResult: (T) -> Triple<R?, String, String>,
+    isShowDialog: Boolean = false,
+    loadingMessage: String = "加载中..."
+) {
+    viewModelScope.launch {
+        runCatching {
+            if (isShowDialog) resultState.value = ResultState.onAppLoading(loadingMessage)
+            withContext(Dispatchers.IO) { block() }
+        }.onSuccess {
+            resultState.value = try {
+                val triple = paresResult(it)
+                if (triple.first != null) {
+                    ResultState.onAppSuccess(triple.first!!)
+                } else {
+                    ResultState.onAppError(
+                        AppException(
+                            triple.second,
+                            triple.third
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                //打印错误消息
+                e.message?.loge("JetpackMvvm")
+                ResultState.onAppError(
+                    ExceptionHandle.handleException(e)
+                )
+            }
+
+
+        }.onFailure {
+            it.message?.loge("JetpackMvvm")
+            resultState.paresException(it)
+        }
+    }
+}
 
 /**
  * net request 不校验请求结果数据是否是成功

@@ -1,18 +1,18 @@
 package com.same.part.assistant.viewmodel.request
 
 import android.app.Application
+import androidx.lifecycle.MutableLiveData
 import com.alibaba.fastjson.JSON
-import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.data.PAYMENT_CHANNEL_ALIPAY
 import com.same.part.assistant.data.repository.request.HttpRequestManger
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
-import me.hgj.jetpackmvvm.callback.livedata.StringLiveData
-import me.hgj.jetpackmvvm.ext.requestResponseBody
+import me.hgj.jetpackmvvm.ext.requestTR
+import me.hgj.jetpackmvvm.state.ResultState
 
 class RequestPaySignOrderInfoViewModel(application: Application) : BaseViewModel(application) {
 
     var paymentChannel = PAYMENT_CHANNEL_ALIPAY
-    val getPaySignResult = StringLiveData()
+    var getPaySignResult = MutableLiveData<ResultState<String>>()
 
     /**
      * 获取签名的订单信息
@@ -20,30 +20,31 @@ class RequestPaySignOrderInfoViewModel(application: Application) : BaseViewModel
     fun getPaySign(
         productOrderId: String
     ) {
-        requestResponseBody(
+        requestTR(
             { HttpRequestManger.instance.getPaySign(productOrderId, paymentChannel) },
-            success = {
+            getPaySignResult,
+            paresResult = {
                 val result = it.string()
                 val jsonObject = JSON.parseObject(result)
                 val code = jsonObject.getString("code")
                 if (code == "1") {
                     val content = jsonObject.getString("content")
-                    getPaySignResult.postValue(content)
+                    Triple(content, code, "")
                 } else {
                     val msg = jsonObject.getString("message")
-                    ToastUtils.showShort(msg)
+                    Triple(null, code, msg)
                 }
             },
-            error = {
-                ToastUtils.showShort(it.errorMsg)
-            })
+            isShowDialog = true,
+            loadingMessage = "正在支付..."
+        )
     }
 
     fun onPaySuccess() {
         clearData()
     }
 
-    fun clearData(){
-        getPaySignResult.value = ""
+    fun clearData() {
+        getPaySignResult = MutableLiveData<ResultState<String>>()
     }
 }

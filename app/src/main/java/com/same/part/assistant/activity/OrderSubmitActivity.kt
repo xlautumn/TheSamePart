@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.base.activity.BaseVmActivity
 import me.hgj.jetpackmvvm.ext.getAppViewModel
 import me.hgj.jetpackmvvm.ext.getViewModel
+import me.hgj.jetpackmvvm.ext.parseState
 import me.shaohui.bottomdialog.BottomDialog
 
 class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
@@ -104,21 +105,33 @@ class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
 
     override fun createObserver() {
         mViewModel.createOrderResult.observe(this, Observer {
-            if (it != null) {
-                requestCartViewModel.onCreateOrderSuccess()
-                if (mViewModel.isFreightCollect()) {
-                    finish()
-                } else {
-                    showPaymentChannel(it.productOrders[0].productOrderId)
-                }
-            }
 
+            parseState(it,
+                onSuccess = {
+                    requestCartViewModel.onCreateOrderSuccess()
+                    if (mViewModel.isFreightCollect()) {
+                        finish()
+                    } else {
+                        showPaymentChannel(it.productOrders[0].productOrderId)
+                    }
+                },
+                onError = {
+                    ToastUtils.showShort(it.errorMsg)
+                }
+            )
         })
 
         requestPaySignOrderInfoViewModel.getPaySignResult.observe(this, Observer {
-            if (it.isNotEmpty()) {
-                alipay(it)
-            }
+            parseState(it,
+                onSuccess = { content ->
+                    if (content.isNotEmpty()) {
+                        alipay(content)
+                    }
+                },
+                onError = { appException ->
+                    ToastUtils.showShort(appException.errorMsg)
+                }
+            )
         })
     }
 
@@ -250,7 +263,6 @@ class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
             requestPaySignOrderInfoViewModel.getPaySign(orderId)
             dialog.dismiss()
         }
-
         val dialog = BottomDialog.create(supportFragmentManager)
             .setLayoutRes(R.layout.select_payment_dialog)
         dialog.setViewListener {
