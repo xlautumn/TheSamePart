@@ -305,7 +305,7 @@ class OrderAdapter(private val data: List<CartProduct>) :
         holder.goodPriceNew.text = cartProduct.price
         val tags = cartProduct.getProperties().joinToString(separator = "/")
         if (tags.isNullOrEmpty()) {
-            holder.goodTag.visibility = View.INVISIBLE
+            holder.goodTag.visibility = View.GONE
         } else {
             holder.goodTag.visibility = View.VISIBLE
             holder.goodTag.text = tags
