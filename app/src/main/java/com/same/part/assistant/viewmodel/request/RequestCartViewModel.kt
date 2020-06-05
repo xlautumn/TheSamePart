@@ -56,17 +56,6 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
         get() = _cartProductList.value?.fold(0,
             { acc: Int, cartProduct: CartProduct -> acc + cartProduct.shopProduct.num })
 
-    /**
-     * 创建订单请求结果
-     */
-    private val _createOrderResult = MutableLiveData<ResultState<String>>()
-    val createOrderResult: LiveData<ResultState<String>> = _createOrderResult
-
-    /**
-     * 下单到支付或者微信请求结果
-     */
-    private val _paySignResult = MutableLiveData<ResultState<String>>()
-    val paySignResult: LiveData<ResultState<String>> = _paySignResult
 
 
     fun getCartList():ArrayList<CartProduct>{
@@ -207,6 +196,14 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
     }
 
     /**
+     * 已经生成订单
+     */
+    fun onCreateOrderSuccess(){
+        clearCacheData()
+    }
+
+
+    /**
      * 创建订单的
      */
     fun createOrder(
@@ -314,6 +311,14 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
             }
 
         )
+    }
+
+    /**
+     * 清空缓存数据
+     */
+     fun clearCacheData() {
+        _cartProductMap.clear()
+        _cartProductList.value = arrayListOf()
     }
 
 

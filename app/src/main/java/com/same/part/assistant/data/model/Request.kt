@@ -182,8 +182,8 @@ data class RequestCreateOrder(
     val userId: String
 ) {
     data class OrderRemark(
-        val properties: String,
-        val remark: String,
+        val properties: String = "",
+        val remark: String = "",
         val shopId: String
     )
 }

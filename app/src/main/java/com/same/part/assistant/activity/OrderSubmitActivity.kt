@@ -1,44 +1,75 @@
 package com.same.part.assistant.activity
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.text.TextUtils
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import com.alipay.sdk.app.PayTask
+import com.blankj.utilcode.util.ToastUtils
+import com.bumptech.glide.Glide
 import com.same.part.assistant.R
-import com.same.part.assistant.adapter.CustomOrderAdapter
-import com.same.part.assistant.dialog.PayWayDialogFragment
-import com.same.part.assistant.data.model.GoodItemModel
+import com.same.part.assistant.data.PAYMENT_CATEGORY_FREIGHT_COLLECT
+import com.same.part.assistant.data.PAYMENT_CATEGORY_ONLINE_PAY
+import com.same.part.assistant.data.PAYMENT_CHANNEL_ALIPAY
+import com.same.part.assistant.data.PAYMENT_CHANNEL_WECHAT
+import com.same.part.assistant.data.model.CartProduct
+import com.same.part.assistant.data.model.PayResult
+import com.same.part.assistant.viewmodel.request.RequestCartViewModel
+import com.same.part.assistant.viewmodel.request.RequestCreateOrderViewModel
 import kotlinx.android.synthetic.main.activity_order_submit.*
 import kotlinx.android.synthetic.main.toolbar_title.*
+import me.hgj.jetpackmvvm.ext.getAppViewModel
+import me.hgj.jetpackmvvm.ext.getViewModel
+import me.shaohui.bottomdialog.BottomDialog
 
 class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
+    private val requestCartViewModel: RequestCartViewModel by lazy { getAppViewModel<RequestCartViewModel>() }
+    private val requestCreateOrderViewModel: RequestCreateOrderViewModel by lazy { getViewModel<RequestCreateOrderViewModel>() }
 
-    private val mOrderList = arrayListOf<GoodItemModel>().apply {
-        add(
-            GoodItemModel(
-                "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1452356606,3848535842&fm=26&gp=0.jpg",
-                "超级好吃的香蕉",
-                "1",
-                "￥12.5"
-            )
-        )
-        add(
-            GoodItemModel(
-                "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1367131621,3892456581&fm=26&gp=0.jpg",
-                "山东苹果五斤",
-                "1",
-                "￥46.0"
-            )
-        )
-        add(
-            GoodItemModel(
-                "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2191395536,486188374&fm=26&gp=0.jpg",
-                "精品砀山梨1斤",
-                "1",
-                "￥7.08"
-            )
-        )
+    private val SDK_PAY_FLAG = 1
+
+    @SuppressLint("HandlerLeak")
+    private val mHandler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                SDK_PAY_FLAG -> {
+                    val payResult =
+                        PayResult(msg.obj as Map<String?, String?>)
+
+                    /**
+                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    val resultInfo: String = payResult.getResult() // 同步返回需要验证的信息
+                    val resultStatus: String = payResult.getResultStatus()
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        requestCreateOrderViewModel.onPaySuccess()
+                        ToastUtils.showShort(payResult.toString())
+                        Log.i("resultInfo", resultInfo)
+                        finish()
+
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        ToastUtils.showShort(payResult.toString())
+                    }
+                }
+                else -> {
+                }
+            }
+        }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,35 +78,191 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
         mTitleBack.setOnClickListener {
             finish()
         }
-        //地址信息
-        address.text = "无锡市惠山区绿地世纪华惠路89号"
-        shopName.text = "生鲜店"
-        customerInfo.text = "李明炎 17796965656"
-        //订单详情页
+        ll_payment.setOnClickListener(this)
+        tv_confirm.setOnClickListener(this)
+
         orderRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = CustomOrderAdapter(mOrderList)
+            adapter = OrderAdapter(requestCartViewModel.getCartList())
         }
-        rlPayContain.setOnClickListener(this)
-        btnPayMoney.setOnClickListener(this)
+        tv_total_money.text = "￥${requestCartViewModel.totalPrice}"
+        orderPayment.text = requestCreateOrderViewModel.paymentCategory
+        requestCreateOrderViewModel.createOrderResult.observe(this, Observer {
+            if (it != null) {
+                requestCartViewModel.onCreateOrderSuccess()
+                if (requestCreateOrderViewModel.isFreightCollect()) {
+                    finish()
+                } else {
+                    showPaymentChannel(it.content.productOrders[0].productOrderId)
+                }
+            }
+
+        })
+
+        requestCreateOrderViewModel.getPaySignResult.observe(this, Observer {
+            if (it != null) {
+                alipay(it.content)
+            }
+        })
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.rlPayContain -> {
-                val payWayDialogFragment = PayWayDialogFragment(this)
-                payWayDialogFragment.setChooseCallBack {
-                    tv_offline_settlement.text = it
-                }
-                supportFragmentManager.let {
-                    payWayDialogFragment.show(it)
-                }
+            R.id.ll_payment -> {
+                showPaymentDialog()
             }
 
-            R.id.btnPayMoney -> {
-                //支付按钮操作
-                //TODO 如果是在线翻译，弹窗提示 微信、支付宝
+            R.id.tv_confirm -> {
+                submitOrder()
             }
         }
     }
+
+
+    /**
+     * 支付宝支付
+     */
+    private fun alipay(orderInfo: String) {
+
+        val payRunnable = Runnable {
+            val alipay = PayTask(this)
+            val result =
+                alipay.payV2(orderInfo, true)
+            Log.i("msp", result.toString())
+            val msg = Message()
+            msg.what = SDK_PAY_FLAG
+            msg.obj = result
+            mHandler.sendMessage(msg)
+        }
+
+        // 必须异步调用
+        val payThread = Thread(payRunnable)
+        payThread.start()
+    }
+
+    /**
+     * 提交订单
+     */
+    private fun submitOrder() {
+
+        val orderId = requestCreateOrderViewModel.getOrderId()
+        if (TextUtils.isEmpty(orderId)) {
+            val cartIds = requestCartViewModel.cartIds
+            requestCreateOrderViewModel.createOrder(cartIds)
+        } else {
+            showPaymentChannel(orderId)
+        }
+
+    }
+
+    /**
+     * 选择付款方式弹窗
+     */
+    private fun showPaymentDialog() {
+        fun handleRadioClick(dialog: BottomDialog, radioButton: RadioButton) {
+            val paymentCategory = radioButton.text.toString()
+            orderPayment.text = paymentCategory
+            requestCreateOrderViewModel.paymentCategory = paymentCategory
+            dialog.dismiss()
+        }
+
+        val dialog = BottomDialog.create(supportFragmentManager)
+            .setLayoutRes(R.layout.select_payment_dialog)
+        dialog.setViewListener {
+            it.findViewById<RadioButton>(R.id.rb_1).apply {
+                text = PAYMENT_CATEGORY_ONLINE_PAY
+                isChecked = requestCreateOrderViewModel.paymentCategory == text
+            }.setOnClickListener { radioButton ->
+                handleRadioClick(
+                    dialog,
+                    radioButton as RadioButton
+                )
+            }
+            it.findViewById<RadioButton>(R.id.rb_2).apply {
+                text = PAYMENT_CATEGORY_FREIGHT_COLLECT
+                isChecked = requestCreateOrderViewModel.paymentCategory == text
+            }.setOnClickListener { radioButton ->
+                handleRadioClick(
+                    dialog,
+                    radioButton as RadioButton
+                )
+            }
+            it.findViewById<Button>(R.id.bt_cancel).setOnClickListener { dialog.dismiss() }
+
+        }.show()
+
+    }
+
+
+    /**
+     * 选择付款渠道弹窗
+     */
+    private fun showPaymentChannel(orderId: String) {
+        fun handleRadioClick(dialog: BottomDialog, radioButton: RadioButton) {
+            val paymentChanel = radioButton.text.toString()
+            requestCreateOrderViewModel.paymentChannel = paymentChanel
+            requestCreateOrderViewModel.getPaySign(orderId)
+            dialog.dismiss()
+        }
+
+        val dialog = BottomDialog.create(supportFragmentManager)
+            .setLayoutRes(R.layout.select_payment_dialog)
+        dialog.setViewListener {
+            it.findViewById<RadioButton>(R.id.rb_1).apply {
+                text = PAYMENT_CHANNEL_ALIPAY
+                isChecked = requestCreateOrderViewModel.paymentChannel == text
+            }.setOnClickListener { radioButton ->
+                handleRadioClick(
+                    dialog,
+                    radioButton as RadioButton
+                )
+            }
+            it.findViewById<RadioButton>(R.id.rb_2).apply {
+                text = PAYMENT_CHANNEL_WECHAT
+                isChecked = requestCreateOrderViewModel.paymentChannel == text
+            }.setOnClickListener { radioButton ->
+                handleRadioClick(
+                    dialog,
+                    radioButton as RadioButton
+                )
+            }
+            it.findViewById<Button>(R.id.bt_cancel).setOnClickListener { dialog.dismiss() }
+        }
+        dialog.show()
+    }
+
+}
+
+class OrderAdapter(private val data: List<CartProduct>) :
+    RecyclerView.Adapter<OrderViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
+        return OrderViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.cashier_order_good_item,
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
+        val model = data[position]
+        val product = model.shopProduct.productDetailData
+        Glide.with(holder.itemView.context).load(product.img)
+            .into(holder.goodAvatar)
+        holder.goodName.text = product.name
+        holder.goodNum.text = "x${model.shopProduct.num}"
+        holder.goodPriceNew.text = model.price
+    }
+}
+
+class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var goodAvatar: ImageView = itemView.findViewById(R.id.goodAvatar)
+    var goodName: TextView = itemView.findViewById(R.id.goodName)
+    var goodNum: TextView = itemView.findViewById(R.id.goodNum)
+    var goodPriceOld: TextView = itemView.findViewById(R.id.goodPriceOld)
+    var goodPriceNew: TextView = itemView.findViewById(R.id.goodPriceNew)
 }

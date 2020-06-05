@@ -10,8 +10,8 @@ import android.view.animation.TranslateAnimation
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
-import com.same.part.assistant.activity.OrderSettlementActivity
 import com.same.part.assistant.activity.OrderSubmitActivity
 import com.same.part.assistant.adapter.CartProductAdapter
 import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
@@ -93,7 +93,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         requestCartViewModel.cartProductList.observe(viewLifecycleOwner, Observer {
             mCartProductAdapter.setData(it)
             totalMoney.text = requestCartViewModel.totalPrice
-            statement.text = getString(R.string.purchase_statement,requestCartViewModel.totalNum)
+            statement.text = getString(R.string.purchase_statement, requestCartViewModel.totalNum)
             if (it.isEmpty() && cartDetailList.visibility == View.VISIBLE) {
                 hideCartDetail()
             }
@@ -159,7 +159,11 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.statement -> {
-                startActivity(Intent(context, OrderSettlementActivity::class.java))
+                if (requestCartViewModel.cartProductList.value.isNullOrEmpty()) {
+                    ToastUtils.showShort("还未添加到购物车")
+                } else {
+                    startActivity(Intent(context, OrderSubmitActivity::class.java))
+                }
             }
             R.id.rootDetail -> {
                 cartDetailArrow.rotation = 0f
@@ -170,11 +174,16 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                     hideCartDetail()
                 }
             }
-            R.id.right_btn ->{
+            R.id.right_btn -> {
                 //清空购物车
                 requestCartViewModel.clearCarts()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requestCartViewModel.clearCacheData()
     }
 
     /**
@@ -209,11 +218,11 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         cartDetailArrow.rotation = -90f
     }
 
-    inner class ProxyClick{
+    inner class ProxyClick {
         /**
          * 添加购物车
          */
-        fun addShopProduct(shopProduct: ShopProduct){
+        fun addShopProduct(shopProduct: ShopProduct) {
             requestCartViewModel.addShopProduct(shopProduct)
         }
 
