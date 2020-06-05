@@ -101,17 +101,22 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
             success = {
                 val response: String = it.string()
                 val jsonObject = JSON.parseObject(response)
-                jsonObject.getJSONObject("content")?.apply {
-                    val cartId = this.getString("cartId")
-                    val price = this.getString("price")
-                    val skuProperties = this.getString("skuProperties")
-                    val cartProduct = CartProduct(shopProduct, cartId, price,skuProperties)
-                    cartProduct.shopProduct.productDetailData.cartNum = shopProduct.num
-                    _cartProductMap[shopProduct.getProductKey()] = cartProduct
-                    _cartProductList.value?.add(cartProduct)
-                    _cartProductList.value = _cartProductList.value
+                val code = jsonObject.getString("code")
+                if (code=="1") {
+                    jsonObject.getJSONObject("content")?.apply {
+                        val cartId = this.getString("cartId")
+                        val price = this.getString("price")
+                        val skuProperties = this.getString("skuProperties")
+                        val cartProduct = CartProduct(shopProduct, cartId, price, skuProperties)
+                        cartProduct.shopProduct.productDetailData.cartNum = shopProduct.num
+                        _cartProductMap[shopProduct.getProductKey()] = cartProduct
+                        _cartProductList.value?.add(cartProduct)
+                        _cartProductList.value = _cartProductList.value
+                    }
+                }else{
+                    val msg = jsonObject.getString("message")
+                    ToastUtils.showShort(msg)
                 }
-
             }, error = {
                 ToastUtils.showShort(it.errorMsg)
             })

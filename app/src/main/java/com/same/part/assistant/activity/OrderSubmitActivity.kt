@@ -1,7 +1,6 @@
 package com.same.part.assistant.activity
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -10,8 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatDialog
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.alipay.sdk.app.PayTask
@@ -26,16 +28,19 @@ import com.same.part.assistant.data.model.CartProduct
 import com.same.part.assistant.data.model.PayResult
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import com.same.part.assistant.viewmodel.request.RequestCreateOrderViewModel
+import com.same.part.assistant.viewmodel.request.RequestPaySignOrderInfoViewModel
 import kotlinx.android.synthetic.main.activity_order_submit.*
 import kotlinx.android.synthetic.main.toolbar_title.*
+import me.hgj.jetpackmvvm.base.activity.BaseVmActivity
 import me.hgj.jetpackmvvm.ext.getAppViewModel
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.shaohui.bottomdialog.BottomDialog
 
-class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
+class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
+    View.OnClickListener {
     private val requestCartViewModel: RequestCartViewModel by lazy { getAppViewModel<RequestCartViewModel>() }
-    private val requestCreateOrderViewModel: RequestCreateOrderViewModel by lazy { getViewModel<RequestCreateOrderViewModel>() }
-
+    private val requestPaySignOrderInfoViewModel: RequestPaySignOrderInfoViewModel by lazy { getViewModel<RequestPaySignOrderInfoViewModel>() }
+    private var processDialog: AppCompatDialog? = null
     private val SDK_PAY_FLAG = 1
 
     @SuppressLint("HandlerLeak")
@@ -43,6 +48,7 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 SDK_PAY_FLAG -> {
+                    dismissLoading()
                     val payResult =
                         PayResult(msg.obj as Map<String?, String?>)
 
@@ -54,7 +60,8 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        requestCreateOrderViewModel.onPaySuccess()
+                        mViewModel.onPaySuccess()
+                        requestPaySignOrderInfoViewModel.onPaySuccess()
                         ToastUtils.showShort(payResult.toString())
                         Log.i("resultInfo", resultInfo)
                         finish()
@@ -70,10 +77,9 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    override fun layoutId(): Int = R.layout.activity_order_submit
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_order_submit)
+    override fun initView(savedInstanceState: Bundle?) {
         mToolbarTitle.text = "提交订单"
         mTitleBack.setOnClickListener {
             finish()
@@ -85,22 +91,27 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
             adapter = OrderAdapter(requestCartViewModel.getCartList())
         }
         tv_total_money.text = "￥${requestCartViewModel.totalPrice}"
-        orderPayment.text = requestCreateOrderViewModel.paymentCategory
-        requestCreateOrderViewModel.createOrderResult.observe(this, Observer {
+        orderPayment.text = mViewModel.paymentCategory
+        mViewModel.clearData()
+        requestPaySignOrderInfoViewModel.clearData()
+    }
+
+    override fun createObserver() {
+        mViewModel.createOrderResult.observe(this, Observer {
             if (it != null) {
                 requestCartViewModel.onCreateOrderSuccess()
-                if (requestCreateOrderViewModel.isFreightCollect()) {
+                if (mViewModel.isFreightCollect()) {
                     finish()
                 } else {
-                    showPaymentChannel(it.content.productOrders[0].productOrderId)
+                    showPaymentChannel(it.productOrders[0].productOrderId)
                 }
             }
 
         })
 
-        requestCreateOrderViewModel.getPaySignResult.observe(this, Observer {
-            if (it != null) {
-                alipay(it.content)
+        requestPaySignOrderInfoViewModel.getPaySignResult.observe(this, Observer {
+            if (it.isNotEmpty()) {
+                alipay(it)
             }
         })
     }
@@ -118,15 +129,45 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
+    override fun showLoading(message: String) {
+        if (processDialog == null) {
+            processDialog = this.let {
+
+                AppCompatDialog(it).apply {
+                    setCancelable(true)
+                    setCanceledOnTouchOutside(false)
+                    setContentView(R.layout.layout_pay_progress_dialog_view)
+
+                }
+
+            }
+        }
+        processDialog?.window?.run {
+            this.findViewById<TextView>(R.id.loading_tips).text = message
+        }
+        processDialog?.show()
+    }
+
+    override fun dismissLoading() {
+        processDialog?.dismiss()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        processDialog?.dismiss()
+    }
+
+
     /**
      * 支付宝支付
      */
     private fun alipay(orderInfo: String) {
 
+        showLoading("正在支付...")
         val payRunnable = Runnable {
             val alipay = PayTask(this)
             val result =
-                alipay.payV2(orderInfo, true)
+                alipay.payV2(orderInfo, false)
             Log.i("msp", result.toString())
             val msg = Message()
             msg.what = SDK_PAY_FLAG
@@ -144,10 +185,10 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun submitOrder() {
 
-        val orderId = requestCreateOrderViewModel.getOrderId()
+        val orderId = mViewModel.getOrderId()
         if (TextUtils.isEmpty(orderId)) {
             val cartIds = requestCartViewModel.cartIds
-            requestCreateOrderViewModel.createOrder(cartIds)
+            mViewModel.createOrder(cartIds)
         } else {
             showPaymentChannel(orderId)
         }
@@ -161,7 +202,7 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
         fun handleRadioClick(dialog: BottomDialog, radioButton: RadioButton) {
             val paymentCategory = radioButton.text.toString()
             orderPayment.text = paymentCategory
-            requestCreateOrderViewModel.paymentCategory = paymentCategory
+            mViewModel.paymentCategory = paymentCategory
             dialog.dismiss()
         }
 
@@ -170,7 +211,7 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
         dialog.setViewListener {
             it.findViewById<RadioButton>(R.id.rb_1).apply {
                 text = PAYMENT_CATEGORY_ONLINE_PAY
-                isChecked = requestCreateOrderViewModel.paymentCategory == text
+                isChecked = mViewModel.paymentCategory == text
             }.setOnClickListener { radioButton ->
                 handleRadioClick(
                     dialog,
@@ -179,7 +220,7 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
             }
             it.findViewById<RadioButton>(R.id.rb_2).apply {
                 text = PAYMENT_CATEGORY_FREIGHT_COLLECT
-                isChecked = requestCreateOrderViewModel.paymentCategory == text
+                isChecked = mViewModel.paymentCategory == text
             }.setOnClickListener { radioButton ->
                 handleRadioClick(
                     dialog,
@@ -199,8 +240,8 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
     private fun showPaymentChannel(orderId: String) {
         fun handleRadioClick(dialog: BottomDialog, radioButton: RadioButton) {
             val paymentChanel = radioButton.text.toString()
-            requestCreateOrderViewModel.paymentChannel = paymentChanel
-            requestCreateOrderViewModel.getPaySign(orderId)
+            requestPaySignOrderInfoViewModel.paymentChannel = paymentChanel
+            requestPaySignOrderInfoViewModel.getPaySign(orderId)
             dialog.dismiss()
         }
 
@@ -209,7 +250,7 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
         dialog.setViewListener {
             it.findViewById<RadioButton>(R.id.rb_1).apply {
                 text = PAYMENT_CHANNEL_ALIPAY
-                isChecked = requestCreateOrderViewModel.paymentChannel == text
+                isChecked = requestPaySignOrderInfoViewModel.paymentChannel == text
             }.setOnClickListener { radioButton ->
                 handleRadioClick(
                     dialog,
@@ -218,7 +259,7 @@ class OrderSubmitActivity : AppCompatActivity(), View.OnClickListener {
             }
             it.findViewById<RadioButton>(R.id.rb_2).apply {
                 text = PAYMENT_CHANNEL_WECHAT
-                isChecked = requestCreateOrderViewModel.paymentChannel == text
+                isChecked = requestPaySignOrderInfoViewModel.paymentChannel == text
             }.setOnClickListener { radioButton ->
                 handleRadioClick(
                     dialog,
@@ -256,10 +297,10 @@ class OrderAdapter(private val data: List<CartProduct>) :
         holder.goodName.text = product.name
         holder.goodNum.text = "x${cartProduct.shopProduct.num}"
         holder.goodPriceNew.text = cartProduct.price
-        val tags= cartProduct.getProperties().joinToString(separator = "/")
-        if (tags.isNullOrEmpty()){
+        val tags = cartProduct.getProperties().joinToString(separator = "/")
+        if (tags.isNullOrEmpty()) {
             holder.goodTag.visibility = View.INVISIBLE
-        }else {
+        } else {
             holder.goodTag.visibility = View.VISIBLE
             holder.goodTag.text = tags
         }
@@ -272,5 +313,5 @@ class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var goodNum: TextView = itemView.findViewById(R.id.goodNum)
     var goodPriceOld: TextView = itemView.findViewById(R.id.goodPriceOld)
     var goodPriceNew: TextView = itemView.findViewById(R.id.goodPriceNew)
-    val goodTag : TextView = itemView.findViewById(R.id.goodTag)
+    val goodTag: TextView = itemView.findViewById(R.id.goodTag)
 }

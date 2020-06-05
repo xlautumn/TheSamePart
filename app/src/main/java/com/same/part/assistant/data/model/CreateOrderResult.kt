@@ -1,12 +1,7 @@
 package com.same.part.assistant.data.model
 
-data class CreateOrderResult(
-    val code: Int,
-    val content: Content,
-    val msg: String
-)
 
-data class Content(
+data class CreateOrderResult(
     val addTime: String,
     val callback: Any,
     val mergeOrderId: Int,
