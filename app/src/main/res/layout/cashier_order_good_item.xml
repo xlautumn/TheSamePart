@@ -26,11 +26,29 @@
         android:text="[特价]精品进口香蕉/1根"
         android:textColor="@color/color_333333"
         android:textSize="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/goodNum"
+        app:layout_constraintBottom_toTopOf="@+id/goodTag"
         app:layout_constraintEnd_toStartOf="@+id/goodPriceOld"
         app:layout_constraintStart_toEndOf="@+id/goodAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread" />
+         />
+
+    <TextView
+        android:id="@+id/goodTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dip_5"
+        android:background="@drawable/shape_red_rect_border"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="@dimen/dip_1"
+        android:text=""
+        android:textColor="@color/color_FF0000"
+        android:textSize="@dimen/dip_12"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/goodNum"
+        app:layout_constraintStart_toEndOf="@+id/goodAvatar"
+        app:layout_constraintTop_toBottomOf="@id/goodName" />
 
     <TextView
         android:id="@+id/goodNum"
@@ -42,7 +60,7 @@
         android:textSize="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/goodAvatar"
-        app:layout_constraintTop_toBottomOf="@+id/goodName" />
+        app:layout_constraintTop_toBottomOf="@+id/goodTag" />
 
     <TextView
         android:id="@+id/goodPriceOld"

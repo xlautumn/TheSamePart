@@ -249,13 +249,20 @@ class OrderAdapter(private val data: List<CartProduct>) :
     }
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-        val model = data[position]
-        val product = model.shopProduct.productDetailData
+        val cartProduct = data[position]
+        val product = cartProduct.shopProduct.productDetailData
         Glide.with(holder.itemView.context).load(product.img)
             .into(holder.goodAvatar)
         holder.goodName.text = product.name
-        holder.goodNum.text = "x${model.shopProduct.num}"
-        holder.goodPriceNew.text = model.price
+        holder.goodNum.text = "x${cartProduct.shopProduct.num}"
+        holder.goodPriceNew.text = cartProduct.price
+        val tags= cartProduct.getProperties().joinToString(separator = "/")
+        if (tags.isNullOrEmpty()){
+            holder.goodTag.visibility = View.INVISIBLE
+        }else {
+            holder.goodTag.visibility = View.VISIBLE
+            holder.goodTag.text = tags
+        }
     }
 }
 
@@ -265,4 +272,5 @@ class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var goodNum: TextView = itemView.findViewById(R.id.goodNum)
     var goodPriceOld: TextView = itemView.findViewById(R.id.goodPriceOld)
     var goodPriceNew: TextView = itemView.findViewById(R.id.goodPriceNew)
+    val goodTag : TextView = itemView.findViewById(R.id.goodTag)
 }

@@ -54,7 +54,13 @@ class CartProductViewHolder(private val binding: CartProductItemBinding,private 
             binding.goodName.text = this.name
             binding.tvPrice.text = "￥${cartProduct.price}"
             binding.tvCartNum.text = cartProduct.shopProduct.num.toString()
-            binding.goodTag.text = cartProduct.getProperties().joinToString(separator = "/")
+            val tags= cartProduct.getProperties().joinToString(separator = "/")
+            if (tags.isNullOrEmpty()){
+                binding.goodTag.visibility = View.INVISIBLE
+            }else {
+                binding.goodTag.visibility = View.VISIBLE
+                binding.goodTag.text = tags
+            }
             binding.cartIncrease.setOnClickListener(View.OnClickListener {
                 proxyClick.addShopProduct(ShopProduct(this,1,cartProduct.shopProduct.productSkuNumber,cartProduct.shopProduct.properties))
 
