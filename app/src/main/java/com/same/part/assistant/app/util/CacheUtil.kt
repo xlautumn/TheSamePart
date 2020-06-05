@@ -2,6 +2,7 @@ package com.same.part.assistant.app.util
 
 import android.text.TextUtils
 import com.google.gson.Gson
+import com.same.part.assistant.data.model.Address
 import com.same.part.assistant.data.model.ShopUserModel
 import com.same.part.assistant.data.model.ShopUserLoginModel
 import com.tencent.mmkv.MMKV
@@ -148,6 +149,27 @@ object CacheUtil {
     }
 
 
+    /**
+     * 获取地址Id
+     */
+    fun getAddressId(): String {
+        return getAddress()?.addressId ?: ""
+    }
 
+    /**
+     * 获取详细地址
+     */
+    fun getDetailAddress(): String {
+        return getAddress()?.let {
+            "${it.province}${it.city}${it.district}${it.addr}${it.name}"
+        } ?: ""
+    }
+
+    /**
+     * 获取地址对象
+     */
+    fun getAddress(): Address? {
+        return getShopUserModel()?.AddressMsg?.data.takeUnless { it.isNullOrEmpty() }?.get(0)
+    }
 
 }

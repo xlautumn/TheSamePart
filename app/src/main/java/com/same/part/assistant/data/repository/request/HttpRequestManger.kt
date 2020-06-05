@@ -6,6 +6,9 @@ import com.same.part.assistant.app.network.NetworkApiv2
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.DEFAULT_SHOP_ID
 import com.same.part.assistant.data.model.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import me.hgj.jetpackmvvm.network.AppException
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -27,7 +30,24 @@ class HttpRequestManger {
     suspend fun login(phoneNum: String, password: String): ApiResponse<ShopUserModel> {
         val loginData = NetworkApi.service.login(RequestShopUserLogin(phoneNum, password, true))
         if (loginData.isSucces()) {
-            return getUserInfo(loginData.data.accessToken)
+
+            val shopUserModelResponse = getUserInfo(loginData.data.accessToken)
+            if (shopUserModelResponse.isSucces()) {
+                val token = shopUserModelResponse.data.AccessToken?.accessToken ?: ""
+                val userId = shopUserModelResponse.data.UserShopDTO?.takeIf { it.isNotEmpty() }
+                    ?.get(0)?.user?.userId?.toString() ?: ""
+                val addressMsgResponse = getAddressesByUserId(token, userId)
+                if (addressMsgResponse.isSucces()) {
+                    shopUserModelResponse.data.AddressMsg = addressMsgResponse.data
+                } else {
+                    //抛出错误异常
+                    throw AppException(loginData.code, loginData.errorMsg)
+                }
+            } else {
+                //抛出错误异常
+                throw AppException(loginData.code, loginData.errorMsg)
+            }
+            return shopUserModelResponse
         } else {
             //抛出错误异常
             throw AppException(loginData.code, loginData.errorMsg)
@@ -47,7 +67,7 @@ class HttpRequestManger {
     suspend fun getAddressesByUserId(
         token: String,
         userId: String
-    ): ApiResponse<GetAddressesByUserIdMsg> {
+    ): ApiResponse<AddressMsg> {
         return NetworkApi.service.getAddressesByUserid(token, userId)
     }
 

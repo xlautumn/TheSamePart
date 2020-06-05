@@ -38,7 +38,7 @@ interface ApiService {
     suspend fun getAddressesByUserid(
         @Header("WSCX") token: String,
         @Query("userId") userId: String
-    ): ApiResponse<GetAddressesByUserIdMsg>
+    ): ApiResponse<AddressMsg>
     /**
      * 获取店铺信息
      */

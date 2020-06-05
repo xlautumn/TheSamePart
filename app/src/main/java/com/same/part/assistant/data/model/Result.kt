@@ -172,7 +172,8 @@ data class ShopUserLoginModel(var accessToken: String, var expiresIn: Long)
  */
 data class ShopUserModel(
     val AccessToken: AccessToken,
-    val UserShopDTO: List<UserShopDTO>
+    val UserShopDTO: List<UserShopDTO>,
+    var AddressMsg: AddressMsg? = null
 )
 
 data class AccessToken(
@@ -494,6 +495,28 @@ data class MemberCardModel(
     val description: String
 ) : Serializable
 
+data class AddressMsg(
+    val `data`: List<Address>,
+    val size: Int
+)
+
+data class Address(
+    val addTime: String,
+    val addr: String,
+    val addressId: String,
+    val city: String,
+    val district: String,
+    val ifDefault: Boolean,
+    val lat: Any,
+    val lng: Any,
+    val mobile: String,
+    val name: String,
+    val province: String,
+    val updateTime: String,
+    val user: User,
+    val weixin: Any,
+    val zip: Any
+)
 
 
 

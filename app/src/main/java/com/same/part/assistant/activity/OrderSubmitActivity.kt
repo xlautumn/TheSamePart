@@ -20,6 +20,7 @@ import com.alipay.sdk.app.PayTask
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
+import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.PAYMENT_CATEGORY_FREIGHT_COLLECT
 import com.same.part.assistant.data.PAYMENT_CATEGORY_ONLINE_PAY
 import com.same.part.assistant.data.PAYMENT_CHANNEL_ALIPAY
@@ -92,6 +93,11 @@ class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
         }
         tv_total_money.text = "￥${requestCartViewModel.totalPrice}"
         orderPayment.text = mViewModel.paymentCategory
+        shippingAddress.text = CacheUtil.getDetailAddress()
+        CacheUtil.getAddress()?.let {
+            shippingPerson.text = "${it.user.realname}    ${it.user.mobile}"
+        }
+
         mViewModel.clearData()
         requestPaySignOrderInfoViewModel.clearData()
     }
