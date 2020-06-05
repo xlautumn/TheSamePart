@@ -2,14 +2,17 @@ package com.same.part.assistant.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.same.part.assistant.R
-import com.same.part.assistant.activity.BusinessManagerActivity
-import com.same.part.assistant.activity.CustomManagerActivity
-import com.same.part.assistant.activity.ShopManagerActivity
-import com.same.part.assistant.activity.VipManagerActivity
+import com.same.part.assistant.activity.*
 import com.same.part.assistant.app.base.BaseFragment
+import com.same.part.assistant.data.model.ShopInfoEvent
 import com.same.part.assistant.databinding.FragmentHomeBinding
 import com.same.part.assistant.viewmodel.state.HomeViewModel
+import kotlinx.android.synthetic.main.activity_coupon_manager.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 首页
@@ -19,21 +22,14 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun layoutId(): Int = R.layout.fragment_home
 
     override fun initView(savedInstanceState: Bundle?) {
+        EventBus.getDefault().register(this)
         mDatabind.vm = mViewModel
         mDatabind.click = ProxyClick()
-        shareViewModel.shopUserModel.value?.run {
-            mViewModel.imageUrl.set(UserShopDTO[0].shop.img)
-            mViewModel.name.set(UserShopDTO[0].shop.name)
-        }
-
     }
 
     override fun lazyLoadData() {
-
-    }
-
-    override fun createObserver() {
-
+        mViewModel.imageUrl.set(shareViewModel.shopPortrait.value)
+        mViewModel.name.set(shareViewModel.shopName.value)
     }
 
     inner class ProxyClick {
@@ -55,5 +51,17 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         fun goBusinessManager() {
             startActivity(Intent(activity, BusinessManagerActivity::class.java))
         }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun eventRefresh(event: ShopInfoEvent) {
+        mViewModel.imageUrl.set(event.img)
+        mViewModel.name.set(event.name)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        EventBus.getDefault().unregister(this)
     }
 }

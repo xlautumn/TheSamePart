@@ -124,11 +124,27 @@ object CacheUtil {
     }
 
     /**
-     * 获取手机号
+     * 获取名称
      */
     fun getShopName(): String? {
         return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
             ?.get(0)?.shop?.name
+    }
+
+    /**
+     * 设置是否已添加会员卡
+     */
+    fun setHasAddCard(hasAdd: Boolean) {
+        val kv = MMKV.mmkvWithID("app")
+        kv.encode(getShopPhone(), hasAdd)
+    }
+
+    /**
+     * 获取TOKEN过期时间
+     */
+    fun isHasAddCard(): Boolean {
+        val kv = MMKV.mmkvWithID("app")
+        return kv.decodeBool(getShopPhone())
     }
 
 

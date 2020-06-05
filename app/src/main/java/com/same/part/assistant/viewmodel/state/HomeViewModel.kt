@@ -9,4 +9,6 @@ class HomeViewModel (application: Application): BaseViewModel(application) {
     var imageUrl = StringObservableField()
 
     var name = StringObservableField()
+
+    var phone = StringObservableField()
 }

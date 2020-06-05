@@ -233,4 +233,37 @@ class HttpRequestManger {
     ): ApiResponse<ChangePwdModel> {
         return NetworkApi.service.changeAccountPwd(changePwdInfo)
     }
+
+    /**
+     * 获取店铺会员卡列表
+     */
+    suspend fun getMemberCardList(page: Int
+    ): ResponseBody {
+        return NetworkApi.service.getMemberCardList(page)
+    }
+
+    /**
+     * 创建店铺会员卡
+     */
+    suspend fun createMemberCard(createMemberCard :CreateMemberCard
+    ): ResponseBody {
+        return NetworkApi.service.createMemberCard(createMemberCard)
+    }
+
+    /**
+     * 编辑店铺会员卡
+     */
+    suspend fun editMemberCard(cardId: String,createMemberCard :CreateMemberCard
+    ): ResponseBody {
+        return NetworkApi.service.editMemberCard(cardId,createMemberCard)
+    }
+
+    /**
+     * 获取店铺客户列表
+     */
+    suspend fun getCustomerList(): ResponseBody {
+        return NetworkApi.service.getCustomerList()
+    }
+
+
 }

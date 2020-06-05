@@ -13,17 +13,15 @@ import me.hgj.jetpackmvvm.callback.livedata.UnPeekNotNullLiveData
  */
 class AppViewModel(app: Application) : BaseViewModel(app) {
 
-    //是否已经登录过
-    var isLogin  =
-        UnPeekNotNullLiveData<Boolean>()
+    //头像
+    var shopPortrait =  UnPeekLiveData<String>()
 
-    //App的账户信息 使用UnPeekLiveData 因为账户信息有可能为空
-    var shopUserModel = UnPeekLiveData<ShopUserModel>()
+    //名称
+    var shopName =  UnPeekLiveData<String>()
 
     init {
-        //初始化
-        isLogin.value = CacheUtil.isLogin()
         //默认值保存的账户信息，没有登陆过则为null
-        shopUserModel.value = CacheUtil.getShopUserModel()
+        shopPortrait.value = CacheUtil.getShopImg()
+        shopName.value = CacheUtil.getShopName()
     }
 }

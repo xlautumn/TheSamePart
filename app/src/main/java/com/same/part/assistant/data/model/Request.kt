@@ -223,6 +223,18 @@ data class ChangePwdInfo(
 )
 
 
+data class CreateMemberCard(
+    val description: String,
+    val discount: Double,
+    val lifetime: String,
+    val name: String,
+    val receiveWay: Int,
+    val shopId: Int? = CacheUtil.getShopId(),
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret()
+)
+
+
 
 
 

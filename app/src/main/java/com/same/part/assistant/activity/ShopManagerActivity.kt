@@ -17,6 +17,8 @@ import com.same.part.assistant.app.util.PhotoPickerUtil.REQUEST_CODE_EXTERNAL_ST
 import com.same.part.assistant.app.util.PhotoPickerUtil.RESULT_CODE_PHOTO_PICKER
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
 import com.same.part.assistant.app.util.PhotoPickerUtil.showPhotoPicker
+import com.same.part.assistant.data.model.Shop
+import com.same.part.assistant.data.model.ShopInfoEvent
 import com.same.part.assistant.databinding.ActivityShopManagerBinding
 import com.same.part.assistant.viewmodel.request.RequestShopManagerViewModel
 import com.same.part.assistant.viewmodel.request.RequestUploadDataViewModel
@@ -27,6 +29,7 @@ import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
+import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.EasyPermissions
 
 /**
@@ -92,7 +95,6 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
                 val code = jsonObject.getIntValue("code")
                 if (code == 1) {
                     tvEdit.text = "编辑"
-                    tvSave.visibility = View.GONE
                     editDesc.setCanInput(false)
                     editShopName.setCanInput(false)
                 }
@@ -104,12 +106,13 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
     /**
      * 更新
      */
-    private fun saveEditContent(imgUrl:String) {
+    private fun saveEditContent(imgUrl: String) {
         mRequestShopManagerViewModel.saveEditContent(
             imgUrl,
             mViewModel.shopName.value,
-           mViewModel.shopDesc.value
+            mViewModel.shopDesc.value
         )
+        EventBus.getDefault().post(ShopInfoEvent(imgUrl, mViewModel.shopName.value))
     }
 
     inner class ProxyClick {
@@ -130,12 +133,10 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
         fun edit() {
             if (tvEdit.text == "编辑") {
                 tvEdit.text = "取消"
-                tvSave.visibility = View.VISIBLE
                 editDesc.setCanInput(true)
                 editShopName.setCanInput(true)
             } else {
                 tvEdit.text = "编辑"
-                tvSave.visibility = View.GONE
                 editDesc.setCanInput(false)
                 editShopName.setCanInput(false)
             }
@@ -164,7 +165,7 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RESULT_CODE_PHOTO_PICKER && resultCode == Activity.RESULT_OK) {
             Matisse.obtainResult(data)?.takeIf { it.isNotEmpty() }?.apply {
-                val imageUrl  = GlobalUtil.getRealFilePath(this@ShopManagerActivity, this[0]) ?: ""
+                val imageUrl = GlobalUtil.getRealFilePath(this@ShopManagerActivity, this[0]) ?: ""
                 mViewModel.imageUrl.postValue(imageUrl)
                 mViewModel.hasSelectPhoto.postValue(true)
                 Glide.with(this@ShopManagerActivity)

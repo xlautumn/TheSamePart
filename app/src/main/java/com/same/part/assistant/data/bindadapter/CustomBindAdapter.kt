@@ -40,5 +40,16 @@ object CustomBindAdapter {
         }
     }
 
+    @BindingAdapter(value = ["receiveWay"])
+    @JvmStatic
+    fun receiveWay(textView: TextView, num: Int) {
+        textView.text = when(num) {
+            1 ->  "直接领取"
+            2 ->  "付费领取"
+            else -> "满足条件自动领取"
+        }
+    }
+
+
 
 }

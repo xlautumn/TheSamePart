@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_coupon_manager.*
 import kotlinx.android.synthetic.main.activity_coupon_manager.mSmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_cashier.*
 import kotlinx.android.synthetic.main.fragment_product_classification.*
+import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.ext.getViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -27,7 +28,7 @@ import org.greenrobot.eventbus.ThreadMode
  * 优惠券管理
  */
 class CouponManagerActivity :
-    BaseActivity<RequestCouponsViewModel, ActivityCouponManagerBinding>() {
+    BaseActivity<BaseViewModel, ActivityCouponManagerBinding>() {
 
     //适配器
     private lateinit var mCouponAdapter: CouponAdapter
