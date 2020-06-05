@@ -32,6 +32,14 @@ interface ApiService {
     suspend fun getUserInfo(@Body requestShopUserInfo: RequestShopUserInfo): ApiResponse<ShopUserModel>
 
     /**
+     * 获取用户地址
+     */
+    @GET("wscx/getAddressesByUserid")
+    suspend fun getAddressesByUserid(
+        @Header("WSCX") token: String,
+        @Query("userId") userId: String
+    ): ApiResponse<GetAddressesByUserIdMsg>
+    /**
      * 获取店铺信息
      */
     @GET("wscx/shop")
@@ -185,11 +193,11 @@ interface ApiService {
     /**
      * 下单到支付或者微信
      */
-    @PUT("product-order/{productOrderId}}/mobile-pay")
+    @PUT("product-order/{productOrderId}/mobile-pay")
     suspend fun getPaySign(
         @Path("productOrderId") productOrderId: String,
         @Body requestPay: RequestPay
-    ): ApiResponse<String>
+    ): ResponseBody
 
 
     /**
@@ -252,6 +260,5 @@ interface ApiService {
         @Query("appKey") appKey: String = CacheUtil.getAppKey(),
         @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
     ): ResponseBody
-
 
 }

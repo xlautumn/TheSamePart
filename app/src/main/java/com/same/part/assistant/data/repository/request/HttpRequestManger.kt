@@ -42,6 +42,16 @@ class HttpRequestManger {
     }
 
     /**
+     * 获取用户地址
+     */
+    suspend fun getAddressesByUserId(
+        token: String,
+        userId: String
+    ): ApiResponse<GetAddressesByUserIdMsg> {
+        return NetworkApi.service.getAddressesByUserid(token, userId)
+    }
+
+    /**
      * 获取店铺信息
      */
     suspend fun getShopInfo(token: String): ApiResponse<ShopModel> {
@@ -211,9 +221,9 @@ class HttpRequestManger {
      */
     suspend fun getPaySign(
         productOrderId: String,
-        requestPay: RequestPay
-    ): ApiResponse<String> {
-        return NetworkApi.service.getPaySign(productOrderId, requestPay)
+        payment:String
+    ): ResponseBody {
+        return NetworkApi.service.getPaySign(productOrderId, RequestPay(payment = payment))
     }
 
 
