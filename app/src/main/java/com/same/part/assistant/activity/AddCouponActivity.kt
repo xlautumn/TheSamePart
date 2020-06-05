@@ -19,6 +19,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.app.util.DatetimeUtil
+import com.same.part.assistant.app.util.DatetimeUtil.now
 import com.same.part.assistant.data.model.RequestCreateCouponInfo
 import com.same.part.assistant.databinding.ActivityAddCouponBinding
 import com.same.part.assistant.viewmodel.request.RequestCreateCouponViewModel
@@ -84,7 +85,15 @@ class AddCouponActivity :
             }
         }
     }
-
+    /** 开始时间与结束*/
+    private val mStartTimeDate = DatePickerInfo()
+    private val mEndTimeDate = DatePickerInfo()
+    class DatePickerInfo() {
+        val ca = Calendar.getInstance()
+        var year: Int = ca[Calendar.YEAR]
+        var month = ca[Calendar.MONTH]
+        var day = ca[Calendar.DAY_OF_MONTH]
+    }
 
     inner class ProxyClick {
         //保存
@@ -105,23 +114,29 @@ class AddCouponActivity :
 
         //选择时间
         fun chooseTime(isStartTime: Boolean) {
-            MaterialDialog(this@AddCouponActivity)
-                .lifecycleOwner(this@AddCouponActivity).show {
-                    cornerRadius(dp2px(3).toFloat())
-                    datePicker(
-                        minDate = Calendar.getInstance()
-                    ) { dialog, date ->
-                        val time = DatetimeUtil.formatDate(
-                            date.time,
-                            DatetimeUtil.DATE_PATTERN_SS
-                        )
-                        if (isStartTime) {
-                            mViewModel.startTime.set(time)
-                        } else {
-                            mViewModel.endTime.set(time)
-                        }
+            val dataPick = if (isStartTime) mStartTimeDate else mEndTimeDate
+            DatePickerDialog(
+                this@AddCouponActivity,
+                OnDateSetListener { _, year, month, dayOfMonth ->
+                    dataPick.year = year
+                    dataPick.month = month
+                    dataPick.day = dayOfMonth
+                    val time =
+                        "${year}-${month.mendZero(true)}-${dayOfMonth.mendZero(false)} ${DatetimeUtil.formatDate(
+                            now,
+                            DatetimeUtil.DATE_PATTERN_HH_MM_SS
+                        )}"
+                    if (isStartTime) {
+                        mViewModel.startTime.set(time)
+                    } else {
+                        mViewModel.endTime.set(time)
                     }
-                }
+                },
+                dataPick.year, dataPick.month, dataPick.day
+            ).apply {
+                datePicker.minDate = Calendar.getInstance().timeInMillis
+                show()
+            }
         }
 
         //使用门槛
@@ -131,6 +146,18 @@ class AddCouponActivity :
                 handleThresholdDialogView(it, dialog)
             }.setLayoutRes(R.layout.dialog_use_threshold).setDimAmount(0.4F)
                 .setCancelOutside(true).setTag("mChooseUsingThreshold").show()
+        }
+    }
+
+    /**
+     * 数字小于10前面补0
+     */
+    fun Int.mendZero(needPlus: Boolean): String {
+        val i = if (needPlus) this + 1 else this
+        return if (i < 10) {
+            "0$i"
+        } else {
+            "$i"
         }
     }
 

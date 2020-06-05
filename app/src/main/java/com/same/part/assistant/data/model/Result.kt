@@ -141,7 +141,7 @@ data class CouponInfoModel(
     var remain: String,
     var used: String,
     var status: String,
-    var statements: String
+    var statements: String?
 )
 
 /**

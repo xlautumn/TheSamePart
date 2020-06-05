@@ -250,11 +250,13 @@ class AddCashierGoodActivity :
             Observer { resultState ->
                 parseStateResponseBody(resultState, {
                     val jsonObject = JSON.parseObject(it.string())
-                    ToastUtils.showLong(jsonObject.getString("msg"))
                     if (jsonObject.getIntValue("code") == 1) {
+                        ToastUtils.showLong(jsonObject.getString("msg"))
                         //返回上级页面刷新
                         EventBus.getDefault().post(ADD_OR_UPDATE_CASHIER_SUCCESS)
                         finish()
+                    } else {
+                        ToastUtils.showLong(jsonObject.getString("message"))
                     }
                 })
             })

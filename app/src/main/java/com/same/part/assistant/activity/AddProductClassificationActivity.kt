@@ -84,11 +84,13 @@ class AddProductClassificationActivity :
                 parseStateResponseBody(resultState, {
                     val response: String = it.string()
                     val responseObject = JSON.parseObject(response)
-                    val contentObject = responseObject.getJSONObject("content")
-                    mViewModel.imageUrl.postValue(contentObject.getString("img") ?: "")
-                    mViewModel.categoryName.postValue(contentObject.getString("name" ?: ""))
-                    mViewModel.sequence.postValue(contentObject.getString("sequence") ?: "")
-                    mViewModel.description.postValue(contentObject.getString("description") ?: "")
+                    responseObject.getJSONObject("content")?.apply {
+                        mViewModel.imageUrl.postValue(getString("img") ?: "")
+                        mViewModel.categoryName.postValue(getString("name" ?: ""))
+                        mViewModel.sequence.postValue(getString("sequence") ?: "")
+                        mViewModel.description.postValue(getString("description") ?: "")
+                    }
+
                 })
             })
         //添加商品分类

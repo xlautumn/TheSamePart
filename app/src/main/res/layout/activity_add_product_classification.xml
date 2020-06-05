@@ -138,6 +138,7 @@
                             android:id="@+id/sequence"
                             android:layout_width="0dp"
                             android:layout_height="35dp"
+                            android:inputType="number"
                             android:layout_marginHorizontal="10dp"
                             android:text="@={viewmodel.sequence}"
                             android:layout_weight="1"

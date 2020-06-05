@@ -2,14 +2,12 @@ package com.same.part.assistant.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.*
 import com.same.part.assistant.app.base.BaseFragment
 import com.same.part.assistant.data.model.ShopInfoEvent
 import com.same.part.assistant.databinding.FragmentHomeBinding
 import com.same.part.assistant.viewmodel.state.HomeViewModel
-import kotlinx.android.synthetic.main.activity_coupon_manager.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -25,11 +23,12 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         EventBus.getDefault().register(this)
         mDatabind.vm = mViewModel
         mDatabind.click = ProxyClick()
+        mViewModel.imageUrl.set(shareViewModel.shopPortrait.value)
+        mViewModel.name.set(shareViewModel.shopName.value)
     }
 
     override fun lazyLoadData() {
-        mViewModel.imageUrl.set(shareViewModel.shopPortrait.value)
-        mViewModel.name.set(shareViewModel.shopName.value)
+
     }
 
     inner class ProxyClick {

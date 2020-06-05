@@ -17,6 +17,8 @@ object DatetimeUtil {
     val DATE_PATTERN = "yyyy-MM-dd"
     var DATE_PATTERN_SS = "yyyy-MM-dd HH:mm:ss"
     var DATE_PATTERN_MM = "yyyy-MM-dd HH:mm"
+    var DATE_PATTERN_HH_MM_SS = "HH:mm:ss"
+
 
     /**
      * 获取现在时刻

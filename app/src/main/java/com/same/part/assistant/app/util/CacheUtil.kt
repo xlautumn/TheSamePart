@@ -132,22 +132,6 @@ object CacheUtil {
             ?.get(0)?.shop?.name
     }
 
-    /**
-     * 设置是否已添加会员卡
-     */
-    fun setHasAddCard(hasAdd: Boolean) {
-        val kv = MMKV.mmkvWithID("app")
-        kv.encode(getShopPhone(), hasAdd)
-    }
-
-    /**
-     * 获取TOKEN过期时间
-     */
-    fun isHasAddCard(): Boolean {
-        val kv = MMKV.mmkvWithID("app")
-        return kv.decodeBool(getShopPhone())
-    }
-
 
     /**
      * 获取地址Id

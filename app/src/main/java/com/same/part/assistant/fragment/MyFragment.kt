@@ -32,6 +32,12 @@ class MyFragment : BaseFragment<HomeViewModel, FragmentMyBinding>(){
     override fun initView(savedInstanceState: Bundle?) {
         EventBus.getDefault().register(this)
         mDatabind.vm = mViewModel
+        //手机号
+        mViewModel.phone.set(CacheUtil.getShopPhone())
+        //头像
+        mViewModel.imageUrl.set(shareViewModel.shopPortrait.value)
+        //用户名
+        mViewModel.name.set(shareViewModel.shopName.value)
         //收银订单
         cashierOrder.setOnClickListener {
             startActivity(Intent(activity, CashierOrderActivity::class.java))
@@ -55,12 +61,7 @@ class MyFragment : BaseFragment<HomeViewModel, FragmentMyBinding>(){
     }
 
     override fun lazyLoadData() {
-        //手机号
-        mViewModel.phone.set(CacheUtil.getShopPhone())
-        //头像
-        mViewModel.imageUrl.set(shareViewModel.shopPortrait.value)
-        //用户名
-        mViewModel.name.set(shareViewModel.shopName.value)
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

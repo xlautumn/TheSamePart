@@ -41,7 +41,6 @@ class VipCardManagerActivity : AppCompatActivity() {
         if (HAND_CARD_SUCCESS == messageEvent) {
             mSmartRefreshLayout.autoRefresh()
             mToolbarAdd.isEnabled = false
-            CacheUtil.setHasAddCard(true)
         }
     }
 
@@ -51,10 +50,6 @@ class VipCardManagerActivity : AppCompatActivity() {
         EventBus.getDefault().register(this)
         //标题
         mToolbarTitle.text = "会员卡管理"
-        //已添加过
-        if (CacheUtil.isHasAddCard()) {
-            mToolbarAdd.isEnabled = false
-        }
         //返回按钮
         mTitleBack.setOnClickListener {
             finish()
@@ -108,6 +103,9 @@ class VipCardManagerActivity : AppCompatActivity() {
                 it.isRefresh -> {
                     mCardAdapter.setNewInstance(it.memberCardList)
                     mSmartRefreshLayout.finishRefresh()
+                    if (it.memberCardList.size > 0) {
+                        mToolbarAdd.isEnabled = false
+                    }
                 }
                 it.hasMore -> {
                     mCardAdapter.addData(it.memberCardList)
