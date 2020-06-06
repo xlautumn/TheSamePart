@@ -92,7 +92,7 @@
         android:id="@+id/cartDetailList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/root_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -157,9 +157,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pop_list_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.5"
             android:background="@android:color/white"
-            android:maxHeight="300dp"
             android:paddingLeft="@dimen/dip_15"
             android:paddingRight="@dimen/dip_15"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -167,6 +167,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
              />
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="0dp"
+            android:text="购物车还未添加商品"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:background="@android:color/white"
+            android:textSize="@dimen/dip_20"
+            android:textColor="@color/color_999999"
+            app:layout_constraintBottom_toBottomOf="@+id/pop_list_view"
+            app:layout_constraintTop_toTopOf="@+id/pop_list_view"
+            app:layout_constraintEnd_toEndOf="@+id/pop_list_view"
+            app:layout_constraintStart_toStartOf="@+id/pop_list_view"
+            android:layout_height="0dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

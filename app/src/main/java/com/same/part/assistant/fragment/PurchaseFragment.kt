@@ -86,16 +86,19 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         PurchaseProductManager.INSTANCE.syncPurchaseCategoryData {
             refreshCategory(0)
         }
-        PurchaseProductManager.INSTANCE.getCartProductList {
-
-        }
-
         requestCartViewModel.cartProductList.observe(viewLifecycleOwner, Observer {
             mCartProductAdapter.setData(it)
             totalMoney.text = requestCartViewModel.totalPrice
             statement.text = getString(R.string.purchase_statement, requestCartViewModel.totalNum)
-            if (it.isEmpty() && cartDetailList.visibility == View.VISIBLE) {
-                hideCartDetail()
+            if (it.isEmpty()) {
+                pop_list_view.visibility = View.INVISIBLE
+                tv_no_data.visibility = View.VISIBLE
+                if (cartDetailList.visibility == View.VISIBLE) {
+                    hideCartDetail()
+                }
+            } else {
+                pop_list_view.visibility = View.VISIBLE
+                tv_no_data.visibility = View.INVISIBLE
             }
         })
 
