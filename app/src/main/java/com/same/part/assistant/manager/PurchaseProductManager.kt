@@ -19,7 +19,6 @@ class PurchaseProductManager private constructor() {
             PurchaseProductManager()
         }
 
-        const val CART_LIST_URL = "carts/group-by-shop"
         const val CATEGORY_LIST_URL = "productCategory/getAllProductCategoryList"
         const val PRODUCT_LIST_URL = "products"
     }
@@ -115,54 +114,6 @@ class PurchaseProductManager private constructor() {
                     }
                 }
                 onSuccess?.invoke()
-            }
-        })
-    }
-
-    fun getCartProductList(onSuccess: (() -> Unit)?) {
-        val url = StringBuilder("${ApiService.SERVER_URL}$CART_LIST_URL")
-            .append("?appKey=${CacheUtil.getAppKey()}")
-            .append("&appSecret=${CacheUtil.getAppSecret()}")
-            .append("&shopId=${CacheUtil.getShopId()}")
-            .append("&userId=${CacheUtil.getUserId()}")
-
-        HttpUtil.instance.getUrl(url.toString(), { result ->
-            //todo 解析列表
-            var uu = result
-        })
-    }
-
-    /**
-     * @param endTime
-     * @param productCategory
-     * @param quantity
-     * @param productId
-     * @param properties
-     * @param productSkuNumber
-     */
-    fun uploadCartProduct(
-        endTime: String, productCategory: String, quantity: String, productId: String,
-        properties: String, productSkuNumber: String, onSuccess: (() -> Unit)?
-    ) {
-        val url = "${ApiService.SERVER_URL}cart"
-        val jsonMap = hashMapOf(
-            "appKey" to CacheUtil.getAppKey(),
-            "appSecret" to CacheUtil.getAppSecret(),
-            "accessToken" to CacheUtil.getToken(),
-            "endTime" to endTime,
-            "category" to productCategory,
-            "quantity" to quantity,
-            "productId" to productId,
-            "properties" to properties,
-            "productSkuNumber" to productSkuNumber
-        )
-        HttpUtil.instance.postUrl(url, jsonMap, { result ->
-            //TODO 加入购物车后得数据
-            JSONObject(result).let { jsonObject ->
-                jsonObject.optJSONObject("content")?.let { content ->
-                    //TODO 解析数据
-
-                }
             }
         })
     }
