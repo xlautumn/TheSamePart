@@ -33,7 +33,7 @@ class PayHelper(private val activity: AppCompatActivity) {
     private var processDialog: AppCompatDialog? = null
     private val SDK_PAY_FLAG = 1
     private val payResultViewModel: PayResultViewModel by lazy { activity.getViewModel<PayResultViewModel>() }
-
+    var paymentChannel = PAYMENT_CHANNEL_ALIPAY
     init {
         requestPaySignOrderInfoViewModel.clearData()
         createObserver()
@@ -95,8 +95,8 @@ class PayHelper(private val activity: AppCompatActivity) {
     fun showPaymentChannel(orderId: String) {
         fun handleRadioClick(dialog: BottomDialog, radioButton: RadioButton) {
             val paymentChanel = radioButton.text.toString()
-            requestPaySignOrderInfoViewModel.paymentChannel = paymentChanel
-            requestPaySignOrderInfoViewModel.getPaySign(orderId)
+            this.paymentChannel = paymentChanel
+            requestPaySignOrderInfoViewModel.getPaySign(orderId,this.paymentChannel)
             dialog.dismiss()
         }
 
@@ -105,7 +105,7 @@ class PayHelper(private val activity: AppCompatActivity) {
         dialog.setViewListener {
             it.findViewById<RadioButton>(R.id.rb_1).apply {
                 text = PAYMENT_CHANNEL_ALIPAY
-                isChecked = requestPaySignOrderInfoViewModel.paymentChannel == text
+                isChecked = paymentChannel == text
             }.setOnClickListener { radioButton ->
                 handleRadioClick(
                     dialog,
@@ -114,7 +114,7 @@ class PayHelper(private val activity: AppCompatActivity) {
             }
             it.findViewById<RadioButton>(R.id.rb_2).apply {
                 text = PAYMENT_CHANNEL_WECHAT
-                isChecked = requestPaySignOrderInfoViewModel.paymentChannel == text
+                isChecked = paymentChannel == text
             }.setOnClickListener { radioButton ->
                 handleRadioClick(
                     dialog,
@@ -132,7 +132,13 @@ class PayHelper(private val activity: AppCompatActivity) {
             parseState(it,
                 onSuccess = { content ->
                     if (content.isNotEmpty()) {
-                        alipay(content)
+                        if (paymentChannel == PAYMENT_CHANNEL_ALIPAY) {
+                            alipay(content)
+                        }else if (paymentChannel== PAYMENT_CHANNEL_WECHAT){
+                            wechatPay(content)
+                        }else{
+                            ToastUtils.showShort("暂不支持该支付方式")
+                        }
                     }
                 },
                 onError = { appException ->
@@ -154,6 +160,20 @@ class PayHelper(private val activity: AppCompatActivity) {
 
         val observer = PayLifecycleObserver(::dismissLoading)
         activity.lifecycle.addObserver(observer)
+    }
+
+    /**
+     * 微信支付
+     */
+    private fun wechatPay(content: String) {
+//        {"code":1,"msg":"weixin","content":{"sign":"427CD0763398F78D9747116D1EE1E783",
+//            "prepayId":"wx07145428994032d45a89d48e1235099900",
+//            "partnerId":"1521386741",
+//            "appId":"wx631ec50e4a502946",
+//            "packageValue":"Sign=WXPay",
+//            "timeStamp":"1591512869",
+//            "nonceStr":"1591512869062"}}
+        ToastUtils.showShort("暂不支持微信支付方式")
     }
 
     private fun showLoading(message: String) {
@@ -178,6 +198,7 @@ class PayHelper(private val activity: AppCompatActivity) {
     private fun dismissLoading() {
         processDialog?.dismiss()
     }
+
 
     /**
      * 支付宝支付

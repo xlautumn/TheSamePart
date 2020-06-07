@@ -11,14 +11,14 @@ import me.hgj.jetpackmvvm.state.ResultState
 
 class RequestPaySignOrderInfoViewModel(application: Application) : BaseViewModel(application) {
 
-    var paymentChannel = PAYMENT_CHANNEL_ALIPAY
     var getPaySignResult = MutableLiveData<ResultState<String>>()
 
     /**
      * 获取签名的订单信息
      */
     fun getPaySign(
-        productOrderId: String
+        productOrderId: String,
+        paymentChannel:String
     ) {
         requestTR(
             { HttpRequestManger.instance.getPaySign(productOrderId, paymentChannel) },
