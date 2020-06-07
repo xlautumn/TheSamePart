@@ -36,7 +36,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
     /**
      * 获取购物车id字符串
      */
-     val cartIds
+    val cartIds
         get() = _cartProductList.value?.let { it.joinToString(separator = ",") { it.cartId } } ?: ""
 
     val totalPrice
@@ -57,10 +57,10 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
             { acc: Int, cartProduct: CartProduct -> acc + cartProduct.shopProduct.num })
 
 
-
-    fun getCartList():ArrayList<CartProduct>{
-       return cartProductList.value?: arrayListOf()
+    fun getCartList(): ArrayList<CartProduct> {
+        return cartProductList.value ?: arrayListOf()
     }
+
     /**
      * 添加购物车
      */
@@ -102,18 +102,17 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                 val response: String = it.string()
                 val jsonObject = JSON.parseObject(response)
                 val code = jsonObject.getString("code")
-                if (code=="1") {
+                if (code == "1") {
                     jsonObject.getJSONObject("content")?.apply {
                         val cartId = this.getString("cartId")
                         val price = this.getString("price")
                         val skuProperties = this.getString("skuProperties").orEmpty()
                         val cartProduct = CartProduct(shopProduct, cartId, price, skuProperties)
-                        cartProduct.shopProduct.productDetailData.cartNum = shopProduct.num
                         _cartProductMap[shopProduct.getProductKey()] = cartProduct
                         _cartProductList.value?.add(cartProduct)
                         _cartProductList.value = _cartProductList.value
                     }
-                }else{
+                } else {
                     val msg = jsonObject.getString("message")
                     ToastUtils.showShort(msg)
                 }
@@ -135,7 +134,6 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                     val quantity = this.getString("quantity")
                     val price = getString("price")
                     val num = quantity.toFloat().toInt()
-                    cartProduct.shopProduct.productDetailData.cartNum = num
                     cartProduct.shopProduct.num = num
                     cartProduct.price = price
                     _cartProductList.value = _cartProductList.value
@@ -160,7 +158,6 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                 val response: String = it.string()
                 val jsonObject = JSON.parseObject(response)
                 if (jsonObject.getInteger("code") == 1) {
-                    cartProduct.shopProduct.productDetailData.cartNum = 0
                     _cartProductMap.remove(cartProduct.shopProduct.getProductKey())
                     _cartProductList.value?.remove(cartProduct)
                     _cartProductList.value = _cartProductList.value
@@ -203,7 +200,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
     /**
      * 已经生成订单
      */
-    fun onCreateOrderSuccess(){
+    fun onCreateOrderSuccess() {
         clearCacheData()
     }
 
@@ -286,7 +283,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                             ShopProduct(
                                 productDetailData,
                                 it.quantity.toFloat().toInt(),
-                                it.productSku?.number?:"",
+                                it.productSku?.number ?: "",
                                 it.properties
                             ),
                             it.cartId,
@@ -313,9 +310,21 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
     }
 
     /**
+     * 获取该商品在购物车中的数量
+     */
+    fun getCartNum(product: ProductDetailData): Int {
+        return if (product.hasSku) {
+            0
+        } else {
+            val productKey = product.productId
+            _cartProductMap[productKey]?.shopProduct?.num ?: 0
+        }
+    }
+
+    /**
      * 清空缓存数据
      */
-     fun clearCacheData() {
+    fun clearCacheData() {
         _cartProductMap.clear()
         _cartProductList.value = arrayListOf()
     }

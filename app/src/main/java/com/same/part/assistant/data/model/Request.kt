@@ -83,8 +83,7 @@ data class ProductDetailData(
     var name: String? = "",
     var price: String? = "",
     var img: String? = "",
-    var hasSku:Boolean = false,
-    var cartNum: Int = 0
+    var hasSku:Boolean = false
 )
 
 

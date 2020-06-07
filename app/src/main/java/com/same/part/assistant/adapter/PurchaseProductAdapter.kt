@@ -15,7 +15,7 @@ import com.same.part.assistant.manager.PurchaseProductManager
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import java.util.*
 
-class PurchaseProductAdapter(private var mContext: FragmentActivity,private val proxyClick: PurchaseFragment.ProxyClick) :
+class PurchaseProductAdapter(private var mContext: FragmentActivity,private val proxyClick: PurchaseFragment.ProxyClick,private val cartViewModel:RequestCartViewModel) :
     BaseAdapter() {
 
     private var mProductModels = ArrayList<ProductDetailData>()
@@ -90,6 +90,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
             } else {
                 goodViewHolder.chooseSpecs?.visibility = View.GONE
                 goodViewHolder.goodShoppingCartRoot?.visibility = View.VISIBLE
+                val cartNum = cartViewModel.getCartNum(this)
                 if (cartNum > 0) {
                     goodViewHolder.cartIncrease?.visibility = View.VISIBLE
                     goodViewHolder.cartReduce?.visibility = View.VISIBLE

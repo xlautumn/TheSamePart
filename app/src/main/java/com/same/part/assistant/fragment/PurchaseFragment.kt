@@ -76,7 +76,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             adapter = mSecondLevelAdapter
         }
         productList.apply {
-            mProductAdapter = activity?.let { PurchaseProductAdapter(it, ProxyClick()) }
+            mProductAdapter = activity?.let { PurchaseProductAdapter(it, ProxyClick(),requestCartViewModel) }
             adapter = mProductAdapter
             mProductAdapter
         }
@@ -101,6 +101,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                 pop_list_view.visibility = View.VISIBLE
                 tv_no_data.visibility = View.INVISIBLE
             }
+            mProductAdapter?.notifyDataSetChanged()
         })
 
         requestCartViewModel.requestCartList()
