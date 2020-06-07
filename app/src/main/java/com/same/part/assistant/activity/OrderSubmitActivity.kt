@@ -53,7 +53,7 @@ class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
         orderPayment.text = mViewModel.paymentCategory
         shippingAddress.text = CacheUtil.getDetailAddress()
         CacheUtil.getAddress()?.let {
-            shippingPerson.text = "${it.user.realname}    ${it.user.mobile}"
+            shippingPerson.text = "${it.name}    ${it.user.mobile}"
         }
 
         mViewModel.clearData()

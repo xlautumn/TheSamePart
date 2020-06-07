@@ -144,7 +144,7 @@ class PayHelper(private val activity: AppCompatActivity) {
         payResultViewModel.payResultState.observe(activity, Observer {
             parseState(it,
             onSuccess = { resultInfo ->
-                ToastUtils.showShort(resultInfo)
+                ToastUtils.showShort("支付成功")
                 Log.i("resultInfo", resultInfo)
             },
             onError = { appException ->

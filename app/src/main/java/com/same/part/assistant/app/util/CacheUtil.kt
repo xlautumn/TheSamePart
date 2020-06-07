@@ -145,7 +145,7 @@ object CacheUtil {
      */
     fun getDetailAddress(): String {
         return getAddress()?.let {
-            "${it.province}${it.city}${it.district}${it.addr}${it.name}"
+            "${it.province}${it.city}${it.district}${it.addr}"
         } ?: ""
     }
 
