@@ -21,32 +21,10 @@ import kotlinx.android.synthetic.main.activity_custom_manager.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
 /**
- * 店铺管理
+ * 客户管理
  */
 class CustomManagerActivity : AppCompatActivity() {
-    private val mCustomList = arrayListOf<CustomInfoModel>().apply {
-        add(
-            CustomInfoModel(
-                "https://p5.gexing.com/GSF/touxiang/20200514/15/6ytxkxypkc25dybo9gy21c8s7.jpg@!200x200_3?recache=20131108",
-                "多多",
-                "511313"
-            )
-        )
-        add(
-            CustomInfoModel(
-                "https://p5.gexing.com/GSF/touxiang/20200514/15/6ytxkxypkc25dybo9gy21c8s7.jpg@!200x200_3?recache=20131108",
-                "时间",
-                "21"
-            )
-        )
-        add(
-            CustomInfoModel(
-                "https://p5.gexing.com/GSF/touxiang/20200514/15/6ytxkxypkc25dybo9gy21c8s7.jpg@!200x200_3?recache=20131108",
-                "果园",
-                "5113"
-            )
-        )
-    }
+    private val mCustomList = ArrayList<CustomInfoModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,13 +68,36 @@ class CustomManagerActivity : AppCompatActivity() {
                     getJSONArray("content")?.takeIf { array -> array.size > 0 }?.apply {
                         val listItems = ArrayList<CustomInfoModel>()
                         for (i in 0 until this.size) {
-
+                            getJSONObject(i)?.getJSONObject("user")?.apply {
+                                val photo = getString("photo")
+                                val nickName = getString("nickname")
+                                val mobile = getString("mobile")
+                                CustomInfoModel(photo, nickName, mobile).apply {
+                                    listItems.add(this)
+                                }
+                            }
                         }
+                        //如果是刷新需要清空之前的数据
+                        if (listItems.size > 0) {
+                            mCustomList.clear()
+                            mCustomList.addAll(listItems)
+                        }
+                        //通知刷新结束
+                        mSmartRefreshLayout?.refreshComplete(false)
+                        //刷新数据
+                        mManagerRecyclerView.adapter?.notifyDataSetChanged()
+                    } ?: also {
+                        //通知刷新结束
+                        mSmartRefreshLayout?.refreshComplete(false)
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                //通知刷新结束
+                mSmartRefreshLayout?.refreshComplete(false)
             }
+        }, {
+            //通知刷新结束
+            mSmartRefreshLayout?.refreshComplete(true)
         })
     }
 
@@ -119,18 +120,18 @@ class CustomManagerActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: CustomItemHolder, position: Int) {
             val model = dataList[position]
             Glide.with(holder.itemView.context)
-                .load(model.avatarUrl)
-                .into(holder.userAvatar)
+                .load(model.photo)
+                .into(holder.avatar)
             holder.userNickname.text = model.nickname
-            holder.userId.text = model.userId
+            holder.mobile.text = model.mobile
         }
 
     }
 
     class CustomItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var userAvatar: ImageView = itemView.findViewById(R.id.userAvatar)
+        var avatar: ImageView = itemView.findViewById(R.id.avatar)
         var userNickname: TextView = itemView.findViewById(R.id.userNickname)
-        var userId: TextView = itemView.findViewById(R.id.userId)
+        var mobile: TextView = itemView.findViewById(R.id.mobile)
     }
 
 }

@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/dip_50">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <RelativeLayout
         android:id="@+id/userAvatar"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/userNickname"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/userNickname"
@@ -26,28 +32,30 @@
         android:gravity="center"
         android:maxLines="1"
         android:text="1号店"
-        android:textSize="12dp"
         android:textColor="@color/color_999999"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/userId"
+        app:layout_constraintEnd_toStartOf="@+id/mobile"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/userAvatar"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/userId"
-        android:layout_width="70dp"
+        android:id="@+id/mobile"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
         android:text="1"
-        android:textSize="12dp"
         android:textColor="@color/color_999999"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/userNickname"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.47" />
 
     <View
         android:id="@+id/item_divider"

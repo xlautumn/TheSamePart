@@ -7,9 +7,9 @@ import java.io.Serializable
  * 客户管理数据类
  */
 data class CustomInfoModel(
-    var avatarUrl: String,
+    var photo: String,
     var nickname: String,
-    var userId: String
+    var mobile: String
 )
 
 /**

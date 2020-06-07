@@ -104,9 +104,9 @@ class CashierOrderActivity : AppCompatActivity() {
                                             for (index in 0 until this.size) {
                                                 getJSONObject(index)?.apply {
                                                     val img = getString("img")
-                                                    var name = getString("name")
-                                                    var quantity = getString("quantity")
-                                                    var price = getString("price")
+                                                    val name = getString("name")
+                                                    val quantity = getString("quantity")
+                                                    val price = getString("price")
                                                     CashierGoodItemModel(
                                                         img,
                                                         name,
