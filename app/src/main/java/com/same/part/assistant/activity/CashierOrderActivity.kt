@@ -86,6 +86,8 @@ class CashierOrderActivity : AppCompatActivity() {
                             //通知刷新结束
                             mSmartRefreshLayout?.refreshComplete(false)
                             mCurrentPage--
+                            //检查是否展示空布局
+                            mCashierRecyclerView.setEmptyView(emptyView)
                         } else {
                             val orderList = ArrayList<CashierOrderModel>()
                             for (i in 0 until this.size) {
@@ -142,11 +144,15 @@ class CashierOrderActivity : AppCompatActivity() {
                             mSmartRefreshLayout?.refreshComplete(true)
                             //刷新数据
                             mCashierRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            mCashierRecyclerView.setEmptyView(emptyView)
                         }
                     } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
+                        //检查是否展示空布局
+                        mCashierRecyclerView.setEmptyView(emptyView)
                     }
                 }
             } catch (e: Exception) {
@@ -154,12 +160,16 @@ class CashierOrderActivity : AppCompatActivity() {
                 if (mCurrentPage > 0) mCurrentPage--
                 //通知刷新结束
                 mSmartRefreshLayout?.refreshComplete(false)
+                //检查是否展示空布局
+                mCashierRecyclerView.setEmptyView(emptyView)
             }
         }, {
             //请求失败回退请求的页数
             if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
+            //检查是否展示空布局
+            mCashierRecyclerView.setEmptyView(emptyView)
         })
     }
 

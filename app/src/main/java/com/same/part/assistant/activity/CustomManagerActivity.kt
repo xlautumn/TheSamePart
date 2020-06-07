@@ -79,6 +79,8 @@ class CustomManagerActivity : AppCompatActivity() {
                             //通知刷新结束
                             mSmartRefreshLayout?.refreshComplete(false)
                             mCurrentPage--
+                            //检查是否展示空布局
+                            mManagerRecyclerView.setEmptyView(emptyView)
                         } else {
                             val listItems = ArrayList<CustomInfoModel>()
                             for (i in 0 until this.size) {

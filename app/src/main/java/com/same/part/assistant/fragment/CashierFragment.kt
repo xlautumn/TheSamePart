@@ -105,6 +105,8 @@ class CashierFragment : Fragment() {
                             //通知刷新结束
                             mSmartRefreshLayout?.refreshComplete(false)
                             mCurrentPage--
+                            //检查是否展示空布局
+                            cashierRecyclerView.setEmptyView(emptyView)
                         } else {
                             val itemList = ArrayList<CashierModel>()
                             for (i in 0 until this.size) {

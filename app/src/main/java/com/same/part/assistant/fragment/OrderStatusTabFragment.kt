@@ -93,6 +93,8 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                             //通知刷新结束
                             mSmartRefreshLayout?.refreshComplete(false)
                             mCurrentPage--
+                            //检查是否展示空布局
+                            mOrderRecyclerView.setEmptyView(emptyView)
                         } else {
                             val orderList = ArrayList<PurchaseOrderModel>()
                             for (i in 0 until this.size) {
@@ -170,11 +172,15 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                             mSmartRefreshLayout?.refreshComplete(true)
                             //刷新数据
                             mOrderRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            mOrderRecyclerView.setEmptyView(emptyView)
                         }
                     } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
+                        //检查是否展示空布局
+                        mOrderRecyclerView.setEmptyView(emptyView)
                     }
                 }
             } catch (e: Exception) {
@@ -182,12 +188,17 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                 if (mCurrentPage > 0) mCurrentPage--
                 //通知刷新结束
                 mSmartRefreshLayout?.refreshComplete(false)
+                //检查是否展示空布局
+                mOrderRecyclerView.setEmptyView(emptyView)
             }
         }, {
             //请求失败回退请求的页数
             if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
+            //检查是否展示空布局
+            mOrderRecyclerView.setEmptyView(emptyView)
+
         })
 
     }
