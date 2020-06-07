@@ -106,7 +106,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
                     jsonObject.getJSONObject("content")?.apply {
                         val cartId = this.getString("cartId")
                         val price = this.getString("price")
-                        val skuProperties = this.getString("skuProperties")
+                        val skuProperties = this.getString("skuProperties").orEmpty()
                         val cartProduct = CartProduct(shopProduct, cartId, price, skuProperties)
                         cartProduct.shopProduct.productDetailData.cartNum = shopProduct.num
                         _cartProductMap[shopProduct.getProductKey()] = cartProduct
@@ -272,32 +272,26 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
 
                     getCartListResponse.takeUnless { it.isNullOrEmpty() }?.get(0)?.carts?.map {
 
-                        val productDetailSkuList =
-                            it.product.productSku.map {
-                                ProductDetailSku(
-                                    it.productSkuId,
-                                    it.weight
-                                )
-                            }
-                                .let { ArrayList(it) }
+                        val hasSku = it.product.productSku.isNotEmpty()
+
                         val product = it.product
                         val productDetailData = ProductDetailData(
                             product.productId,
                             product.name,
                             product.price,
                             product.img,
-                            productDetailSkuList
+                            hasSku = hasSku
                         )
                         CartProduct(
                             ShopProduct(
                                 productDetailData,
                                 it.quantity.toFloat().toInt(),
-                                it.productSku.number,
+                                it.productSku?.number?:"",
                                 it.properties
                             ),
                             it.cartId,
                             it.price,
-                            it.skuProperties
+                            it.skuProperties.orEmpty()
                         )
                     }?.let { cartList ->
                         cartList.distinctBy { cartProduct -> cartProduct.shopProduct.getProductKey() }

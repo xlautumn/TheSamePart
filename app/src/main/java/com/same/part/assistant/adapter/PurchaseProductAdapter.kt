@@ -67,7 +67,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                     .into(it)
             }
 
-            if (productSku.isNullOrEmpty()) {
+            if (hasSku) {
                 goodViewHolder.goodShoppingCartRoot?.visibility = View.GONE
                 goodViewHolder.chooseSpecs?.visibility = View.VISIBLE
                 goodViewHolder.chooseSpecs?.setOnClickListener(View.OnClickListener {
@@ -92,12 +92,14 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                 goodViewHolder.goodShoppingCartRoot?.visibility = View.VISIBLE
                 if (cartNum > 0) {
                     goodViewHolder.cartIncrease?.visibility = View.VISIBLE
+                    goodViewHolder.cartReduce?.visibility = View.VISIBLE
                     goodViewHolder.cartNum?.apply {
                         visibility = View.VISIBLE
                         text = cartNum.toString()
                     }
                 } else {
-                    goodViewHolder.cartIncrease?.visibility = View.GONE
+                    goodViewHolder.cartIncrease?.visibility = View.VISIBLE
+                    goodViewHolder.cartReduce?.visibility = View.GONE
                     goodViewHolder.cartNum?.apply {
                         visibility = View.GONE
                         text = ""

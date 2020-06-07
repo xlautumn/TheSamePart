@@ -83,7 +83,7 @@ data class ProductDetailData(
     var name: String? = "",
     var price: String? = "",
     var img: String? = "",
-    var productSku: ArrayList<ProductDetailSku>? = null,
+    var hasSku:Boolean = false,
     var cartNum: Int = 0
 )
 

@@ -21,7 +21,7 @@ class PurchaseProductManager private constructor() {
 
         const val CART_LIST_URL = "carts/group-by-shop"
         const val CATEGORY_LIST_URL = "productCategory/getAllProductCategoryList"
-        const val PRODUCT_LIST_URL = "product/getProductList"
+        const val PRODUCT_LIST_URL = "products"
     }
 
     private var mPurchaseCategoryData: ArrayList<CategoryData> = ArrayList()
@@ -94,6 +94,7 @@ class PurchaseProductManager private constructor() {
             .append("&appSecret=${CacheUtil.getAppSecret()}")
             .append("&productCategoryId=$productCategoryId")
             .append("&shopId=2000")
+            .append("&state=1")
 
         HttpUtil.instance.getUrl(url.toString(), { result ->
             JSONObject(result).also { jsonObject ->
@@ -106,7 +107,8 @@ class PurchaseProductManager private constructor() {
                                 this.name = jsonObject.optString("name")
                                 this.price = jsonObject.optString("price")
                                 this.img = jsonObject.optString("img")
-                                //todo 解析规格
+                                val productSku = jsonObject.optJSONArray("productSku")
+                                this.hasSku = productSku?.length()!=0?:false
                                 mPurchaseProductData.add(this)
                             }
                         }
