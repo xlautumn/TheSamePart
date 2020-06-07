@@ -52,6 +52,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         statement.setOnClickListener(this)
         rootDetail.setOnClickListener(this)
         right_btn.setOnClickListener(this)
+        cart_invalid_view.setOnClickListener(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -133,6 +134,8 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             it.isSelected = (i == position)
         }
         mFirstLevelAdapter?.setData(categoryDataList)
+        mSecondLevelAdapter?.setData(arrayListOf())
+        mProductAdapter?.setData(arrayListOf())
         categoryDataList.takeIf { position in categoryDataList.indices }?.let {
             val sons = categoryDataList[position].sons
             sons?.apply {
@@ -180,6 +183,11 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             R.id.right_btn -> {
                 //清空购物车
                 requestCartViewModel.clearCarts()
+            }
+            R.id.cart_invalid_view ->{
+                if (cartDetailList.visibility == View.VISIBLE) {
+                    hideCartDetail()
+                }
             }
         }
     }

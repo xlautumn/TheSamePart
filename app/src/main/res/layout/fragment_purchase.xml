@@ -99,6 +99,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <View
+            android:id="@+id/cart_invalid_view"
             android:layout_width="match_parent"
             android:background="@color/color_shadow_bg"
             app:layout_constraintTop_toTopOf="parent"
