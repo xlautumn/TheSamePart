@@ -65,6 +65,7 @@ class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
 
             parseState(it,
                 onSuccess = {
+                    ToastUtils.showShort("您已经成功下单！")
                     requestCartViewModel.onCreateOrderSuccess()
                     if (mViewModel.isFreightCollect()) {
                         finish()
