@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.same.part.assistant.R
-import com.same.part.assistant.activity.AddCashierGoodActivity
 import com.same.part.assistant.activity.AddProductClassificationActivity
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.ADDCLASSIFICATION_SUCCESS
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.CUSTOMCATEGORYID
@@ -24,7 +23,6 @@ import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
-import kotlinx.android.synthetic.main.fragment_cashier.*
 import kotlinx.android.synthetic.main.fragment_product_classification.*
 import kotlinx.android.synthetic.main.fragment_product_classification.mSmartRefreshLayout
 import org.greenrobot.eventbus.EventBus
@@ -95,7 +93,9 @@ class ProductClassificationFragment : Fragment() {
             .append("&name=$name")
             .append("&size=$size")
             .append(
-                "&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.size > 0 }?.get(0)?.shop?.shopId}"
+                "&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }?.get(
+                    0
+                )?.shop?.shopId}"
             )
             .append("&appKey=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey}")
             .append("&appSecret=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret}")
@@ -133,12 +133,16 @@ class ProductClassificationFragment : Fragment() {
                             mSmartRefreshLayout?.refreshComplete(true)
                             //刷新数据
                             productRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            productRecyclerView.setEmptyView(emptyView)
                         }
 
                     } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
+                        //检查是否展示空布局
+                        productRecyclerView.setEmptyView(emptyView)
                     }
                 }
             } catch (e: Exception) {
@@ -146,12 +150,16 @@ class ProductClassificationFragment : Fragment() {
                 if (mCurrentPage > 0) mCurrentPage--
                 //通知刷新结束
                 mSmartRefreshLayout?.refreshComplete(true)
+                //检查是否展示空布局
+                productRecyclerView.setEmptyView(emptyView)
             }
         }, {
             //请求失败回退请求的页数
             if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
+            //检查是否展示空布局
+            productRecyclerView.setEmptyView(emptyView)
         })
     }
 

@@ -25,6 +25,8 @@ import kotlinx.android.synthetic.main.toolbar_title.*
  */
 class CustomManagerActivity : AppCompatActivity() {
     private val mCustomList = ArrayList<CustomInfoModel>()
+    //当前请求第几页的数据
+    private var mCurrentPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,63 +46,89 @@ class CustomManagerActivity : AppCompatActivity() {
         mSmartRefreshLayout.apply {
             //下拉刷新
             setOnRefreshListener {
-                loadCustomManagerList()
+                mCurrentPage = 0
+                loadCustomManagerList(page = mCurrentPage, isRefresh = true)
             }
             //上拉加载
             setOnLoadMoreListener {
-                //通知刷新结束
-                mSmartRefreshLayout?.refreshComplete(false)
+                mCurrentPage++
+                loadCustomManagerList(page = mCurrentPage, isRefresh = false)
             }
         }
         //加载客户管理列表
-        loadCustomManagerList()
+        loadCustomManagerList(page = mCurrentPage, isRefresh = true)
     }
 
-    private fun loadCustomManagerList() {
+    private fun loadCustomManagerList(
+        page: Int = 0,
+        size: String = "20",
+        isRefresh: Boolean
+    ) {
         val url = StringBuilder("${ApiService.SERVER_URL}biz/customers")
             .append("?shopId=${CacheUtil.getShopId()}")
             .append("&appKey=${CacheUtil.getAppKey()}")
             .append("&appSecret=${CacheUtil.getAppSecret()}")
+            .append("&page=$page")
+            .append("&size=$size")
         HttpUtil.instance.getUrl(url.toString(), {
             try {
                 val resultJson = JSONObject.parseObject(it)
                 resultJson.apply {
                     getJSONArray("content")?.takeIf { array -> array.size > 0 }?.apply {
-                        val listItems = ArrayList<CustomInfoModel>()
-                        for (i in 0 until this.size) {
-                            getJSONObject(i)?.getJSONObject("user")?.apply {
-                                val photo = getString("photo")
-                                val nickName = getString("nickname")
-                                val mobile = getString("mobile")
-                                CustomInfoModel(photo, nickName, mobile).apply {
-                                    listItems.add(this)
+                        if (this.size == 0) {
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(false)
+                            mCurrentPage--
+                        } else {
+                            val listItems = ArrayList<CustomInfoModel>()
+                            for (i in 0 until this.size) {
+                                getJSONObject(i)?.getJSONObject("user")?.apply {
+                                    val photo = getString("photo")
+                                    val nickName = getString("nickname")
+                                    val mobile = getString("mobile")
+                                    CustomInfoModel(photo, nickName, mobile).apply {
+                                        listItems.add(this)
+                                    }
                                 }
                             }
+                            //如果是刷新需要清空之前的数据
+                            if (isRefresh && listItems.size > 0) {
+                                mCustomList.clear()
+                                mCustomList.addAll(listItems)
+                            } else {
+                                mCustomList.addAll(listItems)
+                            }
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(true)
+                            //刷新数据
+                            mManagerRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            mManagerRecyclerView.setEmptyView(emptyView)
                         }
-                        //如果是刷新需要清空之前的数据
-                        if (listItems.size > 0) {
-                            mCustomList.clear()
-                            mCustomList.addAll(listItems)
-                        }
-                        //通知刷新结束
-                        mSmartRefreshLayout?.refreshComplete(false)
-                        //刷新数据
-                        mManagerRecyclerView.adapter?.notifyDataSetChanged()
                     } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
+                        mCurrentPage--
+                        //检查是否展示空布局
+                        mManagerRecyclerView.setEmptyView(emptyView)
                     }
                 }
             } catch (e: Exception) {
+                //请求失败回退请求的页数
+                if (mCurrentPage > 0) mCurrentPage--
                 //通知刷新结束
                 mSmartRefreshLayout?.refreshComplete(false)
+                //检查是否展示空布局
+                mManagerRecyclerView.setEmptyView(emptyView)
             }
         }, {
+            //请求失败回退请求的页数
+            if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
+            mManagerRecyclerView.setEmptyView(emptyView)
         })
     }
-
 
     class CustomAdapter(var dataList: ArrayList<CustomInfoModel>) :
         RecyclerView.Adapter<CustomItemHolder>() {

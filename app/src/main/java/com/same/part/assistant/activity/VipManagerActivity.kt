@@ -17,8 +17,7 @@ import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.VipInfoModel
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
-import kotlinx.android.synthetic.main.activity_custom_manager.*
-import kotlinx.android.synthetic.main.activity_custom_manager.mSmartRefreshLayout
+import kotlinx.android.synthetic.main.activity_vip_manager.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
 /**
@@ -113,11 +112,15 @@ class VipManagerActivity : AppCompatActivity() {
                             mSmartRefreshLayout?.refreshComplete(true)
                             //刷新数据
                             mManagerRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            mManagerRecyclerView.setEmptyView(emptyView)
                         }
                     } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
+                        //检查是否展示空布局
+                        mManagerRecyclerView.setEmptyView(emptyView)
                     }
                 }
             } catch (e: Exception) {
@@ -125,12 +128,16 @@ class VipManagerActivity : AppCompatActivity() {
                 if (mCurrentPage > 0) mCurrentPage--
                 //通知刷新结束
                 mSmartRefreshLayout?.refreshComplete(false)
+                //检查是否展示空布局
+                mManagerRecyclerView.setEmptyView(emptyView)
             }
         }, {
             //请求失败回退请求的页数
             if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
+            //检查是否展示空布局
+            mManagerRecyclerView.setEmptyView(emptyView)
         })
 
     }

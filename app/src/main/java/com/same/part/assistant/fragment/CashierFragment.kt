@@ -130,12 +130,16 @@ class CashierFragment : Fragment() {
                             mSmartRefreshLayout?.refreshComplete(true)
                             //刷新数据
                             cashierRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            cashierRecyclerView.setEmptyView(emptyView)
                         }
 
                     } ?: also {
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
+                        //检查是否展示空布局
+                        cashierRecyclerView.setEmptyView(emptyView)
                     }
                 }
             } catch (e: Exception) {
@@ -143,12 +147,16 @@ class CashierFragment : Fragment() {
                 if (mCurrentPage > 0) mCurrentPage--
                 //通知刷新结束
                 mSmartRefreshLayout?.refreshComplete(false)
+                //检查是否展示空布局
+                cashierRecyclerView.setEmptyView(emptyView)
             }
         }, {
             //请求失败回退请求的页数
             if (mCurrentPage > 0) mCurrentPage--
             //通知刷新结束
             mSmartRefreshLayout?.refreshComplete(true)
+            //检查是否展示空布局
+            cashierRecyclerView.setEmptyView(emptyView)
         })
     }
 

@@ -9,8 +9,8 @@
         android:id="@+id/cashier_header"
         android:layout_width="0dp"
         android:layout_height="42dp"
-        android:gravity="center_vertical"
         android:background="@color/color_EFEFEF"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,8 +22,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="名称"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333"/>
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -31,8 +31,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="单价"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333" />
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -40,8 +40,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="计量单位"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333"/>
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -49,8 +49,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="操作"
-            android:textSize="12dp"
-            android:textColor="@color/color_333333"/>
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
     </LinearLayout>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -62,10 +62,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cashier_header">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cashierRecyclerView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <com.same.part.assistant.view.RecyclerViewWithEmpty
+                android:id="@+id/cashierRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/emptyView"
+                layout="@layout/empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

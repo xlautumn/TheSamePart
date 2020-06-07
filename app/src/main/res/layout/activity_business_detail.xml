@@ -13,8 +13,8 @@
         android:id="@+id/areaOne"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/color_FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
 
@@ -212,34 +212,13 @@
             android:textSize="12dp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/color_F7F7F7"
-        android:gravity="center_horizontal"
-        app:layout_constraintStart_toStartOf="parent"
+    <include
+        layout="@layout/empty_view"
+        android:layout_width="@dimen/dip_0"
+        android:layout_height="@dimen/dip_0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/business_column_header">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:src="@drawable/no_more_data_tip"
-            android:layout_marginTop="78dp"
-            android:layout_height="wrap_content">
-        </ImageView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="暂无数据"
-            android:textColor="@color/color_999999"
-            android:layout_marginTop="34dp"
-            android:textSize="12dp" />
-
-    </LinearLayout>
-
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/business_column_header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
