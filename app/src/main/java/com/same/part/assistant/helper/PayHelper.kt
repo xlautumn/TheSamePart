@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
@@ -112,15 +113,18 @@ class PayHelper(private val activity: AppCompatActivity) {
                     radioButton as RadioButton
                 )
             }
-            it.findViewById<RadioButton>(R.id.rb_2).apply {
-                text = PAYMENT_CHANNEL_WECHAT
-                isChecked = paymentChannel == text
-            }.setOnClickListener { radioButton ->
-                handleRadioClick(
-                    dialog,
-                    radioButton as RadioButton
-                )
-            }
+
+            it.findViewById<RadioButton>(R.id.rb_2).visibility  = View.GONE
+            it.findViewById<View>(R.id.divider_2).visibility  = View.GONE
+//            it.findViewById<RadioButton>(R.id.rb_2).apply {
+//                text = PAYMENT_CHANNEL_WECHAT
+//                isChecked = paymentChannel == text
+//            }.setOnClickListener { radioButton ->
+//                handleRadioClick(
+//                    dialog,
+//                    radioButton as RadioButton
+//                )
+//            }
             it.findViewById<Button>(R.id.bt_cancel).setOnClickListener { dialog.dismiss() }
         }
         dialog.show()

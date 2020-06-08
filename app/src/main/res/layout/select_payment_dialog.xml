@@ -36,6 +36,7 @@
     </RadioGroup>
 
     <View
+        android:id="@+id/divider_1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_1"
         android:layout_marginTop="@dimen/dip_50"
@@ -45,6 +46,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/divider_2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_1"
         android:layout_marginTop="100dp"
