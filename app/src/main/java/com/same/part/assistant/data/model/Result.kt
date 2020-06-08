@@ -86,7 +86,6 @@ data class PurchaseOrderModel(
     var price: String,
     var state: String,
     var payState: String,
-    var statements: String,
     var province: String,
     var city: String,
     var district: String,

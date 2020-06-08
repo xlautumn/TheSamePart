@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.data.model.CashierGoodItemModel
 import com.same.part.assistant.data.model.PurchaseOrderModel
+import com.same.part.assistant.fragment.getStatements
 import kotlinx.android.synthetic.main.activity_cashier_order_detail.orderRecyclerView
 import kotlinx.android.synthetic.main.activity_purchase_order_detail.*
 import kotlinx.android.synthetic.main.toolbar_title.*
@@ -47,7 +48,7 @@ class PurchaseOrderDetailActivity : AppCompatActivity() {
                 } else {
                     orderStatement.setTextColor(0xFFE76612.toInt())
                 }
-                orderStatement.text = mPurchaseOrderModel.statements
+                orderStatement.text = mPurchaseOrderModel.getStatements()
                 //收货地址
                 shippingAddress.text =
                     "${mPurchaseOrderModel.province}${mPurchaseOrderModel.city}${mPurchaseOrderModel.district}${mPurchaseOrderModel.address}"

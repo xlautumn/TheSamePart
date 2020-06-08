@@ -100,13 +100,12 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                             val orderList = ArrayList<PurchaseOrderModel>()
                             for (i in 0 until this.size) {
                                 getJSONObject(i)?.apply {
-                                    val productOrderId = getString("productOrderId")?:""
+                                    val productOrderId = getString("productOrderId") ?: ""
                                     val no = getString("no") ?: "--"
                                     val addTime = getString("addTime") ?: "--"
                                     val totalPrice = getString("price") ?: "--"
                                     val status = getString("state") ?: "--"
                                     val payState = getString("payState") ?: "--"
-                                    val statements = getString("statements").orEmpty()
                                     val province = getString("province").orEmpty()
                                     val city = getString("city").orEmpty()
                                     val district = getString("district").orEmpty()
@@ -146,7 +145,6 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                                         totalPrice,
                                         status,
                                         payState,
-                                        statements,
                                         province,
                                         city,
                                         district,
@@ -262,14 +260,14 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                 holder.orderStatus.setTextColor(0xFFE76612.toInt())
             }
 
-            if (model.state == "0"){
+            if (model.payState == "0") {
                 holder.orderOperation.setOnClickListener {
                     PayHelper(mContext).showPaymentChannel(model.productOrderId)
                 }
-            }else{
+            } else {
                 holder.orderId.setOnClickListener(null)
             }
-            holder.orderStatus.text = model.statements
+            holder.orderStatus.text = model.getStatements()
             holder.itemView.setOnClickListener {
                 //跳转详情页
                 startActivity(Intent(mContext, PurchaseOrderDetailActivity::class.java).apply {
@@ -285,5 +283,25 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
         var orderTime: TextView = itemView.findViewById(R.id.orderTime)
         var orderStatus: TextView = itemView.findViewById(R.id.orderStatus)
         var orderOperation: TextView = itemView.findViewById(R.id.orderOperation)
+    }
+}
+
+/**
+ * state:待付款0、待发货3、待收货2、已完成1、已取消-1
+ * payState:未付款：0；已付款1
+ */
+ fun PurchaseOrderModel.getStatements():String {
+   return when (state) {
+        "0" -> "等待买家付款"
+        "1" -> "订单已完成"
+        "2" -> {
+            when (payState) {
+                "0" -> "等待买家付款"
+                "1" -> "等待买家收货"
+                else -> "等待买家付款"
+            }
+        }
+        "3" -> "等待平台发货"
+        else -> "订单已取消"
     }
 }
