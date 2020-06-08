@@ -18,6 +18,7 @@ import com.same.part.assistant.activity.PurchaseOrderActivity
 import com.same.part.assistant.activity.PurchaseOrderActivity.Companion.TITLES
 import com.same.part.assistant.activity.PurchaseOrderDetailActivity
 import com.same.part.assistant.activity.PurchaseOrderDetailActivity.Companion.ORDER_DETAIL_KEY
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CashierGoodItemModel
@@ -309,7 +310,10 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                 }
             } else if (model.state == "2" && model.payState == "1") {
                 holder.orderOperation.setOnClickListener {
-                    requestConformDeliveryViewModel.conformDelivery(model.productOrderId)
+                    showMessage("确定已收到采购的商品？", positiveAction = {
+                        requestConformDeliveryViewModel.conformDelivery(model.productOrderId)
+                    }, negativeButtonText = "取消")
+
                 }
             } else {
                 holder.orderId.setOnClickListener(null)
