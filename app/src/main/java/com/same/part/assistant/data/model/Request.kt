@@ -233,6 +233,9 @@ data class CreateMemberCard(
     val appSecret: String = CacheUtil.getAppSecret()
 )
 
+data class RequestConformDelivery(val appKey: String = CacheUtil.getAppKey(),
+                           val appSecret: String = CacheUtil.getAppSecret())
+
 
 
 

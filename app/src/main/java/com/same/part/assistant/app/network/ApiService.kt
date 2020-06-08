@@ -261,4 +261,10 @@ interface ApiService {
         @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
     ): ResponseBody
 
+    /**
+     * 确认收货
+     */
+    @PUT("product-order/{orderId}/conform")
+    suspend fun conformDelivery(@Path("orderId") orderId:String,@Body requestConformDelivery:RequestConformDelivery = RequestConformDelivery()):ResponseBody
+
 }

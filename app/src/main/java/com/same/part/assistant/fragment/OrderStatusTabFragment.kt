@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
+import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.PurchaseOrderActivity
 import com.same.part.assistant.activity.PurchaseOrderActivity.Companion.TITLES
@@ -19,11 +22,17 @@ import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CashierGoodItemModel
 import com.same.part.assistant.data.model.PurchaseOrderModel
+import com.same.part.assistant.data.repository.request.HttpRequestManger
 import com.same.part.assistant.helper.PayHelper
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
+import com.same.part.assistant.viewmodel.request.RequestConformDeliveryViewModel
 import kotlinx.android.synthetic.main.fragment_cashier.mSmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_order_status_tab.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import me.hgj.jetpackmvvm.ext.getViewModel
+import me.hgj.jetpackmvvm.state.ResultState
 
 /**
  * 采购订单状态页面
@@ -217,9 +226,43 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
         else -> 0
     }
 
+    /**
+     * 刷新数据
+     */
+    private fun refreshData(){
+        mCurrentPage = 0
+        loadPurchaseOrderList(state = getStatus(), page = mCurrentPage, isRefresh = true)
+    }
 
     inner class CustomAdapter(var dataList: ArrayList<PurchaseOrderModel>) :
         RecyclerView.Adapter<OrderStatusItemHolder>() {
+
+        private val payHelper: PayHelper by lazy {
+            PayHelper(mContext).apply {
+                observePayResultState(
+                    viewLifecycleOwner,
+                    onSuccess = { refreshData() })
+            }
+        }
+        private val requestConformDeliveryViewModel: RequestConformDeliveryViewModel by lazy {
+            getViewModel<RequestConformDeliveryViewModel>().apply {
+                this.conformDeliveryResult.observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        is ResultState.Loading -> {
+
+                        }
+                        is ResultState.Success -> {
+                            ToastUtils.showShort("已确认收货")
+                            refreshData()
+                        }
+                        is ResultState.Error -> {
+                            ToastUtils.showShort(it.error.errorMsg)
+                        }
+                    }
+                })
+            }
+        }
+
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
@@ -262,7 +305,11 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
 
             if (model.payState == "0") {
                 holder.orderOperation.setOnClickListener {
-                    PayHelper(mContext).showPaymentChannel(model.productOrderId)
+                    payHelper.showPaymentChannel(model.productOrderId)
+                }
+            } else if (model.state == "2" && model.payState == "1") {
+                holder.orderOperation.setOnClickListener {
+                    requestConformDeliveryViewModel.conformDelivery(model.productOrderId)
                 }
             } else {
                 holder.orderId.setOnClickListener(null)
@@ -290,8 +337,8 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
  * state:待付款0、待发货3、待收货2、已完成1、已取消-1
  * payState:未付款：0；已付款1
  */
- fun PurchaseOrderModel.getStatements():String {
-   return when (state) {
+fun PurchaseOrderModel.getStatements(): String {
+    return when (state) {
         "0" -> "等待买家付款"
         "1" -> "订单已完成"
         "2" -> {

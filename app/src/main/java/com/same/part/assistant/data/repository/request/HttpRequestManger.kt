@@ -295,5 +295,12 @@ class HttpRequestManger {
         return NetworkApi.service.getCustomerList()
     }
 
+    /**
+     * 确认收货
+     */
+    suspend fun conformDelivery(orderId:String):ResponseBody{
+        return NetworkApi.service.conformDelivery(orderId)
+    }
+
 
 }
