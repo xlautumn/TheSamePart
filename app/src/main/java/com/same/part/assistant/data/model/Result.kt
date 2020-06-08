@@ -80,7 +80,7 @@ data class CashierOrderModel(
  * 采购订单数据类
  */
 data class PurchaseOrderModel(
-    val productOrderId:String,
+    val productOrderId: String,
     var no: String,
     var time: String,
     var price: String,
@@ -118,6 +118,8 @@ data class CashierGoodItemModel(
     var name: String,
     var quantity: String,
     var price: String,
+    var type: String,
+    var weight: String,
     var oldPrice: String = ""
 ) : Serializable
 

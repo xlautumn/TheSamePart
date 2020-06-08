@@ -92,18 +92,20 @@ class CashierOrderDetailActivity : AppCompatActivity() {
             Glide.with(holderCashier.itemView.context).load(model.img)
                 .into(holderCashier.goodAvatar)
             holderCashier.goodName.text = model.name
-            holderCashier.goodNum.text = "x${model.quantity}"
-            if (model.oldPrice.isEmpty()) {
-                holderCashier.goodPriceOld.visibility = View.GONE
-            } else {
+            //称重商品
+            if (model.type == "1") {
                 holderCashier.goodPriceOld.apply {
                     visibility = View.VISIBLE
                     paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                    text = "￥${model.oldPrice}"
+                    text = "￥${model.price}"
                 }
-
+                holderCashier.goodPriceNew.text = "￥${model.oldPrice}"
+                holderCashier.goodNum.text = "${model.weight}"
+            } else {
+                holderCashier.goodPriceOld.visibility = View.GONE
+                holderCashier.goodPriceNew.text = "￥${model.price}"
+                holderCashier.goodNum.text = "x${model.quantity}"
             }
-            holderCashier.goodPriceNew.text = "￥${model.price}"
         }
     }
 

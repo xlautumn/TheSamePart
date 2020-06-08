@@ -122,7 +122,7 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                                     val address = getString("address").orEmpty()
                                     val addrName = getString("addrName") ?: "--"
                                     val addrMobile = getString("addrMobile") ?: "--"
-                                    val payment = (getString("payment") ?: "--").ifEmpty { "--" }
+                                    val payment = (getString("category") ?: "--").ifEmpty { "--" }
                                     val nickname = getString("nickname") ?: "--"
                                     val nicktel = getString("nicktel") ?: "--"
                                     val nickDeliveryTime = getString("nickDeliveryTime") ?: "--"
@@ -141,7 +141,7 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                                                         img,
                                                         name,
                                                         quantity,
-                                                        price
+                                                        price, "", ""
                                                     ).apply {
                                                         orderItemList.add(this)
                                                     }
@@ -230,7 +230,7 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
     /**
      * 刷新数据
      */
-    private fun refreshData(){
+    private fun refreshData() {
         mCurrentPage = 0
         loadPurchaseOrderList(state = getStatus(), page = mCurrentPage, isRefresh = true)
     }

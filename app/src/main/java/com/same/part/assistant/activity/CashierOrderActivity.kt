@@ -109,11 +109,30 @@ class CashierOrderActivity : AppCompatActivity() {
                                                     val name = getString("name")
                                                     val quantity = getString("quantity")
                                                     val price = getString("price")
+                                                    //1--代表是收银商品 ,称重商品
+                                                    //2--代表是收银商品，非称重商品
+                                                    var type = "2"
+                                                    var oldPrice = ""
+                                                    var weight = ""
+                                                    getJSONObject("product")?.apply {
+                                                        type = getString("type")
+                                                    }
+                                                    //称重商品
+                                                    if (type == "1") {
+                                                        weight = getString("weight") + "kg"
+                                                        oldPrice = String.format(
+                                                            "%.2f",
+                                                            (price.toDouble() * getString("weight").toDouble())
+                                                        )
+                                                    }
                                                     CashierGoodItemModel(
                                                         img,
                                                         name,
                                                         quantity,
-                                                        price
+                                                        price,
+                                                        type,
+                                                        weight,
+                                                        oldPrice
                                                     ).apply {
                                                         orderItemList.add(this)
                                                     }
