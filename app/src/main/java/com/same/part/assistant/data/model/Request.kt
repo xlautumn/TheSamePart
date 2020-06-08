@@ -172,6 +172,7 @@ data class RequestUpdateCart(
 data class RequestCreateOrder(
     val appKey: String = CacheUtil.getAppKey(),
     val appSecret: String = CacheUtil.getAppSecret(),
+    val shopPayId: String = CacheUtil.getShopId()?.toString() ?: "",
     val addressId: String,
     val cartIds: String,
     val category: String,//在线付款，货到付款
