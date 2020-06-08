@@ -80,6 +80,7 @@ data class CashierOrderModel(
  * 采购订单数据类
  */
 data class PurchaseOrderModel(
+    val productOrderId:String,
     var no: String,
     var time: String,
     var price: String,

@@ -19,6 +19,7 @@ import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CashierGoodItemModel
 import com.same.part.assistant.data.model.PurchaseOrderModel
+import com.same.part.assistant.helper.PayHelper
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
 import kotlinx.android.synthetic.main.fragment_cashier.mSmartRefreshLayout
@@ -99,6 +100,7 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                             val orderList = ArrayList<PurchaseOrderModel>()
                             for (i in 0 until this.size) {
                                 getJSONObject(i)?.apply {
+                                    val productOrderId = getString("productOrderId")?:""
                                     val no = getString("no") ?: "--"
                                     val addTime = getString("addTime") ?: "--"
                                     val totalPrice = getString("price") ?: "--"
@@ -138,6 +140,7 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                                             }
                                         }
                                     PurchaseOrderModel(
+                                        productOrderId,
                                         no,
                                         addTime,
                                         totalPrice,
@@ -257,6 +260,14 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                 holder.orderStatus.setTextColor(0xFF999999.toInt())
             } else {
                 holder.orderStatus.setTextColor(0xFFE76612.toInt())
+            }
+
+            if (model.state == "0"){
+                holder.orderOperation.setOnClickListener {
+                    PayHelper(mContext).showPaymentChannel(model.productOrderId)
+                }
+            }else{
+                holder.orderId.setOnClickListener(null)
             }
             holder.orderStatus.text = model.statements
             holder.itemView.setOnClickListener {
