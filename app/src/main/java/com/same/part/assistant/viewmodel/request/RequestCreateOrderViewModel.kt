@@ -41,7 +41,7 @@ class RequestCreateOrderViewModel(application: Application) : BaseViewModel(appl
                     CacheUtil.getAddressId(),
                     cartIds,
                     paymentCategory,
-                    arrayListOf(RequestCreateOrder.OrderRemark(shopId = "2000")),
+                    arrayListOf(RequestCreateOrder.OrderRemark(shopId = CacheUtil.getShopId()?.toString()?:"")),
                     CacheUtil.getUserId()?.toString() ?: ""
                 )
             }, createOrderResult,
