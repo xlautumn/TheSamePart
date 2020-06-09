@@ -18,6 +18,7 @@ import com.same.part.assistant.data.model.CashierGoodItemModel
 import com.same.part.assistant.data.model.CashierOrderModel
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
+import com.same.part.assistant.utils.Util.Companion.format2
 import kotlinx.android.synthetic.main.activity_cashier_order.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
@@ -94,7 +95,8 @@ class CashierOrderActivity : AppCompatActivity() {
                                 getJSONObject(i)?.apply {
                                     val no = getString("no") ?: "--"
                                     val price = getString("price") ?: "--"
-                                    val payment = (getString("payment") ?: "--").ifEmpty { "--" }
+                                    val payment =
+                                        (getString("payment") ?: "现金支付").ifEmpty { "现金支付" }
                                     val addTime = getString("addTime") ?: "--"
                                     val shopCouponPrice = getString("shopCouponPrice") ?: "0.00"
                                     val platformCouponPrice =
@@ -120,10 +122,9 @@ class CashierOrderActivity : AppCompatActivity() {
                                                     //称重商品
                                                     if (type == "1") {
                                                         weight = getString("weight") + "kg"
-                                                        oldPrice = String.format(
-                                                            "%.2f",
-                                                            (price.toDouble() * getString("weight").toDouble())
-                                                        )
+                                                        oldPrice = format2(
+                                                            "${price.toDouble() * getString("weight").toDouble()}"
+                                                        ).orEmpty()
                                                     }
                                                     CashierGoodItemModel(
                                                         img,

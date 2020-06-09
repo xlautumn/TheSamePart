@@ -70,12 +70,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="21dp"
                 android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
                 android:background="@drawable/shape_white_color_rect"
                 android:orientation="horizontal"
+                android:paddingTop="16dp"
+                android:paddingBottom="21dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/shop_info">
@@ -84,9 +84,9 @@
                     android:id="@+id/custom_manager"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:drawableTop="@drawable/home_custom_manager"
                     android:drawablePadding="11dp"
-                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:onClick="@{()->click.goCustomManager()}"
                     android:text="客户管理"
@@ -101,9 +101,9 @@
                     android:id="@+id/vip_manager"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/home_vip_manager"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:drawableTop="@drawable/home_vip_manager"
                     android:drawablePadding="11dp"
                     android:gravity="center"
                     android:onClick="@{()->click.goVipManager()}"
@@ -188,7 +188,7 @@
                         android:id="@+id/order_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0件"
+                        android:text="@{vm.turnoverCountToday+`件`}"
                         android:textColor="@color/color_E6660F"
                         android:textSize="13dp" />
 
@@ -196,7 +196,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="今日订单数"
+                        android:text="昨日订单数"
                         android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
@@ -228,7 +228,7 @@
                         android:id="@+id/order_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥0.00"
+                        android:text="@{`￥`+vm.incomeToday}"
                         android:textColor="@color/color_E6660F"
                         android:textSize="13dp" />
 
@@ -236,7 +236,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="今日订单金额"
+                        android:text="昨日订单金额"
                         android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
@@ -267,7 +267,7 @@
                         android:id="@+id/week_order_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0件"
+                        android:text="@{vm.turnoverCountWeek+`件`}"
                         android:textColor="@color/color_E6660F"
                         android:textSize="13dp" />
 
@@ -304,10 +304,10 @@
                     app:layout_constraintTop_toTopOf="@+id/line_six">
 
                     <TextView
-                        android:id="@+id/week_deal_amount"
+                        android:id="@+id/week_order_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0人"
+                        android:text="@{`￥`+vm.incomeWeek}"
                         android:textColor="@color/color_E6660F"
                         android:textSize="13dp" />
 
@@ -315,7 +315,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="一周成交用户数"
+                        android:text="一周订单金额"
                         android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
@@ -344,10 +344,10 @@
                     app:layout_constraintTop_toTopOf="@+id/line_six">
 
                     <TextView
-                        android:id="@+id/week_order_amount"
+                        android:id="@+id/week_average_order_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥15.00"
+                        android:text="@{`￥`+vm.incomeWeekAvg}"
                         android:textColor="@color/color_E6660F"
                         android:textSize="13dp" />
 
@@ -355,7 +355,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="一周订单金额"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="一周平均订单金额"
                         android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
@@ -378,15 +380,14 @@
                     android:orientation="vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@+id/line_ten"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/line_nine">
 
                     <TextView
-                        android:id="@+id/week_average_order_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥5.00"
                         android:textColor="@color/color_E6660F"
                         android:textSize="13dp" />
 
@@ -394,7 +395,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="一周平均订单金额"
                         android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
@@ -405,6 +405,7 @@
                     android:layout_width="0.67dp"
                     android:layout_height="0dp"
                     android:background="@color/color_EEEEEE"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/week_average_order_amount_area"
                     app:layout_constraintEnd_toStartOf="@+id/week_average_custom_area"
                     app:layout_constraintStart_toEndOf="@+id/week_average_order_amount_area"
@@ -418,15 +419,14 @@
                     android:orientation="vertical"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/line_ten"
                     app:layout_constraintTop_toTopOf="@+id/line_nine">
 
                     <TextView
-                        android:id="@+id/week_average_custom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥0.00"
                         android:textColor="@color/color_E6660F"
                         android:textSize="13dp" />
 
@@ -434,7 +434,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="一周人均消费"
                         android:textColor="@color/color_333333"
                         android:textSize="13dp" />
 
