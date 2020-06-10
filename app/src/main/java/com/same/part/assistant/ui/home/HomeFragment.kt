@@ -3,6 +3,7 @@ package com.same.part.assistant.ui.home
 import android.content.Intent
 import android.os.Bundle
 import com.alibaba.fastjson.JSONObject
+import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.BusinessManagerActivity
 import com.same.part.assistant.activity.CustomManagerActivity
@@ -37,6 +38,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         EventBus.getDefault().register(this)
         mDatabind.vm = mViewModel
         mDatabind.click = ProxyClick()
+        mViewModel.imageUrl.set(CacheUtil.getShopImg())
+        mViewModel.name.set(CacheUtil.getShopName())
     }
 
     override fun lazyLoadData() {
@@ -46,6 +49,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun createObserver() {
         mRequestShopManagerViewModel.shopResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {resultState ->
             parseState(resultState, {
+                CacheUtil.setShopImg(it.img)
+                CacheUtil.setShopName(it.name)
                 mViewModel.imageUrl.set(it.img)
                 mViewModel.name.set(it.name)
             })

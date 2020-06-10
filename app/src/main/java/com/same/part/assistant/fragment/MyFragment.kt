@@ -39,6 +39,8 @@ class MyFragment : BaseFragment<HomeViewModel, FragmentMyBinding>(){
         mDatabind.vm = mViewModel
         //手机号
         mViewModel.phone.set(CacheUtil.getShopPhone())
+        mViewModel.imageUrl.set(CacheUtil.getShopImg())
+        mViewModel.name.set(CacheUtil.getShopName())
         //收银订单
         cashierOrder.setOnClickListener {
             startActivity(Intent(activity, CashierOrderActivity::class.java))
@@ -68,6 +70,8 @@ class MyFragment : BaseFragment<HomeViewModel, FragmentMyBinding>(){
     override fun createObserver() {
         mRequestShopManagerViewModel.shopResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {resultState ->
             parseState(resultState, {
+                CacheUtil.setShopImg(it.img)
+                CacheUtil.setShopName(it.name)
                 mViewModel.imageUrl.set(it.img )
                 mViewModel.name.set(it.name)
             })
