@@ -32,14 +32,10 @@ object CacheUtil {
         if (shopUserModel == null) {
             kv.encode("shopUserModel", "")
             setIsLogin(false)
-            setShopImg("")
-            setShopName("")
             setTokenExpirationTime(0)
         } else {
             kv.encode("shopUserModel", Gson().toJson(shopUserModel))
             setTokenExpirationTime(shopUserModel.AccessToken.expiresIn + System.currentTimeMillis())
-            setShopImg(shopUserModel.UserShopDTO.takeIf { it.isNotEmpty() }?.get(0)?.shop?.img)
-            setShopName(shopUserModel.UserShopDTO.takeIf { it.isNotEmpty() }?.get(0)?.shop?.name)
             setIsLogin(true)
         }
     }

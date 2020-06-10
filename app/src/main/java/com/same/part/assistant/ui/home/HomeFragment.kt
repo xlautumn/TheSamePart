@@ -15,7 +15,10 @@ import com.same.part.assistant.data.model.ShopInfoEvent
 import com.same.part.assistant.databinding.FragmentHomeBinding
 import com.same.part.assistant.utils.HttpUtil
 import com.same.part.assistant.utils.Util
+import com.same.part.assistant.viewmodel.request.RequestShopManagerViewModel
 import com.same.part.assistant.viewmodel.state.HomeViewModel
+import me.hgj.jetpackmvvm.ext.getViewModel
+import me.hgj.jetpackmvvm.ext.parseState
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -26,18 +29,27 @@ import java.util.*
  */
 class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
+    private val mRequestShopManagerViewModel: RequestShopManagerViewModel by lazy { getViewModel<RequestShopManagerViewModel>() }
+
     override fun layoutId(): Int = R.layout.fragment_home
 
     override fun initView(savedInstanceState: Bundle?) {
         EventBus.getDefault().register(this)
         mDatabind.vm = mViewModel
         mDatabind.click = ProxyClick()
-        mViewModel.imageUrl.set(shareViewModel.shopPortrait.value)
-        mViewModel.name.set(shareViewModel.shopName.value)
     }
 
     override fun lazyLoadData() {
+        mRequestShopManagerViewModel.shopModelReq(CacheUtil.getToken())
+    }
 
+    override fun createObserver() {
+        mRequestShopManagerViewModel.shopResult.observe(viewLifecycleOwner, androidx.lifecycle.Observer {resultState ->
+            parseState(resultState, {
+                mViewModel.imageUrl.set(it.img)
+                mViewModel.name.set(it.name)
+            })
+        })
     }
 
     override fun initData() {
