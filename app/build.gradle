@@ -52,6 +52,25 @@ android {
         ]
     }
 
+    //设置apk打包名称，注意引用
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                output ->
+                    def outputFile = output.outputFile
+                    if (outputFile.name.contains("debug")){
+                        outputFileName = new File("../debug/", "${defaultConfig.applicationId}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk")
+                    }
+                    if (outputFile.name.contains("release")){
+                        outputFileName = new File("../release/", "${defaultConfig.applicationId}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk")
+                    }
+            }
+    }
+}
+
+//打包的文件名引用系统时间
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd HH-mm-ss", TimeZone.getTimeZone("Asia/Shanghai"))
 }
 
 dependencies {
