@@ -19,6 +19,7 @@ import com.same.part.assistant.viewmodel.state.HomeViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.*
 
 /**
  * 首页
@@ -40,12 +41,14 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     }
 
     override fun initData() {
-        val url = StringBuilder("${ApiService.SERVER_URL}shop-summary/searchCollect/2013")
-            .append("?year=${Util.getCurrentYear()}")
-            .append("&month=${Util.getCurrentMonth()}")
-            // .append("&day=${Util.getCurrentDay()}")
-            .append("&day=8")
-            .append("&week=${Util.getCurrentWeek()}")
+        val yesterday = Util.getYesterday()
+        val url = StringBuilder("${ApiService.SERVER_URL}shop-summary/searchCollect/")
+            .append(CacheUtil.getShopId())
+            .append("?year=${yesterday.get(Calendar.YEAR)}")
+            .append("&month=${yesterday.get(Calendar.MONTH)+1}")
+             .append("&day=${yesterday.get(Calendar.DAY_OF_MONTH)}")
+//            .append("&day=8")
+            .append("&week=${yesterday.get(Calendar.WEEK_OF_YEAR)}")
         HttpUtil.instance.getUrlWithHeader("WSCX", CacheUtil.getToken(), url.toString(), {
             try {
                 val resultJson = JSONObject.parseObject(it)
@@ -54,7 +57,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                     mViewModel.incomeToday.set(getString("incomeToday") ?: "0")
                     mViewModel.turnoverCountWeek.set(getString("turnoverCountWeek") ?: "0")
                     mViewModel.incomeWeek.set(getString("incomeWeek") ?: "0")
-                    mViewModel.incomeWeekAvg.set(getString("incomeWeekAvg") ?: "0")
+                    mViewModel.incomeWeekAvg.set(Util.format2(getString("incomeWeekAvg") ?: "0"))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

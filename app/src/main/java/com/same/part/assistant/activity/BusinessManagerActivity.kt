@@ -15,6 +15,7 @@ import com.same.part.assistant.viewmodel.state.BusinessManagerModel
 import kotlinx.android.synthetic.main.activity_business_manager.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
+import java.util.*
 
 /**
  * 交易管理
@@ -44,12 +45,14 @@ class BusinessManagerActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        val url = StringBuilder("${ApiService.SERVER_URL}shop-summary/management/2013")
-            .append("?year=${Util.getCurrentYear()}")
-            .append("&month=${Util.getCurrentMonth()}")
-//            .append("&day=${Util.getCurrentDay()}")
-            .append("&day=8")
-            .append("&week=${Util.getCurrentWeek()}")
+        val yesterday = Util.getYesterday()
+        val url = StringBuilder("${ApiService.SERVER_URL}shop-summary/management/")
+            .append(CacheUtil.getShopId())
+            .append("?year=${yesterday.get(Calendar.YEAR)}")
+            .append("&month=${yesterday.get(Calendar.MONTH)+1}")
+            .append("&day=${yesterday.get(Calendar.DAY_OF_MONTH)}")
+//            .append("&day=8")
+            .append("&week=${yesterday.get(Calendar.WEEK_OF_YEAR)}")
         HttpUtil.instance.getUrlWithHeader("WSCX", CacheUtil.getToken(), url.toString(), {
             try {
                 val resultJson = JSONObject.parseObject(it)

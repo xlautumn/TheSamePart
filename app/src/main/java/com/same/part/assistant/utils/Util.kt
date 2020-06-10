@@ -58,5 +58,17 @@ class Util {
             return "${calendar.get(Calendar.WEEK_OF_YEAR)}"
         }
 
+        /**
+         * 昨天
+         *
+         * @return
+         */
+        fun getYesterday(): Calendar {
+            val calendar = Calendar.getInstance()
+            calendar.time = Date()
+            calendar.add(Calendar.DAY_OF_MONTH, -1)
+            return calendar
+        }
+
     }
 }
