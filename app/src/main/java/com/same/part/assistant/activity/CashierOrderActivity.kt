@@ -101,6 +101,8 @@ class CashierOrderActivity : AppCompatActivity() {
                                     val shopCouponPrice = getString("shopCouponPrice") ?: "0.00"
                                     val platformCouponPrice =
                                         getString("platformCouponPrice") ?: "0.00"
+                                    val shopDiscountPrice = getString("shopDiscountPrice") ?: "0.00"
+                                    val changeMoney = getString("changeMoney") ?: "0.00"
                                     //订单详情条目的列表数据
                                     val orderItemList = ArrayList<CashierGoodItemModel>()
                                     getJSONArray("orderItems")?.takeIf { array -> array.size > 0 }
@@ -147,6 +149,8 @@ class CashierOrderActivity : AppCompatActivity() {
                                         addTime,
                                         shopCouponPrice,
                                         platformCouponPrice,
+                                        shopDiscountPrice,
+                                        changeMoney,
                                         orderItemList
                                     ).apply {
                                         orderList.add(this)

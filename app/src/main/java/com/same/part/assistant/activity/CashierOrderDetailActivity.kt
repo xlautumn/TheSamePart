@@ -64,7 +64,10 @@ class CashierOrderDetailActivity : AppCompatActivity() {
                 //平台优惠券
                 platformCouponMinus.text = "-￥${mCashierOrderModel.platformCouponPrice}"
                 //会员卡折扣（暂无）
-
+                //店铺减免
+                shopMinus.text = "-￥${mCashierOrderModel.shopDiscountPrice}"
+                //店铺找零
+                chargeValue.text = "￥${mCashierOrderModel.changeMoney}"
                 //合计
                 orderAmount.text = "￥${mCashierOrderModel.price}"
             }

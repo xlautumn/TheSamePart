@@ -240,6 +240,56 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/vipCardTitle" />
 
+                    <TextView
+                        android:id="@+id/shopMinusTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:layout_marginTop="@dimen/dip_15"
+                        android:text="店铺减免"
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/vipCardTitle" />
+
+                    <TextView
+                        android:id="@+id/shopMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dip_15"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:text="-￥0.0"
+                        android:textColor="@color/color_E6660F"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toBottomOf="@+id/shopMinusTitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/shopMinusTitle" />
+
+                    <TextView
+                        android:id="@+id/chargeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dip_15"
+                        android:layout_marginTop="@dimen/dip_15"
+                        android:text="店铺找零"
+                        android:textColor="@color/color_333333"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/shopMinusTitle" />
+
+                    <TextView
+                        android:id="@+id/chargeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dip_15"
+                        android:layout_marginRight="@dimen/dip_15"
+                        android:text="￥0.0"
+                        android:textColor="@color/color_E6660F"
+                        android:textSize="@dimen/dip_12"
+                        app:layout_constraintBottom_toBottomOf="@+id/chargeTitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/chargeTitle" />
+
                     <View
                         android:id="@+id/line_two"
                         android:layout_width="0dp"
@@ -250,7 +300,7 @@
                         android:background="@color/color_CCCCCC"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/vipCardTitle" />
+                        app:layout_constraintTop_toBottomOf="@+id/chargeTitle" />
 
                     <TextView
                         android:id="@+id/orderAmount"

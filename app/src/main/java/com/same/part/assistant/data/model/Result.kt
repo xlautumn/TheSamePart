@@ -73,6 +73,8 @@ data class CashierOrderModel(
     var addTime: String,
     var shopCouponPrice: String,
     var platformCouponPrice: String,
+    var shopDiscountPrice: String,
+    var changeMoney: String,
     var orderItemList: ArrayList<CashierGoodItemModel> = ArrayList()
 ) : Serializable
 
