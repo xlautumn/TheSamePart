@@ -198,7 +198,7 @@ class OrderAdapter(private val data: List<CartProduct>) :
             .into(holder.goodAvatar)
         holder.goodName.text = product.name
         holder.goodNum.text = "x${cartProduct.shopProduct.num}"
-        holder.goodPriceNew.text = cartProduct.price
+        holder.goodPriceNew.text = "￥${cartProduct.price}"
         val tags = cartProduct.getProperties().joinToString(separator = "/")
         if (tags.isNullOrEmpty()) {
             holder.goodTag.visibility = View.GONE
