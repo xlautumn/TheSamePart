@@ -32,9 +32,14 @@ object CacheUtil {
         if (shopUserModel == null) {
             kv.encode("shopUserModel", "")
             setIsLogin(false)
+            setShopImg("")
+            setShopName("")
+            setTokenExpirationTime(0)
         } else {
             kv.encode("shopUserModel", Gson().toJson(shopUserModel))
             setTokenExpirationTime(shopUserModel.AccessToken.expiresIn + System.currentTimeMillis())
+            setShopImg(shopUserModel.UserShopDTO.takeIf { it.isNotEmpty() }?.get(0)?.shop?.img)
+            setShopName(shopUserModel.UserShopDTO.takeIf { it.isNotEmpty() }?.get(0)?.shop?.name)
             setIsLogin(true)
         }
     }
@@ -111,10 +116,19 @@ object CacheUtil {
     /**
      * 获取头像
      */
-    fun getShopImg(): String? {
-        return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
-            ?.get(0)?.shop?.img
+    fun getShopImg(): String {
+        val kv = MMKV.mmkvWithID("app")
+        return kv.decodeString("shopImg") ?: ""
     }
+
+    /**
+     * 设置本地头像
+     */
+    fun setShopImg(shopImg: String?) {
+        val kv = MMKV.mmkvWithID("app")
+        kv.encode("shopImg", shopImg)
+    }
+
 
     /**
      * 获取手机号
@@ -127,9 +141,17 @@ object CacheUtil {
     /**
      * 获取名称
      */
-    fun getShopName(): String? {
-        return getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
-            ?.get(0)?.shop?.name
+    fun getShopName(): String {
+        val kv = MMKV.mmkvWithID("app")
+        return kv.decodeString("shopName") ?: ""
+    }
+
+    /**
+     * 更新名称
+     */
+    fun setShopName(shopName: String?) {
+        val kv = MMKV.mmkvWithID("app")
+        kv.encode("shopName", shopName)
     }
 
 

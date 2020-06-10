@@ -73,10 +73,11 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
         mRequestUploadDataViewModel.uploadResult.observe(this, Observer { qiuniuModel ->
             when {
                 qiuniuModel == null -> {//没有选择图片时
-                    saveEditContent(mViewModel.imageUrl.value)
+                    saveEditContent()
                 }
                 qiuniuModel.img.isNotEmpty() -> {//选择了图片上传至七牛云
-                    saveEditContent(qiuniuModel.img)
+                    mViewModel.imageUrl.value = qiuniuModel.img
+                    saveEditContent()
                 }
                 qiuniuModel.qiniuResponseInfo != null -> {//七牛云上传失败
                     dismissLoading()
@@ -97,6 +98,9 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
                     tvEdit.text = "编辑"
                     editDesc.setCanInput(false)
                     editShopName.setCanInput(false)
+                    CacheUtil.setShopImg(mViewModel.imageUrl.value)
+                    CacheUtil.setShopName(mViewModel.shopName.value)
+                    EventBus.getDefault().post(ShopInfoEvent(mViewModel.imageUrl.value, mViewModel.shopName.value))
                 }
                 ToastUtils.showLong(jsonObject.getString("msg"))
             })
@@ -106,13 +110,12 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
     /**
      * 更新
      */
-    private fun saveEditContent(imgUrl: String) {
+    private fun saveEditContent() {
         mRequestShopManagerViewModel.saveEditContent(
-            imgUrl,
+            mViewModel.imageUrl.value,
             mViewModel.shopName.value,
             mViewModel.shopDesc.value
         )
-        EventBus.getDefault().post(ShopInfoEvent(imgUrl, mViewModel.shopName.value))
     }
 
     inner class ProxyClick {
