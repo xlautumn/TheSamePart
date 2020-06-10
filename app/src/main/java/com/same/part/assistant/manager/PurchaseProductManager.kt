@@ -7,6 +7,7 @@ import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.data.model.ProductSku
 import com.same.part.assistant.data.model.PropertyData
 import com.same.part.assistant.utils.HttpUtil
+import me.hgj.jetpackmvvm.network.ExceptionHandle
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.StringBuilder
@@ -122,56 +123,62 @@ class PurchaseProductManager private constructor() {
         productId: String, onSuccess: ((
             LinkedHashMap<String, MutableSet<PropertyData>>?,
             LinkedHashSet<ProductSku>?
-        ) -> Unit)?
+        ) -> Unit)?,
+        onError: ((String) -> Unit)? = null
     ) {
         var url = StringBuilder("${ApiService.SERVER_URL}product/$productId")
             .append("?appKey=${CacheUtil.getAppKey()}")
             .append("&appSecret=${CacheUtil.getAppSecret()}")
         HttpUtil.instance.getUrl(url.toString(), { result ->
-            val propertyList = linkedMapOf<String, MutableSet<PropertyData>>()
-            val propertyPriceList = linkedSetOf<ProductSku>()
-            result.takeIf { it.isNotEmpty() }?.let {
-                JSONObject(it).optJSONObject("content")?.optJSONArray("productSkus")
-                    ?.takeIf { productSkus -> productSkus.length() > 0 }
-                    ?.let { productSkus ->
-                        for (i in 0 until productSkus.length()) {
-                            productSkus.optJSONObject(i)?.also { productSku ->
-                                val propertiesStr = productSku.optString("properties")
-                                JSONArray(propertiesStr).takeIf { properties -> properties.length() > 0 }
-                                    ?.let { properties ->
-                                        val propertyKey = linkedSetOf<String>()
-                                        for (j in 0 until properties.length()) {
-                                            properties.optJSONObject(j)?.let { property ->
-                                                val project = property.optString("project")
-                                                val value = property.optString("value")
-                                                val propertyData =
-                                                    PropertyData(project, value, false)
-                                                if (!propertyList.containsKey(project)) {
-                                                    //未包含该属性
-                                                    propertyList[project] =
-                                                        mutableSetOf(propertyData)
-                                                } else {
-                                                    propertyList[project]?.add(propertyData)
+            try {
+                val propertyList = linkedMapOf<String, MutableSet<PropertyData>>()
+                val propertyPriceList = linkedSetOf<ProductSku>()
+                result.takeIf { it.isNotEmpty() }?.let {
+                    JSONObject(it).optJSONObject("content")?.optJSONArray("productSkus")
+                        ?.takeIf { productSkus -> productSkus.length() > 0 }
+                        ?.let { productSkus ->
+                            for (i in 0 until productSkus.length()) {
+                                productSkus.optJSONObject(i)?.also { productSku ->
+                                    val propertiesStr = productSku.optString("properties")
+                                    JSONArray(propertiesStr).takeIf { properties -> properties.length() > 0 }
+                                        ?.let { properties ->
+                                            val propertyKey = linkedSetOf<String>()
+                                            for (j in 0 until properties.length()) {
+                                                properties.optJSONObject(j)?.let { property ->
+                                                    val project = property.optString("project")
+                                                    val value = property.optString("value")
+                                                    val propertyData =
+                                                        PropertyData(project, value, false)
+                                                    if (!propertyList.containsKey(project)) {
+                                                        //未包含该属性
+                                                        propertyList[project] =
+                                                            mutableSetOf(propertyData)
+                                                    } else {
+                                                        propertyList[project]?.add(propertyData)
+                                                    }
+                                                    propertyKey.add(value)
                                                 }
-                                                propertyKey.add(value)
                                             }
-                                        }
-                                        propertyPriceList.add(
-                                            ProductSku(
-                                                productSku.optString("productSkuId"),
-                                                productSku.optString("number"),
-                                                productSku.optString("price"),
-                                                propertyKey,
-                                                productSku.optString("weight")
+                                            propertyPriceList.add(
+                                                ProductSku(
+                                                    productSku.optString("productSkuId"),
+                                                    productSku.optString("number"),
+                                                    productSku.optString("price"),
+                                                    propertyKey,
+                                                    productSku.optString("weight")
 
+                                                )
                                             )
-                                        )
-                                    }
+                                        }
+                                }
                             }
                         }
-                    }
+                }
+                onSuccess?.invoke(propertyList, propertyPriceList)
+            }catch (e:Exception){
+                onError?.invoke(ExceptionHandle.handleException(e).errorMsg)
             }
-            onSuccess?.invoke(propertyList, propertyPriceList)
-        })
+
+        },onError)
     }
 }

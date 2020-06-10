@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
+import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.data.model.ProductDetailData
@@ -73,19 +74,26 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
                 goodViewHolder.chooseSpecs?.setOnClickListener(View.OnClickListener {
                     //规格查询
                     PurchaseProductManager.INSTANCE.getProductSpecs(
-                        productId
-                    ) { propertyList, propertyPriceList ->
-                        propertyList?.takeIf { list -> list.isNotEmpty() }?.let {
-                            val dialogFragment =
-                                ChooseSpecsDialogFragment.create(name ?: "", mContext)
-                            dialogFragment.setData(it, propertyPriceList)
-                            dialogFragment.setListener { productSku ->
-                                //加入购物车的请求
-                                proxyClick.addShopProduct(ShopProduct(this,productSkuNumber = productSku.number))
+                        productId,
+                        { propertyList, propertyPriceList ->
+                            propertyList?.takeIf { list -> list.isNotEmpty() }?.let {
+                                val dialogFragment =
+                                    ChooseSpecsDialogFragment.create(name ?: "", mContext)
+                                dialogFragment.setData(it, propertyPriceList)
+                                dialogFragment.setListener { productSku ->
+                                    //加入购物车的请求
+                                    proxyClick.addShopProduct(
+                                        ShopProduct(
+                                            this,
+                                            productSkuNumber = productSku.number
+                                        )
+                                    )
+                                }
+                                dialogFragment.showDialog(mContext.supportFragmentManager)
                             }
-                            dialogFragment.showDialog(mContext.supportFragmentManager)
-                        }
-                    }
+                        }, onError = {
+                            ToastUtils.showShort(it)
+                        })
                 })
             } else {
                 goodViewHolder.chooseSpecs?.visibility = View.GONE
