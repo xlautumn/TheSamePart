@@ -78,13 +78,27 @@
                 android:layout_height="@dimen/dip_05"
                 android:background="@color/color_E5E5E5" />
 
-            <ListView
-                android:id="@+id/productList"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:listSelector="@android:color/transparent"
-                android:background="@color/color_FFFFFF"
-                android:divider="@android:color/transparent" />
+                android:background="@color/color_FFFFFF">
+
+                <ListView
+                    android:id="@+id/productList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_FFFFFF"
+                    android:divider="@android:color/transparent"
+                    android:listSelector="@android:color/transparent" />
+
+                <include
+                    android:id="@+id/emptyView"
+                    layout="@layout/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

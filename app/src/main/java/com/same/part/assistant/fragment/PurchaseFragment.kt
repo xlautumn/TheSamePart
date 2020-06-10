@@ -159,6 +159,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             //刷新产品数据
             val productData =
                 PurchaseProductManager.INSTANCE.getPurchaseProductData()
+            emptyView.visibility = if (productData.isNullOrEmpty()) View.VISIBLE else View.GONE
             mProductAdapter?.setData(productData)
         }
     }
