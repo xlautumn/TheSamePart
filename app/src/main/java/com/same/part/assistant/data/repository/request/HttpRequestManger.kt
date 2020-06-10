@@ -85,13 +85,13 @@ class HttpRequestManger {
         token: String,
         img: String,
         name: String,
-        brand: String,
+        content: String,
         shopId: String
     ): ResponseBody {
         return NetworkApi.service.updateShopIno(
             token,
             shopId,
-            RequestUpdateShopInfo(brand, img, name)
+            RequestUpdateShopInfo(content, img, name)
         )
     }
 

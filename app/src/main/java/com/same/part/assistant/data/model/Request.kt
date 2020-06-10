@@ -22,7 +22,7 @@ data class RequestShopUserInfo(
  * 更新店铺信息
  */
 data class RequestUpdateShopInfo(
-    val brand: String,
+    val content: String,
     val img: String,
     val name: String
 )

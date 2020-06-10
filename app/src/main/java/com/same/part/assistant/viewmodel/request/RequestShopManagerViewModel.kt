@@ -25,14 +25,14 @@ class RequestShopManagerViewModel(application: Application) : BaseViewModel(appl
         )
     }
 
-    fun saveEditContent(img: String, name: String, brand: String) {
+    fun saveEditContent(img: String, name: String, content: String) {
         requestResponseBody(
             {
                 HttpRequestManger.instance.updateShopInfo(
                     CacheUtil.getToken(),
                     img,
                     name,
-                    brand,
+                    content,
                     CacheUtil.getShopId()?.toString() ?: ""
                 )
             },
