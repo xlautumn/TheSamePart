@@ -59,11 +59,11 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
         //店铺信息
         mRequestShopManagerViewModel.shopResult.observe(this, Observer { resultState ->
             parseState(resultState, {
-                mViewModel.imageUrl.postValue(it.img ?: "")
-                mViewModel.shopName.postValue(it.name ?: "")
-                mViewModel.shopDesc.postValue(it.brand ?: "")
-                mViewModel.operatorName.postValue(it.linkman ?: "")
-                mViewModel.operatorPhone.postValue(it.mobile ?: "")
+                mViewModel.imageUrl.postValue(it.img )
+                mViewModel.shopName.postValue(it.name)
+                mViewModel.shopDesc.postValue(it.content)
+                mViewModel.operatorName.postValue(it.corporate)
+                mViewModel.operatorPhone.postValue(it.phone)
                 mViewModel.address.postValue(
                     it.province.plus(it.city).plus(it.district).plus(it.address)
                 )
