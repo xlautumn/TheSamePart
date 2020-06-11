@@ -228,7 +228,7 @@ class AddCashierGoodActivity :
                         mScannerBarcode.visibility = View.GONE
                     } else {
                         mScannerBarcode.visibility = View.VISIBLE
-                        mViewModel.barcode.postValue(cashDetailMode.barcode)
+                        mViewModel.barcode.postValue(cashDetailMode.barcode?:"")
                     }
                     mProductClassificationList.forEach {
                         if (it.id == cashDetailMode.customCategoryProductId.toString()) {
@@ -379,10 +379,10 @@ class AddCashierGoodActivity :
             ToastUtils.showShort("排序不可为空！")
             false
         }
-        mViewModel.productCategoryId.value.isEmpty() && mViewModel.type.value == "否"-> {
-            ToastUtils.showShort("商品条码不可为空！")
-            false
-        }
+//        mViewModel.productCategoryId.value.isEmpty() && mViewModel.type.value == "否"-> {
+//            ToastUtils.showShort("商品条码不可为空！")
+//            false
+//        }
         else -> true
     }
 
