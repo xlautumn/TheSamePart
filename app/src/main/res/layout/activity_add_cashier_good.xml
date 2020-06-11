@@ -285,7 +285,7 @@
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/shape_gray_rect_border_input"
-                            android:hint="（必填）"
+                            android:hint="（非必填）"
                             android:text="@={viewmodel.barcode}"
                             android:lines="1"
                             android:paddingLeft="5dp"
