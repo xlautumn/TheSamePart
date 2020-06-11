@@ -147,7 +147,7 @@ class AddCashierGoodActivity :
                             selectedIfWeightGood.text = option
                             //此时选择的是称重商品
                             if (position == 0) {
-                                mViewModel.unit.postValue( mWeightGoodUnitList[0])
+                                mViewModel.unit.postValue(mWeightGoodUnitList[0])
                                 mScannerBarcode.visibility = View.GONE
                             } else {
                                 mViewModel.unit.postValue(mNotWeightGoodUnitList[0])
@@ -185,6 +185,10 @@ class AddCashierGoodActivity :
         coverImg.setOnClickListener {
             choosePhoto(this)
         }
+        //上架
+        switch_button.setOnCheckedChangeListener { _, isChecked ->
+            mViewModel.shelvesState.postValue(if (isChecked) 1 else 0)
+        }
         //保存
         saveCashier.setOnClickListener {
             if (judgeCanSave()) {
@@ -193,14 +197,16 @@ class AddCashierGoodActivity :
                     (mJumpFromType == JUMP_FROM_EDIT && mViewModel.hasSelectPhoto.value) || mJumpFromType == JUMP_FROM_ADD_CASHIER_GOOD
                 mRequestUploadDataViewModel.uploadData(isNeedUploadQiniu, mViewModel.imgs.value)
             }
-
         }
         //扫描二维码
         scanBarCode.setOnClickListener {
             ScanBarCodeUtil.startScanCode(this)
         }
         //加载商品分类数据
-        mRequestAddCashierGoodViewModel.queryCashierGood(mJumpFromType == JUMP_FROM_EDIT, mCashierEditId)
+        mRequestAddCashierGoodViewModel.queryCashierGood(
+            mJumpFromType == JUMP_FROM_EDIT,
+            mCashierEditId
+        )
     }
 
     override fun createObserver() {
@@ -217,13 +223,14 @@ class AddCashierGoodActivity :
             this,
             Observer { resultState ->
                 parseState(resultState, { cashDetailMode ->
-                    mViewModel.imgs.postValue(cashDetailMode.img)
-                    mViewModel.name.postValue(cashDetailMode.name)
+                    mViewModel.imgs.postValue(cashDetailMode.img?:"")
+                    mViewModel.name.postValue(cashDetailMode.name?:"")
                     mViewModel.productCategoryId.postValue(cashDetailMode.customCategoryProductId.toString())
                     mViewModel.type.postValue(if (cashDetailMode.type == "1") "是" else "否")
-                    mViewModel.unit.postValue(cashDetailMode.unit)
+                    mViewModel.unit.postValue(cashDetailMode.unit?:"")
                     mViewModel.price.postValue(cashDetailMode.price.toString())
                     mViewModel.sequence.postValue(cashDetailMode.sequence.toString())
+                    mViewModel.shelvesState.postValue(cashDetailMode.state)
                     if (cashDetailMode.type == "1") {
                         mScannerBarcode.visibility = View.GONE
                     } else {
@@ -398,7 +405,8 @@ class AddCashierGoodActivity :
             mViewModel.productCategoryId.value,
             mViewModel.sequence.value,
             if (mViewModel.type.value == "是") "1" else "2",
-            mViewModel.unit.value
+            mViewModel.unit.value,
+            state = mViewModel.shelvesState.value
         )
         if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
             requestShopCategoryInfo.id = mCashierEditId

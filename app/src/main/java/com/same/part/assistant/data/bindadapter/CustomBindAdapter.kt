@@ -3,6 +3,7 @@ package com.same.part.assistant.data.bindadapter
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -51,5 +52,10 @@ object CustomBindAdapter {
     }
 
 
+    @BindingAdapter(value = ["switchButton"])
+    @JvmStatic
+    fun switchButton(switchCompat: SwitchCompat,num:Int) {
+        switchCompat.isChecked = num == 1
+    }
 
 }

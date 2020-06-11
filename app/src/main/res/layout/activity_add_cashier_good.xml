@@ -318,7 +318,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="启用"
+                            android:text="上架"
                             android:textColor="@color/color_333333"
                             android:textSize="13dp" />
 
@@ -327,7 +327,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dip_10"
-                            android:checked="true" />
+                            app:switchButton="@{viewmodel.shelvesState}"/>
 
                     </LinearLayout>
                 </LinearLayout>
