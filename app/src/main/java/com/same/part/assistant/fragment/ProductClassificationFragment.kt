@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
+import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddProductClassificationActivity
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.ADDCLASSIFICATION_SUCCESS
@@ -38,6 +39,11 @@ class ProductClassificationFragment : Fragment() {
 
     private val mProductClassificationList = ArrayList<ProductClassificationModel>()
 
+    //是否是搜索模式
+    private var mIsSearchMode = false
+
+    //当前搜索的关键字
+    private var mCurrentSearchKey = ""
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun eventRefresh(messageEvent: String) {
@@ -66,13 +72,21 @@ class ProductClassificationFragment : Fragment() {
         mSmartRefreshLayout.apply {
             //下拉刷新
             setOnRefreshListener {
-                mCurrentPage = 0
-                loadProductClassificationList(page = mCurrentPage, isRefresh = true)
+                if (mIsSearchMode) {
+                    searchData(mCurrentSearchKey, true)
+                } else {
+                    mCurrentPage = 0
+                    loadProductClassificationList(page = mCurrentPage, isRefresh = true)
+                }
             }
             //上拉加载
             setOnLoadMoreListener {
                 mCurrentPage++
-                loadProductClassificationList(page = mCurrentPage, isRefresh = false)
+                if (mIsSearchMode) {
+                    searchData(mCurrentSearchKey, false)
+                } else {
+                    loadProductClassificationList(page = mCurrentPage, isRefresh = false)
+                }
             }
         }
         //加载数据
@@ -93,9 +107,10 @@ class ProductClassificationFragment : Fragment() {
             .append("&name=$name")
             .append("&size=$size")
             .append(
-                "&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }?.get(
-                    0
-                )?.shop?.shopId}"
+                "&shopId=${CacheUtil.getShopUserModel()?.UserShopDTO?.takeIf { it.isNotEmpty() }
+                    ?.get(
+                        0
+                    )?.shop?.shopId}"
             )
             .append("&appKey=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appKey}")
             .append("&appSecret=${CacheUtil.getShopUserModel()?.AccessToken?.easyapi?.appSecret}")
@@ -228,5 +243,28 @@ class ProductClassificationFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+    }
+
+    /**
+     * 搜索
+     */
+    fun searchData(text: String, isRefresh: Boolean) {
+        mCurrentSearchKey = text
+        mIsSearchMode = true
+        //从外面点击搜索的时候第一次会走这里
+        if (isRefresh) {
+            mCurrentPage = 0
+        }
+        loadProductClassificationList(text, mCurrentPage, isRefresh = isRefresh)
+    }
+
+    /**
+     * 取消搜索
+     */
+    fun cancelSearch() {
+        mCurrentSearchKey = ""
+        mIsSearchMode = false
+        mCurrentPage = 0
+        loadProductClassificationList(page = mCurrentPage, isRefresh = true)
     }
 }

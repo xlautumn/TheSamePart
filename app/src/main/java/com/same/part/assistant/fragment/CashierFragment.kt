@@ -35,6 +35,11 @@ class CashierFragment : Fragment() {
     //当前请求第几页的数据
     private var mCurrentPage = 0
 
+    //是否是搜索模式
+    private var mIsSearchMode = false
+
+    //当前搜索的关键字
+    private var mCurrentSearchKey = ""
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun eventRefresh(messageEvent: String) {
@@ -65,13 +70,21 @@ class CashierFragment : Fragment() {
         mSmartRefreshLayout.apply {
             //下拉刷新
             setOnRefreshListener {
-                mCurrentPage = 0
-                loadCashierList(page = mCurrentPage, isRefresh = true)
+                if (mIsSearchMode) {
+                    searchData(mCurrentSearchKey, true)
+                } else {
+                    mCurrentPage = 0
+                    loadCashierList(page = mCurrentPage, isRefresh = true)
+                }
             }
             //上拉加载
             setOnLoadMoreListener {
                 mCurrentPage++
-                loadCashierList(page = mCurrentPage, isRefresh = false)
+                if (mIsSearchMode) {
+                    searchData(mCurrentSearchKey, false)
+                } else {
+                    loadCashierList(page = mCurrentPage, isRefresh = false)
+                }
             }
         }
         //加载数据
@@ -210,6 +223,29 @@ class CashierFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+    }
+
+    /**
+     * 搜索
+     */
+    fun searchData(text: String, isRefresh: Boolean) {
+        mCurrentSearchKey = text
+        mIsSearchMode = true
+        //从外面点击搜索的时候第一次会走这里
+        if (isRefresh) {
+            mCurrentPage = 0
+        }
+        loadCashierList(text, mCurrentPage, isRefresh = isRefresh)
+    }
+
+    /**
+     * 取消搜索
+     */
+    fun cancelSearch() {
+        mCurrentSearchKey = ""
+        mIsSearchMode = false
+        mCurrentPage = 0
+        loadCashierList(page = mCurrentPage, isRefresh = true)
     }
 
 }

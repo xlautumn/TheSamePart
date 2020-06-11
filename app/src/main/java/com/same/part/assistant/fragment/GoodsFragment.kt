@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_goods.*
 
 /**
@@ -50,16 +51,33 @@ class GoodsFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         mCurrentTab = tab?.position ?: 0
+        (activity as? MainActivity)?.changeSearchHint()
+    }
+
+    /**
+     * 开始触发搜索逻辑
+     */
+    fun searchData(index: Int, text: String) {
+        if (index == TAB_CASHIER_INDEX) {
+            (mFragmentList[0] as? CashierFragment)?.searchData(text, true)
+        } else {
+            (mFragmentList[1] as? ProductClassificationFragment)?.searchData(text, true)
+        }
+    }
+
+    fun cancelSearch(index: Int) {
+        if (index == TAB_CASHIER_INDEX) {
+            (mFragmentList[0] as? CashierFragment)?.cancelSearch()
+        } else {
+            (mFragmentList[1] as? ProductClassificationFragment)?.cancelSearch()
+        }
     }
 
     class TabAdapter(fragmentManager: FragmentManager) :
         FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int): Fragment = when (position) {
-            TAB_CASHIER_INDEX -> CashierFragment()
-            else -> ProductClassificationFragment()
-        }
+        override fun getItem(position: Int): Fragment = mFragmentList[position]
 
-        override fun getCount(): Int = TITLES.size
+        override fun getCount(): Int = mFragmentList.size
 
         override fun getPageTitle(position: Int): CharSequence? = TITLES[position]
 
@@ -70,5 +88,6 @@ class GoodsFragment : Fragment(), TabLayout.OnTabSelectedListener {
         val TITLES = arrayOf("收银商品", "商品分类")
         const val TAB_CASHIER_INDEX = 0
         const val TAB_PRODUCT_INDEX = 1
+        val mFragmentList = arrayOf(CashierFragment(), ProductClassificationFragment())
     }
 }
