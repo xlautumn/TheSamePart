@@ -7,35 +7,62 @@
 
     <RadioGroup
         android:id="@+id/radio_payment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dip_40"
         android:layout_marginEnd="@dimen/dip_30"
         app:layout_constraintBottom_toTopOf="@+id/bt_cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toEndOf="@+id/iv_logo_1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="@dimen/dip_40">
 
         <RadioButton
-            android:id="@+id/tv_online_payment"
+            android:id="@+id/rb_1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dip_50"
             android:layoutDirection="rtl"
-            android:text="在线支付"
+            android:text="支付宝"
             android:textColor="@color/color_333333"
             android:textSize="@dimen/dip_12" />
 
         <RadioButton
-            android:id="@+id/tv_freight_collect_payment"
+            android:id="@+id/rb_2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dip_50"
             android:layoutDirection="rtl"
-            android:text="货到付款"
+            android:text="微信支付"
             android:textColor="@color/color_333333"
             android:textSize="@dimen/dip_12" />
     </RadioGroup>
 
+    <ImageView
+        android:id="@+id/iv_logo_1"
+        android:layout_width="@dimen/dip_50"
+        android:layout_height="@dimen/dip_50"
+        android:layout_marginStart="@dimen/dip_20"
+        android:padding="@dimen/dip_10"
+        android:src="@mipmap/alipay_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_logo_2"
+        android:layout_width="@dimen/dip_50"
+        android:layout_height="@dimen/dip_50"
+        android:layout_marginStart="@dimen/dip_20"
+        android:padding="@dimen/dip_10"
+        android:src="@mipmap/wechat_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/divider_1" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/logo_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="iv_logo_1,iv_logo_2" />
+
     <View
+        android:id="@+id/divider_1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_1"
         android:layout_marginTop="@dimen/dip_50"
@@ -45,6 +72,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/divider_2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dip_1"
         android:layout_marginTop="100dp"

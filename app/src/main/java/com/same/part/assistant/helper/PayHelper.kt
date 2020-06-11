@@ -8,10 +8,12 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
+import androidx.constraintlayout.widget.Group
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -102,7 +104,7 @@ class PayHelper(private val activity: AppCompatActivity) {
         }
 
         val dialog = BottomDialog.create(activity.supportFragmentManager)
-            .setLayoutRes(R.layout.select_payment_dialog)
+            .setLayoutRes(R.layout.select_payment_channel_dialog)
         dialog.setViewListener {
             it.findViewById<RadioButton>(R.id.rb_1).apply {
                 text = PAYMENT_CHANNEL_ALIPAY
@@ -114,17 +116,15 @@ class PayHelper(private val activity: AppCompatActivity) {
                 )
             }
 
-            it.findViewById<RadioButton>(R.id.rb_2).visibility  = View.GONE
-            it.findViewById<View>(R.id.divider_2).visibility  = View.GONE
-//            it.findViewById<RadioButton>(R.id.rb_2).apply {
-//                text = PAYMENT_CHANNEL_WECHAT
-//                isChecked = paymentChannel == text
-//            }.setOnClickListener { radioButton ->
-//                handleRadioClick(
-//                    dialog,
-//                    radioButton as RadioButton
-//                )
-//            }
+            it.findViewById<RadioButton>(R.id.rb_2).apply {
+                text = PAYMENT_CHANNEL_WECHAT
+                isChecked = paymentChannel == text
+            }.setOnClickListener { radioButton ->
+                handleRadioClick(
+                    dialog,
+                    radioButton as RadioButton
+                )
+            }
             it.findViewById<Button>(R.id.bt_cancel).setOnClickListener { dialog.dismiss() }
         }
         dialog.show()
