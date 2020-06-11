@@ -29,6 +29,7 @@
             android:id="@+id/rb_2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dip_50"
+            android:visibility="gone"
             android:layoutDirection="rtl"
             android:text="微信支付"
             android:textColor="@color/color_333333"
@@ -56,10 +57,11 @@
         app:layout_constraintTop_toTopOf="@+id/divider_1" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/logo_group"
+        android:id="@+id/weichat_group"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="iv_logo_1,iv_logo_2" />
+        app:constraint_referenced_ids="divider_2,iv_logo_2" />
 
     <View
         android:id="@+id/divider_1"

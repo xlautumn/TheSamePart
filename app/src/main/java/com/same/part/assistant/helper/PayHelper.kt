@@ -115,16 +115,15 @@ class PayHelper(private val activity: AppCompatActivity) {
                     radioButton as RadioButton
                 )
             }
-
-            it.findViewById<RadioButton>(R.id.rb_2).apply {
-                text = PAYMENT_CHANNEL_WECHAT
-                isChecked = paymentChannel == text
-            }.setOnClickListener { radioButton ->
-                handleRadioClick(
-                    dialog,
-                    radioButton as RadioButton
-                )
-            }
+//            it.findViewById<RadioButton>(R.id.rb_2).apply {
+//                text = PAYMENT_CHANNEL_WECHAT
+//                isChecked = paymentChannel == text
+//            }.setOnClickListener { radioButton ->
+//                handleRadioClick(
+//                    dialog,
+//                    radioButton as RadioButton
+//                )
+//            }
             it.findViewById<Button>(R.id.bt_cancel).setOnClickListener { dialog.dismiss() }
         }
         dialog.show()
