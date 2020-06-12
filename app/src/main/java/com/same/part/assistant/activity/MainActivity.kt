@@ -14,7 +14,9 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.tabs.TabLayout
+import com.same.part.assistant.BuildConfig
 import com.same.part.assistant.R
 import com.same.part.assistant.fragment.GoodsFragment
 import com.same.part.assistant.fragment.MyFragment
@@ -84,6 +86,9 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         }
         //版本检测
         detectVersion(this)
+        if (BuildConfig.IS_TEST_URL){
+            ToastUtils.showShort("当前是测试环境")
+        }
     }
 
     /**

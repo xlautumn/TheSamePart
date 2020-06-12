@@ -1,5 +1,6 @@
 package com.same.part.assistant.app.network
 
+import com.same.part.assistant.BuildConfig
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.ApiResponse
 import com.same.part.assistant.data.model.*
@@ -14,9 +15,15 @@ interface ApiService {
 
     companion object {
         //生产
-//        const val SERVER_URL = "https://product.tfsq.vip/easyapi/"
-        //测试
-        const val SERVER_URL = "https://test.tfsq.vip/easyapi/"
+        private const val PRODUCT_SERVER_URL = "https://product.tfsq.vip/easyapi/"
+
+        //        测试
+        private const val TEST_SERVER_URL = "https://test.tfsq.vip/easyapi/"
+        val SERVER_URL = if (BuildConfig.IS_TEST_URL) {
+            TEST_SERVER_URL
+        } else {
+            PRODUCT_SERVER_URL
+        }
     }
 
     /**
@@ -39,6 +46,7 @@ interface ApiService {
         @Header("WSCX") token: String,
         @Query("userId") userId: String
     ): ApiResponse<AddressMsg>
+
     /**
      * 获取店铺信息
      */
@@ -265,6 +273,9 @@ interface ApiService {
      * 确认收货
      */
     @PUT("product-order/{orderId}/conform")
-    suspend fun conformDelivery(@Path("orderId") orderId:String,@Body requestConformDelivery:RequestConformDelivery = RequestConformDelivery()):ResponseBody
+    suspend fun conformDelivery(
+        @Path("orderId") orderId: String,
+        @Body requestConformDelivery: RequestConformDelivery = RequestConformDelivery()
+    ): ResponseBody
 
 }

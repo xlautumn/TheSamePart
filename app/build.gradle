@@ -25,7 +25,11 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField "Boolean","IS_TEST_URL","true"
+        }
         release {
+            buildConfigField "Boolean","IS_TEST_URL","false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
