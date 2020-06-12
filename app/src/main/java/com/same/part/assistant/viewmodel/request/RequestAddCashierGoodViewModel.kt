@@ -56,10 +56,10 @@ class RequestAddCashierGoodViewModel(application: Application) : BaseViewModel(a
                     jsonObject.getJSONArray("content").takeIf { it.size >= 0 }?.apply {
                         for (i in 0 until size) {
                             getJSONObject(i)?.apply {
-                                val id = getString("customCategoryId")
+                                val id = getString("id")
                                 val name = getString("name")
                                 val parentId =
-                                    getJSONObject("parent")?.getString("customCategoryId").orEmpty()
+                                    getJSONObject("parent")?.getString("id").orEmpty()
                                 //过滤掉一级分类
                                 if (parentId.isNotEmpty()) {
                                     ProductClassificationModel(id, name, parentId).apply {
@@ -73,7 +73,7 @@ class RequestAddCashierGoodViewModel(application: Application) : BaseViewModel(a
                     classificationnameListResult.postValue(nameList)
                     productClassificationListResult.postValue(itemList)
                     //编辑还需查询详情信息
-                    if (itemList.size > 0 && isEditPage) {
+                    if (isEditPage) {
                         getCashierGoodDetail(productId)
                     }
                 } catch (e: Exception) {

@@ -39,7 +39,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="计量单位"
+            android:text="库存"
+            android:textColor="@color/color_333333"
+            android:textSize="12dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="状态"
             android:textColor="@color/color_333333"
             android:textSize="12dp" />
 

@@ -129,7 +129,8 @@ class CashierFragment : Fragment() {
                                     val price = getString("price")
                                     val unit = getString("unit")
                                     val state = getString("state")
-                                    CashierModel(id, name, price, unit, state).apply {
+                                    val quantity = getString("quantity")
+                                    CashierModel(id, name, price, unit, state,quantity = quantity).apply {
                                         itemList.add(this)
                                     }
                                 }
@@ -194,7 +195,8 @@ class CashierFragment : Fragment() {
             val model = dataList[position]
             holder.cashierName.text = model.name
             holder.cashierPrice.text = "￥${model.price}"
-            holder.cashierUnit.text = model.unit
+            holder.cashierUnit.text = "${model.quantity}${model.unit}"
+            holder.shelves.text = if (model.status == "1") "上架" else "下架"
             holder.edit.apply {
                 setOnClickListener {
                     startActivity(
@@ -217,6 +219,7 @@ class CashierFragment : Fragment() {
         var cashierPrice: TextView = itemView.findViewById(R.id.cashierPrice)
         var cashierUnit: TextView = itemView.findViewById(R.id.cashierUnit)
         var edit: TextView = itemView.findViewById(R.id.edit)
+        var shelves: TextView = itemView.findViewById(R.id.shelves)
     }
 
 

@@ -40,7 +40,7 @@ data class CashierModel(
     var type: String = "2",
     //	审核状态（0待审核，1审核通过，-1审核驳回） 默认值2
     var audit_state: String = "2",
-    var quantity: String = "2147483647"
+    var quantity: String = ""
 ) : Serializable
 
 
@@ -431,7 +431,7 @@ data class CashierDetailMode(
     val productExtends: List<Any>,
     val customCategoryProductId: Int,
     val productId: Int,
-    val quantity: Int,
+    val quantity: String,
     val ratio: Double,
     val sequence: Int,
     val shop: Shop,
