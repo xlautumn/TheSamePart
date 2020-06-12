@@ -128,7 +128,7 @@ class AddProductClassificationActivity :
                         mViewModel.description.value,
                         mParentId
                     )
-                    mRequestCategoryViewModel.editShopCategory("42", requestShopCategoryInfo)
+                    mRequestCategoryViewModel.editShopCategory(mCustomCategoryId, requestShopCategoryInfo)
                 }
                 qiuniuModel.qiniuResponseInfo != null -> {//七牛云上传失败
 
