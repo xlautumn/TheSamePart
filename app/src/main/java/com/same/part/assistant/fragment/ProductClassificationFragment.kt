@@ -26,6 +26,7 @@ import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
 import kotlinx.android.synthetic.main.fragment_product_classification.*
 import kotlinx.android.synthetic.main.fragment_product_classification.mSmartRefreshLayout
+import me.hgj.jetpackmvvm.network.ExceptionHandle
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -169,6 +170,7 @@ class ProductClassificationFragment : Fragment() {
                 mSmartRefreshLayout?.refreshComplete(true)
                 //检查是否展示空布局
                 productRecyclerView.setEmptyView(emptyView)
+                ToastUtils.showShort(ExceptionHandle.handleException(e).errorMsg)
             }
         }, {
             //请求失败回退请求的页数
@@ -177,6 +179,7 @@ class ProductClassificationFragment : Fragment() {
             mSmartRefreshLayout?.refreshComplete(true)
             //检查是否展示空布局
             productRecyclerView.setEmptyView(emptyView)
+            ToastUtils.showShort(it)
         })
     }
 
