@@ -129,10 +129,10 @@ class ProductClassificationFragment : Fragment() {
                             val itemList = ArrayList<ProductClassificationModel>()
                             for (i in 0 until this.size) {
                                 getJSONObject(i)?.apply {
-                                    val id = getString("customCategoryId")
+                                    val id = getString("id")
                                     val name = getString("name")
                                     val parentId =
-                                        getJSONObject("parent")?.getString("customCategoryId")
+                                        getJSONObject("parent")?.getString("id")
                                             .orEmpty()
                                     ProductClassificationModel(id, name, parentId).apply {
                                         itemList.add(this)
