@@ -26,10 +26,10 @@ android {
 
     buildTypes {
         debug{
-            buildConfigField "Boolean","IS_TEST_URL","true"
+            buildConfigField "Boolean","IS_TEST_URL",isTestUrlInDebug
         }
         release {
-            buildConfigField "Boolean","IS_TEST_URL","false"
+            buildConfigField "Boolean","IS_TEST_URL",isTestUrlInRelease
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -63,12 +63,21 @@ android {
                 output ->
                     def outputFile = output.outputFile
                     if (outputFile.name.contains("debug")){
-                        outputFileName = new File("../debug/", "${defaultConfig.applicationId}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk")
+                        outputFileName = new File("../debug/", "${defaultConfig.applicationId}-${urlEnvironment(Boolean.parseBoolean(isTestUrlInDebug))}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk")
                     }
                     if (outputFile.name.contains("release")){
-                        outputFileName = new File("../release/", "${defaultConfig.applicationId}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk")
+                        outputFileName = new File("../release/", "${defaultConfig.applicationId}-${urlEnvironment(Boolean.parseBoolean(isTestUrlInRelease))}-${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk")
                     }
             }
+    }
+}
+
+
+def urlEnvironment(boolean isTestUrl){
+    if (isTestUrl){
+        return "test"
+    }else {
+        return "product"
     }
 }
 
