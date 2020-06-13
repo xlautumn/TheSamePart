@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         //版本检测
         detectVersion(this)
         if (BuildConfig.IS_TEST_URL){
-            ToastUtils.showShort("亲,当前是测试环境哦，请放心大胆的操作！")
+            ToastUtils.showLong("亲,当前是测试环境哦!")
         }
     }
 
