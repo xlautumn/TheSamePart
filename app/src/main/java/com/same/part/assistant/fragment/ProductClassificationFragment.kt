@@ -27,9 +27,7 @@ import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
 import com.same.part.assistant.viewmodel.request.RequestDeleteCategoryViewModel
-import com.same.part.assistant.viewmodel.request.RequestVipCardViewModel
 import kotlinx.android.synthetic.main.fragment_product_classification.*
-import kotlinx.android.synthetic.main.fragment_product_classification.mSmartRefreshLayout
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.network.ExceptionHandle
 import org.greenrobot.eventbus.EventBus
@@ -51,7 +49,7 @@ class ProductClassificationFragment : Fragment() {
     //当前搜索的关键字
     private var mCurrentSearchKey = ""
 
-    private lateinit var mCategoryAdapter:CustomAdapter
+    private lateinit var mCategoryAdapter: CustomAdapter
 
     //删除分类
     private val mRequestDeleteCategoryViewModel: RequestDeleteCategoryViewModel by lazy { getViewModel<RequestDeleteCategoryViewModel>() }
@@ -106,7 +104,7 @@ class ProductClassificationFragment : Fragment() {
 
         //删除更新
         mRequestDeleteCategoryViewModel.deleteShopCategoryResult.observe(viewLifecycleOwner,
-            Observer { position->
+            Observer { position ->
                 mCategoryAdapter.notifyItemRemoved(position)
             })
     }
@@ -138,11 +136,20 @@ class ProductClassificationFragment : Fragment() {
                 resultJson.apply {
                     getJSONArray("content")?.takeIf { it.size >= 0 }?.apply {
                         if (this.size == 0) {
-                            //通知刷新结束
-                            mSmartRefreshLayout?.refreshComplete(false)
-                            mCurrentPage--
-                            //检查是否展示空布局
-                            productRecyclerView.setEmptyView(emptyView)
+                            if (mIsSearchMode) {
+                                //清空数据，展示没数据
+                                mProductClassificationList.clear()
+                                //刷新数据
+                                productRecyclerView.adapter?.notifyDataSetChanged()
+                                //检查是否展示空布局
+                                productRecyclerView.setEmptyView(emptyView)
+                            } else {
+                                //通知刷新结束
+                                mSmartRefreshLayout?.refreshComplete(false)
+                                mCurrentPage--
+                                //检查是否展示空布局
+                                productRecyclerView.setEmptyView(emptyView)
+                            }
                         } else {
                             val itemList = ArrayList<ProductClassificationModel>()
                             for (i in 0 until this.size) {
@@ -153,8 +160,13 @@ class ProductClassificationFragment : Fragment() {
                                         getJSONObject("parent")?.getString("id")
                                             .orEmpty()
                                     val parentName =
-                                        getJSONObject("parent")?.getString("name")?:"--"
-                                    ProductClassificationModel(id, name, parentId,parentName).apply {
+                                        getJSONObject("parent")?.getString("name") ?: "--"
+                                    ProductClassificationModel(
+                                        id,
+                                        name,
+                                        parentId,
+                                        parentName
+                                    ).apply {
                                         itemList.add(this)
                                     }
                                 }
@@ -175,11 +187,20 @@ class ProductClassificationFragment : Fragment() {
                         }
 
                     } ?: also {
-                        //通知刷新结束
-                        mSmartRefreshLayout?.refreshComplete(false)
-                        mCurrentPage--
-                        //检查是否展示空布局
-                        productRecyclerView.setEmptyView(emptyView)
+                        if (mIsSearchMode) {
+                            //清空数据，展示没数据
+                            mProductClassificationList.clear()
+                            //刷新数据
+                            productRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            productRecyclerView.setEmptyView(emptyView)
+                        } else {
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(false)
+                            mCurrentPage--
+                            //检查是否展示空布局
+                            productRecyclerView.setEmptyView(emptyView)
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -255,7 +276,7 @@ class ProductClassificationFragment : Fragment() {
             //删除
             holder.delete.setOnClickListener {
                 showMessage("请确认是否删除？", positiveAction = {
-                  mRequestDeleteCategoryViewModel.deleteShopCategory(model.id,position)
+                    mRequestDeleteCategoryViewModel.deleteShopCategory(model.id, position)
                 }, negativeButtonText = "取消")
             }
         }
@@ -292,9 +313,12 @@ class ProductClassificationFragment : Fragment() {
      * 取消搜索
      */
     fun cancelSearch() {
-        mCurrentSearchKey = ""
-        mIsSearchMode = false
-        mCurrentPage = 0
-        loadProductClassificationList(page = mCurrentPage, isRefresh = true)
+        if (mIsSearchMode) {
+            mCurrentSearchKey = ""
+            mIsSearchMode = false
+            mCurrentPage = 0
+            loadProductClassificationList(page = mCurrentPage, isRefresh = true)
+            mSmartRefreshLayout?.setNoMoreData(false)
+        }
     }
 }

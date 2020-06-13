@@ -115,11 +115,20 @@ class CashierFragment : Fragment() {
                 resultJson.apply {
                     getJSONObject("msg")?.getJSONArray("data")?.takeIf { it.size >= 0 }?.apply {
                         if (this.size == 0) {
-                            //通知刷新结束
-                            mSmartRefreshLayout?.refreshComplete(false)
-                            mCurrentPage--
-                            //检查是否展示空布局
-                            cashierRecyclerView.setEmptyView(emptyView)
+                            if (mIsSearchMode) {
+                                //清空数据，展示没数据
+                                mCashierList.clear()
+                                //刷新数据
+                                cashierRecyclerView.adapter?.notifyDataSetChanged()
+                                //检查是否展示空布局
+                                cashierRecyclerView.setEmptyView(emptyView)
+                            } else {
+                                //通知刷新结束
+                                mSmartRefreshLayout?.refreshComplete(false)
+                                mCurrentPage--
+                                //检查是否展示空布局
+                                cashierRecyclerView.setEmptyView(emptyView)
+                            }
                         } else {
                             val itemList = ArrayList<CashierModel>()
                             for (i in 0 until this.size) {
@@ -128,10 +137,18 @@ class CashierFragment : Fragment() {
                                     val name = getString("name")
                                     val price = getString("price")
                                     val unit = getString("unit")
-                                    val type =  getString("type")
+                                    val type = getString("type")
                                     val state = getString("state")
                                     val quantity = getString("quantity")
-                                    CashierModel(id, name, price, unit, state,quantity = quantity,type = type).apply {
+                                    CashierModel(
+                                        id,
+                                        name,
+                                        price,
+                                        unit,
+                                        state,
+                                        quantity = quantity,
+                                        type = type
+                                    ).apply {
                                         itemList.add(this)
                                     }
                                 }
@@ -152,11 +169,20 @@ class CashierFragment : Fragment() {
                         }
 
                     } ?: also {
-                        //通知刷新结束
-                        mSmartRefreshLayout?.refreshComplete(false)
-                        mCurrentPage--
-                        //检查是否展示空布局
-                        cashierRecyclerView.setEmptyView(emptyView)
+                        if (mIsSearchMode) {
+                            //清空数据，展示没数据
+                            mCashierList.clear()
+                            //刷新数据
+                            cashierRecyclerView.adapter?.notifyDataSetChanged()
+                            //检查是否展示空布局
+                            cashierRecyclerView.setEmptyView(emptyView)
+                        } else {
+                            //通知刷新结束
+                            mSmartRefreshLayout?.refreshComplete(false)
+                            mCurrentPage--
+                            //检查是否展示空布局
+                            cashierRecyclerView.setEmptyView(emptyView)
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -199,7 +225,7 @@ class CashierFragment : Fragment() {
             var cashQuantity = model.quantity
             if (model.type != "1" && cashQuantity.isNotEmpty() && cashQuantity.contains(".")) {
                 val index = cashQuantity.indexOf(".")
-                cashQuantity = cashQuantity.substring(0,index)
+                cashQuantity = cashQuantity.substring(0, index)
             }
 
             holder.cashierUnit.text = "${cashQuantity}${model.unit}"
@@ -252,10 +278,12 @@ class CashierFragment : Fragment() {
      * 取消搜索
      */
     fun cancelSearch() {
-        mCurrentSearchKey = ""
-        mIsSearchMode = false
-        mCurrentPage = 0
-        loadCashierList(page = mCurrentPage, isRefresh = true)
+        if (mIsSearchMode) {
+            mCurrentSearchKey = ""
+            mIsSearchMode = false
+            mCurrentPage = 0
+            loadCashierList(page = mCurrentPage, isRefresh = true)
+            mSmartRefreshLayout?.setNoMoreData(false)
+        }
     }
-
 }
