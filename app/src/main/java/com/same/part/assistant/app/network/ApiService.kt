@@ -281,11 +281,11 @@ interface ApiService {
     /**
      * 删除店铺商品分类
      */
-    @HTTP(method = "DELETE", path = "admin/custom-category/{categoryId}", hasBody = true)
+    @DELETE("admin/custom-category/{categoryId}")
     suspend fun deleteShopCategory(
         @Path("categoryId") categoryId: String,
         @Query("appKey") appKey: String = CacheUtil.getAppKey(),
-        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret(),
-        @Body requestDeleteShopCategory: RequestdeleteShopCategory = RequestdeleteShopCategory("1")
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
     ): ResponseBody
+
 }

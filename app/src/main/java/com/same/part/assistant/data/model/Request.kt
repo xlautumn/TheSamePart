@@ -237,10 +237,6 @@ data class CreateMemberCard(
 data class RequestConformDelivery(val appKey: String = CacheUtil.getAppKey(),
                            val appSecret: String = CacheUtil.getAppSecret())
 
-/**
- * 删除店铺商品分类
- */
-data class RequestdeleteShopCategory(val appid:String)
 
 
 
