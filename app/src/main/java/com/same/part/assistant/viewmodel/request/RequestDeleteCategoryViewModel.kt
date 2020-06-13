@@ -26,14 +26,13 @@ class RequestDeleteCategoryViewModel(application: Application) : BaseViewModel(a
                 val response: String = it.string()
                 val jsonObject = JSON.parseObject(response)
                 val code = jsonObject.getIntValue("code")
+                ToastUtils.showLong(jsonObject.getString("message"))
                 if (code == 1) {
-                    ToastUtils.showLong(jsonObject.getString("message"))
                     deleteShopCategoryResult.postValue(position)
-                } else {
-                    ToastUtils.showLong(jsonObject.getString("msg"))
                 }
             }, error = {
-                ToastUtils.showLong(it.errorMsg)
+                val jsonObject = JSON.parseObject(it.errorMsg)
+                ToastUtils.showLong(jsonObject.getString("message"))
             }, isShowDialog = true
         )
     }
