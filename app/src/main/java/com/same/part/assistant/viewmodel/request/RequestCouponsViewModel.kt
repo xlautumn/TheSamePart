@@ -4,11 +4,9 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.alibaba.fastjson.JSON
 import com.same.part.assistant.data.model.CouponInfoModel
-import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.data.repository.request.HttpRequestManger
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.ext.requestResponseBody
-import me.hgj.jetpackmvvm.state.ResultResponseBodyState
 
 /**
  * 优惠券管理ViewModel

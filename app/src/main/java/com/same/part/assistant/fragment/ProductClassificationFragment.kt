@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
@@ -19,13 +20,17 @@ import com.same.part.assistant.activity.AddProductClassificationActivity.Compani
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_EDIT
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_TYPE
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.PARENT_ID
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.ProductClassificationModel
 import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.utils.HttpUtil
+import com.same.part.assistant.viewmodel.request.RequestDeleteCategoryViewModel
+import com.same.part.assistant.viewmodel.request.RequestVipCardViewModel
 import kotlinx.android.synthetic.main.fragment_product_classification.*
 import kotlinx.android.synthetic.main.fragment_product_classification.mSmartRefreshLayout
+import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.network.ExceptionHandle
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -46,6 +51,11 @@ class ProductClassificationFragment : Fragment() {
     //当前搜索的关键字
     private var mCurrentSearchKey = ""
 
+    private lateinit var mCategoryAdapter:CustomAdapter
+
+    //删除分类
+    private val mRequestDeleteCategoryViewModel: RequestDeleteCategoryViewModel by lazy { getViewModel<RequestDeleteCategoryViewModel>() }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun eventRefresh(messageEvent: String) {
         if (ADDCLASSIFICATION_SUCCESS == messageEvent) {
@@ -65,8 +75,9 @@ class ProductClassificationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         EventBus.getDefault().register(this)
         //列表数据
+        mCategoryAdapter = CustomAdapter(mProductClassificationList)
         productRecyclerView.apply {
-            adapter = CustomAdapter(mProductClassificationList)
+            adapter = mCategoryAdapter
             layoutManager = LinearLayoutManager(context)
         }
         //定时刷新
@@ -92,6 +103,12 @@ class ProductClassificationFragment : Fragment() {
         }
         //加载数据
         loadProductClassificationList(page = mCurrentPage, isRefresh = true)
+
+        //删除更新
+        mRequestDeleteCategoryViewModel.deleteShopCategoryResult.observe(viewLifecycleOwner,
+            Observer { position->
+                mCategoryAdapter.notifyItemRemoved(position)
+            })
     }
 
     /**
@@ -135,7 +152,9 @@ class ProductClassificationFragment : Fragment() {
                                     val parentId =
                                         getJSONObject("parent")?.getString("id")
                                             .orEmpty()
-                                    ProductClassificationModel(id, name, parentId).apply {
+                                    val parentName =
+                                        getJSONObject("parent")?.getString("name")?:"--"
+                                    ProductClassificationModel(id, name, parentId,parentName).apply {
                                         itemList.add(this)
                                     }
                                 }
@@ -211,7 +230,7 @@ class ProductClassificationFragment : Fragment() {
                 holder.addSecondCategory.visibility = View.GONE
                 "二级"
             }
-
+            holder.categoryParentName.text = model.parentName
             //添加二级页面
             holder.addSecondCategory.setOnClickListener {
                 startActivity(
@@ -233,6 +252,12 @@ class ProductClassificationFragment : Fragment() {
                     }
                 )
             }
+            //删除
+            holder.delete.setOnClickListener {
+                showMessage("请确认是否删除？", positiveAction = {
+                  mRequestDeleteCategoryViewModel.deleteShopCategory(model.id,position)
+                }, negativeButtonText = "取消")
+            }
         }
     }
 
@@ -241,6 +266,8 @@ class ProductClassificationFragment : Fragment() {
         var productLevel: TextView = itemView.findViewById(R.id.productLevel)
         var addSecondCategory: View = itemView.findViewById(R.id.addSecondCategory)
         var edit: View = itemView.findViewById(R.id.edit)
+        var categoryParentName: TextView = itemView.findViewById(R.id.categoryParentName)
+        var delete: TextView = itemView.findViewById(R.id.delete)
     }
 
     override fun onDestroy() {

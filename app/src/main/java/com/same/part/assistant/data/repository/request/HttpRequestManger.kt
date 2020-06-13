@@ -201,7 +201,7 @@ class HttpRequestManger {
      */
     suspend fun updateCart(
         cartId: String,
-        quantity:Int
+        quantity: Int
     ): ResponseBody {
         return NetworkApi.service.updateCart(cartId, RequestUpdateCart(quantity = quantity))
     }
@@ -215,25 +215,29 @@ class HttpRequestManger {
         cartIds: String
     ): ResponseBody {
         return NetworkApi.service.delCarts(
-            cartIds,appKey, appSecret
+            cartIds, appKey, appSecret
         )
     }
 
     /**
      * 创建商品订单
      */
-    suspend fun createOrder( addressId: String,
-                             cartIds: String,
-                             category: String,
-                             orderRemarks: List<RequestCreateOrder.OrderRemark>,
-                             userId: String): ResponseBody {
-        return NetworkApi.service.createOrder(RequestCreateOrder(
-            addressId = addressId,
-            cartIds = cartIds,
-            category = category,
-            orderRemarks = orderRemarks,
-            userId = userId
-        ))
+    suspend fun createOrder(
+        addressId: String,
+        cartIds: String,
+        category: String,
+        orderRemarks: List<RequestCreateOrder.OrderRemark>,
+        userId: String
+    ): ResponseBody {
+        return NetworkApi.service.createOrder(
+            RequestCreateOrder(
+                addressId = addressId,
+                cartIds = cartIds,
+                category = category,
+                orderRemarks = orderRemarks,
+                userId = userId
+            )
+        )
     }
 
     /**
@@ -241,7 +245,7 @@ class HttpRequestManger {
      */
     suspend fun getPaySign(
         productOrderId: String,
-        payment:String
+        payment: String
     ): ResponseBody {
         return NetworkApi.service.getPaySign(productOrderId, RequestPay(payment = payment))
     }
@@ -259,7 +263,8 @@ class HttpRequestManger {
     /**
      * 修改账号密码
      */
-    suspend fun changeAccountPwd(changePwdInfo: ChangePwdInfo
+    suspend fun changeAccountPwd(
+        changePwdInfo: ChangePwdInfo
     ): ApiResponse<ChangePwdModel> {
         return NetworkApi.service.changeAccountPwd(changePwdInfo)
     }
@@ -267,7 +272,8 @@ class HttpRequestManger {
     /**
      * 获取店铺会员卡列表
      */
-    suspend fun getMemberCardList(page: Int
+    suspend fun getMemberCardList(
+        page: Int
     ): ResponseBody {
         return NetworkApi.service.getMemberCardList(page)
     }
@@ -275,7 +281,8 @@ class HttpRequestManger {
     /**
      * 创建店铺会员卡
      */
-    suspend fun createMemberCard(createMemberCard :CreateMemberCard
+    suspend fun createMemberCard(
+        createMemberCard: CreateMemberCard
     ): ResponseBody {
         return NetworkApi.service.createMemberCard(createMemberCard)
     }
@@ -283,9 +290,10 @@ class HttpRequestManger {
     /**
      * 编辑店铺会员卡
      */
-    suspend fun editMemberCard(cardId: String,createMemberCard :CreateMemberCard
+    suspend fun editMemberCard(
+        cardId: String, createMemberCard: CreateMemberCard
     ): ResponseBody {
-        return NetworkApi.service.editMemberCard(cardId,createMemberCard)
+        return NetworkApi.service.editMemberCard(cardId, createMemberCard)
     }
 
     /**
@@ -298,9 +306,15 @@ class HttpRequestManger {
     /**
      * 确认收货
      */
-    suspend fun conformDelivery(orderId:String):ResponseBody{
+    suspend fun conformDelivery(orderId: String): ResponseBody {
         return NetworkApi.service.conformDelivery(orderId)
     }
 
+    /**
+     * 删除店铺商品分类
+     */
+    suspend fun deleteShopCategory(categoryId: String): ResponseBody {
+        return NetworkApiv2.service.deleteShopCategory(categoryId)
+    }
 
 }

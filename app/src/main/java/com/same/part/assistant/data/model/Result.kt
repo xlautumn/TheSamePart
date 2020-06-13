@@ -50,7 +50,8 @@ data class CashierModel(
 data class ProductClassificationModel(
     var id: String,
     var name: String,
-    var parentId: String
+    var parentId: String,
+    var parentName:String = "--"
 )
 
 /**
