@@ -105,6 +105,7 @@ class ProductClassificationFragment : Fragment() {
         //删除更新
         mRequestDeleteCategoryViewModel.deleteShopCategoryResult.observe(viewLifecycleOwner,
             Observer { position ->
+                mProductClassificationList.removeAt(position)
                 mCategoryAdapter.notifyItemRemoved(position)
             })
     }
