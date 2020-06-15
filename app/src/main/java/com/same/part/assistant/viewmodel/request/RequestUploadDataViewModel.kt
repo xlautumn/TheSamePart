@@ -33,7 +33,7 @@ class RequestUploadDataViewModel(application: Application) : BaseViewModel(appli
         imagePath: String
     ) {
         //不上传图片
-        if (!isNeedUploadQiniu) {
+        if (!isNeedUploadQiniu || imagePath.isEmpty()) {
             uploadResult.postValue(null)
             return
         }

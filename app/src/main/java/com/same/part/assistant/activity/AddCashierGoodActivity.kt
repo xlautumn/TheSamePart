@@ -376,10 +376,10 @@ class AddCashierGoodActivity :
      * 判断输入
      */
     private fun judgeCanSave(): Boolean = when {
-        mViewModel.imgs.value.isEmpty() -> {
-            ToastUtils.showShort("商品缩略图不可为空！")
-            false
-        }
+//        mViewModel.imgs.value.isEmpty() -> {
+//            ToastUtils.showShort("商品缩略图不可为空！")
+//            false
+//        }
         mViewModel.name.value.isEmpty() -> {
             ToastUtils.showShort("商品名称不可为空！")
             false

@@ -35,7 +35,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 /**
- * 商品分类
+ * 商品分类add
  */
 class ProductClassificationFragment : Fragment() {
     //当前请求第几页的数据
