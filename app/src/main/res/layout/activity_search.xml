@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.same.part.assistant.viewmodel.state.SearchViewModel" />
+
+        <variable
+            name="click"
+            type="com.same.part.assistant.activity.SearchActivity.ProxyClick" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbar_title"
+            layout="@layout/toolbar_title" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rootSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginTop="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_70"
+            android:background="@drawable/shape_search_bg"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_title">
+
+            <ImageView
+                android:id="@+id/ivSearch"
+                android:layout_width="@dimen/dip_20"
+                android:layout_height="@dimen/dip_20"
+                android:layout_marginLeft="@dimen/dip_10"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/etSearch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="@dimen/dip_0"
+                android:layout_height="@dimen/dip_35"
+                android:layout_marginLeft="@dimen/dip_7"
+                android:layout_marginRight="@dimen/dip_7"
+                android:background="@null"
+                android:gravity="left|center_vertical"
+                android:hint="请输入商品名称"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/color_B4B4B4"
+                android:textColorHint="@color/color_B4B4B4"
+                android:textCursorDrawable="@drawable/shape_search_cursor"
+                android:textSize="@dimen/dip_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivSearchClear"
+                app:layout_constraintStart_toEndOf="@id/ivSearch"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivSearchClear"
+                android:layout_width="@dimen/dip_15"
+                android:layout_height="@dimen/dip_15"
+                android:layout_marginRight="@dimen/dip_10"
+                android:onClick="@{()->click.clear()}"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_dialog_close"
+                app:isVisible="@{viewmodel.hasSearchResult}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->click.cancel()}"
+            android:paddingLeft="@dimen/dip_5"
+            android:paddingRight="@dimen/dip_5"
+            android:text="取消"
+            android:textSize="@dimen/dip_16"
+            app:layout_constraintBottom_toBottomOf="@id/rootSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/rootSearch"
+            app:layout_constraintTop_toTopOf="@id/rootSearch" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dip_15"
+            android:paddingLeft="@dimen/dip_15"
+            android:paddingRight="@dimen/dip_15"
+            app:isVisible="@{viewmodel.showHistory}"
+            app:layout_constraintTop_toBottomOf="@id/rootSearch" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dip_0"
+            app:isVisible="@{viewmodel.showResult}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rootSearch">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dip_15"
+                android:paddingLeft="@dimen/dip_15"
+                android:paddingRight="@dimen/dip_15"
+                app:isVisible="@{viewmodel.hasSearchResult}" />
+
+            <include
+                android:id="@+id/emptyView"
+                layout="@layout/empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_0"
+                android:layout_marginTop="@dimen/dip_15"
+                app:isVisible="@{!viewmodel.hasSearchResult}" />
+
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

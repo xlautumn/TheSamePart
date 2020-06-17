@@ -317,4 +317,11 @@ class HttpRequestManger {
         return NetworkApiv2.service.deleteShopCategory(categoryId)
     }
 
+    /**
+     * 请求搜索内容结果
+     */
+
+    suspend fun getSearchResult(name: String): ResponseBody{
+        return NetworkApiv2.service.getSearchResult(name)
+    }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.OrderSubmitActivity
+import com.same.part.assistant.activity.SearchActivity
 import com.same.part.assistant.adapter.CartProductAdapter
 import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
@@ -53,6 +54,7 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         rootDetail.setOnClickListener(this)
         right_btn.setOnClickListener(this)
         cart_invalid_view.setOnClickListener(this)
+        layoutSearch.setOnClickListener(this)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -189,6 +191,12 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
             R.id.cart_invalid_view ->{
                 if (cartDetailList.visibility == View.VISIBLE) {
                     hideCartDetail()
+                }
+            }
+            R.id.layoutSearch ->{
+                //跳转search
+                activity?.let {
+                    startActivity(Intent(it, SearchActivity::class.java))
                 }
             }
         }

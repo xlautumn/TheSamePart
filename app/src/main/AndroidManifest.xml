@@ -65,6 +65,8 @@
             android:exported="true"
             android:launchMode="singleTop"
            />
+        <activity android:name=".activity.SearchActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.same.part.assistant.fileProvider"

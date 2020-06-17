@@ -288,4 +288,15 @@ interface ApiService {
         @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
     ): ResponseBody
 
+    /**
+     * 获取搜索结果
+     */
+    @GET("products")
+    suspend fun getSearchResult(
+        @Query("name")  name: String,
+        @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret(),
+        @Query("shopId") shopId: Int=2000,
+        @Query("state") state: Int=1
+    ): ResponseBody
 }
