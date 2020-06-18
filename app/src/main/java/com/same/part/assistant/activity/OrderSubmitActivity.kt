@@ -88,7 +88,12 @@ class OrderSubmitActivity : BaseVmActivity<RequestCreateOrderViewModel>(),
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.ll_payment -> {
-                showPaymentDialog()
+                val orderId = mViewModel.getOrderId()
+                if (TextUtils.isEmpty(orderId)) {
+                    showPaymentDialog()
+                } else {
+                    ToastUtils.showShort("已生成订单，不能修改支付方式")
+                }
             }
 
             R.id.tv_confirm -> {
