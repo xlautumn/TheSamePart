@@ -20,6 +20,7 @@ import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.databinding.ActivitySearchBinding
 import com.same.part.assistant.utils.SharedPreferenceUtil
 import com.same.part.assistant.view.CustomerLayoutManager
+import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import com.same.part.assistant.viewmodel.request.RequestSearchResultViewModel
 import com.same.part.assistant.viewmodel.state.SearchViewModel
 import kotlinx.android.synthetic.main.activity_search.*
@@ -32,6 +33,8 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>(), T
     private val mSearchResultViewModel: RequestSearchResultViewModel by lazy {
         getAppViewModel<RequestSearchResultViewModel>()
     }
+
+    private val requestCartViewModel: RequestCartViewModel by lazy { getAppViewModel<RequestCartViewModel>() }
     private lateinit var mPreferInstance: SharedPreferenceUtil
 
     override fun layoutId(): Int = R.layout.activity_search
@@ -56,8 +59,7 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>(), T
         mDatabind.searchHistory.adapter = historyAdapter
         subscribeHistoryUi(historyAdapter)
 
-        //TODO 购物车逻辑，是否需要修改adapter
-        val searchResultAdapter = SearchProductAdapter(this, ProxyClick(), null)
+        val searchResultAdapter = SearchProductAdapter(this, ProxyClick(), requestCartViewModel)
         mDatabind.searchResult.layoutManager = LinearLayoutManager(this)
         mDatabind.searchResult.adapter = searchResultAdapter
         subscribeSearchResultUi(searchResultAdapter)
@@ -69,6 +71,10 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>(), T
 
         mPreferInstance = SharedPreferenceUtil.getInstance(this)
         mViewModel.getHistoryData(mPreferInstance)
+
+        requestCartViewModel.cartProductList.observe(this, Observer {
+            searchResultAdapter?.notifyDataSetChanged()
+        })
     }
 
     private fun subscribeSearchResultUi(adapter: SearchProductAdapter) {
@@ -170,14 +176,14 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>(), T
          * 添加购物车
          */
         fun addShopProduct(shopProduct: ShopProduct) {
-            //TODO 购物车逻辑
+            requestCartViewModel.addShopProduct(shopProduct)
         }
 
         /**
          * 减少购物车数量
          */
         fun minusShopProduct(shopProduct: ShopProduct) {
-            //TODO 购物车逻辑
+            requestCartViewModel.minusShopProduct(shopProduct)
         }
     }
 }

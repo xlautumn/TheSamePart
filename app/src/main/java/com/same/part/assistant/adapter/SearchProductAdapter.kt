@@ -21,7 +21,7 @@ import java.util.*
 class SearchProductAdapter(
     private var mContext: SearchActivity,
     private val proxyClick: SearchActivity.ProxyClick,
-    private val cartViewModel: RequestCartViewModel?
+    private val cartViewModel: RequestCartViewModel
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -97,7 +97,7 @@ class SearchProductAdapter(
                 } else {
                     holder.chooseSpecs.visibility = View.GONE
                     holder.goodShoppingCartRoot.visibility = View.VISIBLE
-                    val cartNum = cartViewModel?.getCartNum(this) ?: 0
+                    val cartNum = cartViewModel.getCartNum(this) ?: 0
                     if (cartNum > 0) {
                         holder.cartIncrease.visibility = View.VISIBLE
                         holder.cartReduce.visibility = View.VISIBLE
