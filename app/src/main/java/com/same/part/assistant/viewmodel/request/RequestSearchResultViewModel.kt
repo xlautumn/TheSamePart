@@ -1,6 +1,7 @@
 package com.same.part.assistant.viewmodel.request
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alibaba.fastjson.JSON
@@ -32,6 +33,13 @@ class RequestSearchResultViewModel(application: Application) : BaseViewModel(app
                 val result = it.string()
                 val resultObject = JSON.parse(result)
                 if (resultObject is JSONObject) {
+                    val code = resultObject.getString("code")
+                    if (TextUtils.equals("0", code)) {
+                        //暂无数据
+                        _searchResultList.postValue(_searchResultList.value)
+                        ToastUtils.showShort(resultObject.getString("message"))
+                        return@requestResponseBody
+                    }
                     //数据解析
                     val resultList = ArrayList<ProductDetailData>()
                     resultObject.getJSONArray("content")?.takeIf { it.size > 0 }?.let { jsonArray ->

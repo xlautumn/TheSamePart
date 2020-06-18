@@ -9,6 +9,7 @@ import com.same.part.assistant.R
 
 class SearchHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val mData = ArrayList<String>()
+    private var mListener: ((String) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         HistoryViewHolder(
             LayoutInflater.from(parent.context)
@@ -20,6 +21,9 @@ class SearchHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is HistoryViewHolder) {
             holder.name.text = mData[position]
+            holder.itemView.setOnClickListener {
+                mListener?.invoke(mData[position])
+            }
         }
     }
 
@@ -27,11 +31,15 @@ class SearchHistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val name: TextView = itemView.findViewById(R.id.searchHistoryName)
     }
 
-    fun setData(data: List<String>) {
-        data.let {
+    fun setData(data: List<String>?) {
+        data?.let {
             mData.clear()
             mData.addAll(it)
             notifyDataSetChanged()
         }
+    }
+
+    fun setItemOnClickListener(listener: ((String) -> Unit)?) {
+        mListener = listener
     }
 }

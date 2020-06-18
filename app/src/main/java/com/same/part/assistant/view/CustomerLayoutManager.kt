@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager
 class CustomerLayoutManager(private val maxRows: Int) : LayoutManager() {
     private var mMaxRow = 0
     private var mRow = 0
+    private var mCanScrollVertical=false
 
     init {
         isAutoMeasureEnabled = true
@@ -59,6 +60,7 @@ class CustomerLayoutManager(private val maxRows: Int) : LayoutManager() {
                     leftOffset + itemWidth,
                     topOffset + itemHeight
                 )
+                leftOffset+=itemWidth
             } else {
                 if (mMaxRow != 0 && mMaxRow <= mRow) {
                     removeView(child)
@@ -87,9 +89,12 @@ class CustomerLayoutManager(private val maxRows: Int) : LayoutManager() {
 
     private fun getDecoratedMeasurementVertical(view: View): Int {
         val params: RecyclerView.LayoutParams = view.layoutParams as RecyclerView.LayoutParams
-        return getDecoratedMeasuredWidth(view) + params.topMargin + params.bottomMargin
+        return getDecoratedMeasuredHeight(view) + params.topMargin + params.bottomMargin
     }
 
     private fun getHorizontalSpace(): Int = width - paddingLeft
 
+    override fun canScrollVertically(): Boolean {
+        return mCanScrollVertical
+    }
 }

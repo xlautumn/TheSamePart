@@ -29,6 +29,7 @@
             android:layout_marginLeft="@dimen/dip_15"
             android:layout_marginTop="@dimen/dip_15"
             android:layout_marginRight="@dimen/dip_70"
+            android:focusableInTouchMode="true"
             android:background="@drawable/shape_search_bg"
             app:layout_constraintTop_toBottomOf="@id/toolbar_title">
 
@@ -73,7 +74,7 @@
                 android:onClick="@{()->click.clear()}"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_dialog_close"
-                app:isVisible="@{viewmodel.hasSearchResult}"
+                app:isVisible="@{viewmodel.showClear}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -94,15 +95,48 @@
             app:layout_constraintStart_toEndOf="@id/rootSearch"
             app:layout_constraintTop_toTopOf="@id/rootSearch" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchHistory"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dip_15"
-            android:paddingLeft="@dimen/dip_15"
-            android:paddingRight="@dimen/dip_15"
+            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginRight="@dimen/dip_15"
+            android:orientation="vertical"
             app:isVisible="@{viewmodel.showHistory}"
-            app:layout_constraintTop_toBottomOf="@id/rootSearch" />
+            app:layout_constraintTop_toBottomOf="@id/rootSearch">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dip_7"
+                android:paddingBottom="@dimen/dip_7">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="历史搜索"
+                    android:textColor="@color/color_B4B4B4"
+                    android:textSize="@dimen/dip_14" />
+
+                <ImageView
+                    android:layout_width="@dimen/dip_15"
+                    android:layout_height="@dimen/dip_15"
+                    android:layout_alignParentRight="true"
+                    android:onClick="@{()->click.delete()}"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icon_delete" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dip_5"
+                android:paddingLeft="@dimen/dip_15"
+                android:paddingRight="@dimen/dip_15" />
+        </LinearLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"

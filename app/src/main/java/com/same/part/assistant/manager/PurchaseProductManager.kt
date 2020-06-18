@@ -40,47 +40,50 @@ class PurchaseProductManager private constructor() {
             .append("&appSecret=${CacheUtil.getAppSecret()}")
 
         HttpUtil.instance.getUrl(url.toString(), { result ->
-            JSONArray(result).takeIf { it.length() > 0 }?.also { jsonArray ->
-                mPurchaseCategoryData.clear()
-                for (i in 0 until jsonArray.length()) {
-                    jsonArray.optJSONObject(i)?.let { jsonObject ->
-                        CategoryData().apply {
-                            this.productCategoryId = jsonObject.optString("productCategoryId")
-                            this.addTime = jsonObject.optString("addTime")
-                            this.name = jsonObject.optString("name")
-                            this.description = jsonObject.optString("description")
-                            this.img = jsonObject.optString("img")
-                            this.unit = jsonObject.optString("unit")
-                            this.sequence = jsonObject.optString("sequence")
-                            this.ifShow = jsonObject.optBoolean("ifShow")
-                            jsonObject.optJSONArray("sons")?.let { sons ->
-                                val sonsList = ArrayList<CategoryData>()
-                                for (k in 0 until sons.length()) {
-                                    sons.optJSONObject(k)?.let { son ->
-                                        CategoryData().let { secondCategory ->
-                                            secondCategory.productCategoryId =
-                                                son.optString("productCategoryId")
-                                            secondCategory.addTime = son.optString("addTime")
-                                            secondCategory.name = son.optString("name")
-                                            secondCategory.description =
-                                                son.optString("description")
-                                            secondCategory.img = son.optString("img")
-                                            secondCategory.unit = son.optString("unit")
-                                            secondCategory.sequence = son.optString("sequence")
-                                            secondCategory.ifShow = son.optBoolean("ifShow")
-                                            sonsList.add(secondCategory)
+            try {
+                JSONArray(result).takeIf { it.length() > 0 }?.also { jsonArray ->
+                    mPurchaseCategoryData.clear()
+                    for (i in 0 until jsonArray.length()) {
+                        jsonArray.optJSONObject(i)?.let { jsonObject ->
+                            CategoryData().apply {
+                                this.productCategoryId = jsonObject.optString("productCategoryId")
+                                this.addTime = jsonObject.optString("addTime")
+                                this.name = jsonObject.optString("name")
+                                this.description = jsonObject.optString("description")
+                                this.img = jsonObject.optString("img")
+                                this.unit = jsonObject.optString("unit")
+                                this.sequence = jsonObject.optString("sequence")
+                                this.ifShow = jsonObject.optBoolean("ifShow")
+                                jsonObject.optJSONArray("sons")?.let { sons ->
+                                    val sonsList = ArrayList<CategoryData>()
+                                    for (k in 0 until sons.length()) {
+                                        sons.optJSONObject(k)?.let { son ->
+                                            CategoryData().let { secondCategory ->
+                                                secondCategory.productCategoryId =
+                                                    son.optString("productCategoryId")
+                                                secondCategory.addTime = son.optString("addTime")
+                                                secondCategory.name = son.optString("name")
+                                                secondCategory.description =
+                                                    son.optString("description")
+                                                secondCategory.img = son.optString("img")
+                                                secondCategory.unit = son.optString("unit")
+                                                secondCategory.sequence = son.optString("sequence")
+                                                secondCategory.ifShow = son.optBoolean("ifShow")
+                                                sonsList.add(secondCategory)
+                                            }
                                         }
                                     }
+                                    this.sons = sonsList
                                 }
-                                this.sons = sonsList
+                                mPurchaseCategoryData.add(this)
                             }
-                            mPurchaseCategoryData.add(this)
                         }
                     }
+                    onSuccess?.invoke()
                 }
-                onSuccess?.invoke()
-            }
+            }catch (e: Exception){
 
+            }
         })
     }
 
