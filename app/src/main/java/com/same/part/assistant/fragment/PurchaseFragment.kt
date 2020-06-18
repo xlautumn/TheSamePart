@@ -193,12 +193,12 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
                     hideCartDetail()
                 }
             }
-            R.id.layoutSearch ->{
-                //跳转search
-                activity?.let {
-                    startActivity(Intent(it, SearchActivity::class.java))
-                }
-            }
+//            R.id.layoutSearch ->{
+//                //跳转search
+//                activity?.let {
+//                    startActivity(Intent(it, SearchActivity::class.java))
+//                }
+//            }
         }
     }
 
