@@ -38,7 +38,7 @@ class SettingActivity : AppCompatActivity() {
         //退出登录
         accountQuit.setOnClickListener {
             showMessage(message = "请确认是否退出？", title = "温馨提示", positiveAction = {
-                CacheUtil.setShopUserModel(null)
+                CacheUtil.setShopUserModel(applicationContext,null)
                 startActivity(Intent(this, LoginActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 })

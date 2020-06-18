@@ -1,10 +1,12 @@
 package com.same.part.assistant.app.util
 
+import android.content.Context
 import android.text.TextUtils
 import com.google.gson.Gson
 import com.same.part.assistant.data.model.Address
 import com.same.part.assistant.data.model.ShopUserModel
 import com.same.part.assistant.data.model.ShopUserLoginModel
+import com.same.part.assistant.utils.SharedPreferenceUtil
 import com.tencent.mmkv.MMKV
 
 /**
@@ -27,7 +29,7 @@ object CacheUtil {
     /**
      * 设置账户信息
      */
-    fun setShopUserModel(shopUserModel: ShopUserModel?) {
+    fun setShopUserModel(context: Context, shopUserModel: ShopUserModel?) {
         val kv = MMKV.mmkvWithID("app")
         if (shopUserModel == null) {
             kv.encode("shopUserModel", "")
@@ -35,6 +37,7 @@ object CacheUtil {
             setTokenExpirationTime(0)
             setShopImg("")
             setShopName("")
+            clearSearchHistory(context)
         } else {
             kv.encode("shopUserModel", Gson().toJson(shopUserModel))
             setTokenExpirationTime(shopUserModel.AccessToken.expiresIn + System.currentTimeMillis())
@@ -42,6 +45,11 @@ object CacheUtil {
             setShopName(shopUserModel.UserShopDTO.takeIf { it.isNotEmpty() }?.get(0)?.shop?.name)
             setIsLogin(true)
         }
+    }
+
+    private fun clearSearchHistory(context: Context) {
+        val sp=SharedPreferenceUtil.getInstance(context)
+        sp.removeByKey(SharedPreferenceUtil.SEARCH_HISTORY)
     }
 
     /**
