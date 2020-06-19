@@ -1,6 +1,7 @@
 package com.same.part.assistant.utils
 
 import android.content.Context
+import java.lang.NumberFormatException
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -28,9 +29,13 @@ class Util {
          * @return
          */
         fun format2(value: String?): String? {
-            var bd = BigDecimal(value)
-            bd = bd.setScale(2, RoundingMode.HALF_UP)
-            return bd.toPlainString()
+            return try {
+                var bd = BigDecimal(value)
+                bd = bd.setScale(2, RoundingMode.HALF_UP)
+                bd.toPlainString()
+            }catch (e:NumberFormatException){
+                "0.00"
+            }
         }
 
         /**
