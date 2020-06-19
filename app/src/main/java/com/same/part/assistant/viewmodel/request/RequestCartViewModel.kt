@@ -21,6 +21,11 @@ import me.hgj.jetpackmvvm.state.ResultState
 
 class RequestCartViewModel(application: Application) : BaseViewModel(application) {
 
+    /**
+     * 是否请求过购物车数据
+     */
+    private var hasRequestCart:Boolean = false
+
     private val _cartProductMap: MutableMap<String, CartProduct> = mutableMapOf()
 
     /**
@@ -245,6 +250,10 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
      * 请求购物车列表
      */
     fun requestCartList() {
+        if (hasRequestCart){
+            return
+        }
+        hasRequestCart = true
         requestResponseBody(
             {
                 HttpRequestManger.instance.getCartList()
@@ -325,6 +334,7 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
      * 清空缓存数据
      */
     fun clearCacheData() {
+        hasRequestCart = false
         _cartProductMap.clear()
         _cartProductList.value = arrayListOf()
     }

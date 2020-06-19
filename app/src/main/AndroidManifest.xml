@@ -65,7 +65,8 @@
             android:exported="true"
             android:launchMode="singleTop"
            />
-        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.SearchActivity"
+            android:windowSoftInputMode="adjustNothing|stateVisible"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
