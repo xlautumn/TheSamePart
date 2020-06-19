@@ -8,9 +8,10 @@ import com.bumptech.glide.Glide
 import com.same.part.assistant.data.model.CartProduct
 import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.databinding.CartProductItemBinding
+import com.same.part.assistant.fragment.CartDetailFragment
 import com.same.part.assistant.fragment.PurchaseFragment
 
-class CartProductAdapter(private val proxyClick: PurchaseFragment.ProxyClick) : RecyclerView.Adapter<CartProductViewHolder>() {
+class CartProductAdapter(private val proxyClick: CartDetailFragment.ProxyClick) : RecyclerView.Adapter<CartProductViewHolder>() {
 
     private val data: ArrayList<CartProduct> = arrayListOf()
 
@@ -40,7 +41,7 @@ class CartProductAdapter(private val proxyClick: PurchaseFragment.ProxyClick) : 
     }
 }
 
-class CartProductViewHolder(private val binding: CartProductItemBinding,private val proxyClick: PurchaseFragment.ProxyClick) :
+class CartProductViewHolder(private val binding: CartProductItemBinding,private val proxyClick: CartDetailFragment.ProxyClick) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(cartProduct: CartProduct) {
