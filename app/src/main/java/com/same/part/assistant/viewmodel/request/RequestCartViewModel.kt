@@ -211,42 +211,6 @@ class RequestCartViewModel(application: Application) : BaseViewModel(application
 
 
     /**
-     * 创建订单的
-     */
-    fun createOrder(
-        addressId: String,
-        category: String,
-        orderRemarks: List<RequestCreateOrder.OrderRemark>,
-        userId: String
-    ) {
-        requestResponseBody(
-            {
-                HttpRequestManger.instance.createOrder(
-                    addressId,
-                    cartIds,
-                    category,
-                    orderRemarks,
-                    userId
-                )
-            },
-            success = {},
-            error = {}
-        )
-    }
-
-//    fun getPaySign(
-//        productOrderId: String,
-//        requestPay: RequestPay
-//    ) {
-//        request(
-//            {
-//                HttpRequestManger.instance.getPaySign(productOrderId, requestPay)
-//            },
-//            _paySignResult
-//        )
-//    }
-
-    /**
      * 请求购物车列表
      */
     fun requestCartList() {
