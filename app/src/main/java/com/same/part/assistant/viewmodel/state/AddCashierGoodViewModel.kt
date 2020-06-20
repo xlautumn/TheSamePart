@@ -17,6 +17,7 @@ class AddCashierGoodViewModel(application: Application) : BaseViewModel(applicat
     var type = StringLiveData("否")
     var hasSelectPhoto = BooleanLiveData(false)
     var shelvesState = IntLiveData(1)
+    var specState = IntLiveData(0)
 
     var quantity = StringLiveData("")
 }

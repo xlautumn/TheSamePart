@@ -25,7 +25,10 @@ object CustomBindAdapter {
             .placeholder(R.drawable.home_user_avatar)
             .error(R.drawable.home_user_avatar)
             .into(object : SimpleTarget<Drawable>() {
-                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable>?
+                ) {
                     view.setImageDrawable(resource)
                 }
             })
@@ -44,9 +47,9 @@ object CustomBindAdapter {
     @BindingAdapter(value = ["receiveWay"])
     @JvmStatic
     fun receiveWay(textView: TextView, num: Int) {
-        textView.text = when(num) {
-            1 ->  "直接领取"
-            2 ->  "付费领取"
+        textView.text = when (num) {
+            1 -> "直接领取"
+            2 -> "付费领取"
             else -> "满足条件自动领取"
         }
     }
@@ -54,7 +57,7 @@ object CustomBindAdapter {
 
     @BindingAdapter(value = ["switchButton"])
     @JvmStatic
-    fun switchButton(switchCompat: SwitchCompat,num:Int) {
+    fun switchButton(switchCompat: SwitchCompat, num: Int) {
         switchCompat.isChecked = num == 1
     }
 

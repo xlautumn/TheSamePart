@@ -95,12 +95,12 @@ class AddCashierGoodActivity :
             when (intent?.getStringExtra(AddCashierGoodActivity.JUMP_FROM_TYPE).orEmpty()) {
                 JUMP_FROM_ADD_CASHIER_GOOD -> {
                     //添加收银商品标题
-                    mToolbarTitle.text = "添加收银商品"
+                    mToolbarTitle.text = "添加商品"
                     JUMP_FROM_ADD_CASHIER_GOOD
                 }
                 else -> {
                     //编辑收银商品标题
-                    mToolbarTitle.text = "编辑收银商品"
+                    mToolbarTitle.text = "编辑商品"
                     JUMP_FROM_EDIT
                 }
             }
@@ -166,6 +166,10 @@ class AddCashierGoodActivity :
             }.setLayoutRes(R.layout.bottom_dialog_list).setDimAmount(0.4F)
                 .setCancelOutside(true).setTag("mChooseIfWeightGood").show()
         }
+        //多规格
+        mSpecState.setOnCheckedChangeListener { _, isChecked ->
+            mViewModel.specState.value = if (isChecked) 1 else 0
+        }
         //选择计量单位
         mChooseUnit.setOnClickListener {
             val dialog = BottomDialog.create(supportFragmentManager)
@@ -230,11 +234,11 @@ class AddCashierGoodActivity :
             this,
             Observer { resultState ->
                 parseState(resultState, { cashDetailMode ->
-                    mViewModel.imgs.postValue(cashDetailMode.img?:"")
-                    mViewModel.name.postValue(cashDetailMode.name?:"")
+                    mViewModel.imgs.postValue(cashDetailMode.img ?: "")
+                    mViewModel.name.postValue(cashDetailMode.name ?: "")
                     mViewModel.productCategoryId.postValue(cashDetailMode.customCategoryProductId.toString())
                     mViewModel.type.postValue(if (cashDetailMode.type == "1") "是" else "否")
-                    mViewModel.unit.postValue(cashDetailMode.unit?:"")
+                    mViewModel.unit.postValue(cashDetailMode.unit ?: "")
                     mViewModel.price.postValue(cashDetailMode.price.toString())
                     mViewModel.sequence.postValue(cashDetailMode.sequence.toString())
                     mViewModel.shelvesState.postValue(cashDetailMode.state)
@@ -244,7 +248,7 @@ class AddCashierGoodActivity :
                         mScannerBarcode.visibility = View.GONE
                     } else {
                         mScannerBarcode.visibility = View.VISIBLE
-                        mViewModel.barcode.postValue(cashDetailMode.barcode?:"")
+                        mViewModel.barcode.postValue(cashDetailMode.barcode ?: "")
                     }
                     if (mProductClassificationList.size > 0) {
                         mProductClassificationList.forEach {
@@ -397,7 +401,7 @@ class AddCashierGoodActivity :
             ToastUtils.showShort("库存不可为空！")
             false
         }
-        mViewModel.quantity.value.contains(".") && mViewModel.type.value != "是" ->{
+        mViewModel.quantity.value.contains(".") && mViewModel.type.value != "是" -> {
             ToastUtils.showShort("非称重商品库存不能包含小数点！")
             false
         }
@@ -438,10 +442,10 @@ class AddCashierGoodActivity :
     /**
      * 库存hint显示以及小数点位数
      */
-    fun EditText.digitsWithHintText(hasDigits:Boolean) {
+    private fun EditText.digitsWithHintText(hasDigits: Boolean) {
         if (hasDigits) {
             hint = "称重商品库存为商品总重量"
-            NumberInputUtil.setPriceMode(this,3)
+            NumberInputUtil.setPriceMode(this, 3)
         } else {
             hint = "非称重商品库存为数量"
             inputType = InputType.TYPE_CLASS_NUMBER
