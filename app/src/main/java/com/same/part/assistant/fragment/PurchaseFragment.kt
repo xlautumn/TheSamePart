@@ -1,5 +1,6 @@
 package com.same.part.assistant.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.SearchActivity
 import com.same.part.assistant.adapter.PurchaseFirstLevelAdapter
 import com.same.part.assistant.adapter.PurchaseProductAdapter
 import com.same.part.assistant.adapter.PurchaseSecondLevelAdapter
@@ -138,14 +140,17 @@ class PurchaseFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
+    override fun onClick(v: View) {
 
-//            R.id.layoutSearch ->{
-//                //跳转search
-//                activity?.let {
-//                    startActivity(Intent(it, SearchActivity::class.java))
-//                }
-//            }
+        when (v.id) {
+            R.id.layoutSearch -> {
+                //跳转search
+                activity?.let {
+                    startActivity(Intent(it, SearchActivity::class.java))
+                }
+            }
+        }
+
     }
 
     override fun onDestroy() {
