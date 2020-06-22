@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dip_12"
+        android:paddingTop="@dimen/dip_15"
+        android:paddingEnd="@dimen/dip_12"
+        android:paddingBottom="@dimen/dip_15"
+        android:background="@drawable/shape_spec_bottom"
+       >
+
+        <View
+            android:id="@+id/del_button"
+            android:layout_width="65dp"
+            android:layout_height="@dimen/dip_25"
+            android:background="@drawable/shape_del_spec_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_add"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="@dimen/dip_11"
+            app:layout_constraintBottom_toBottomOf="@+id/del_button"
+            app:layout_constraintEnd_toStartOf="@+id/iv_del"
+            app:layout_constraintStart_toStartOf="@+id/del_button"
+            app:layout_constraintTop_toTopOf="@+id/del_button" />
+
+        <ImageView
+            android:id="@+id/iv_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_del"
+            app:layout_constraintBottom_toBottomOf="@+id/del_button"
+            app:layout_constraintEnd_toEndOf="@+id/del_button"
+            app:layout_constraintStart_toEndOf="@+id/tv_del"
+            app:layout_constraintTop_toTopOf="@+id/del_button" />
+
+        <View
+            android:id="@+id/add_button"
+            android:layout_width="65dp"
+            android:layout_height="@dimen/dip_25"
+            android:background="@drawable/shape_add_spec_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/del_button"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="增加值"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="@dimen/dip_11"
+            app:layout_constraintBottom_toBottomOf="@+id/add_button"
+            app:layout_constraintEnd_toStartOf="@+id/iv_add"
+            app:layout_constraintStart_toStartOf="@+id/add_button"
+            app:layout_constraintTop_toTopOf="@+id/add_button" />
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_add"
+            app:layout_constraintBottom_toBottomOf="@+id/add_button"
+            app:layout_constraintEnd_toEndOf="@+id/add_button"
+            app:layout_constraintStart_toEndOf="@+id/tv_add"
+            app:layout_constraintTop_toTopOf="@+id/add_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

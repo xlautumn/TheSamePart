@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/shape_spec_top"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dip_12"
+            android:paddingTop="@dimen/dip_12"
+            android:paddingEnd="@dimen/dip_12"
+            android:paddingBottom="@dimen/dip_6">
+
+            <TextView
+                android:id="@+id/tv_spec_title"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:text="规格名"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/dip_12" />
+
+            <EditText
+                android:id="@+id/tv_spec_name"
+                android:layout_width="0dp"
+                android:layout_height="27dp"
+                android:paddingStart="@dimen/dip_19"
+                android:paddingEnd="@dimen/dip_19"
+                android:singleLine="true"
+                android:layout_weight="1"
+                android:background="@drawable/shape_gray_rect_border_input"
+                android:hint="请填写规格名称，如：口味"
+                android:textColorHint="@color/color_999999"
+                android:textSize="@dimen/dip_11" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

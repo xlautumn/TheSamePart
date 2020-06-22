@@ -195,7 +195,36 @@
                             app:switchButton="@{viewmodel.specState}" />
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_product_spec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:isVisible="@{viewmodel.specState==1}"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="商品规格"
+                            android:textColor="@color/color_333333"
+                            android:textSize="13dp" />
+
+                        <TextView
+                            android:id="@+id/tv_spec"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/dip_10"
+                            android:drawableRight="@drawable/arrow_next_page"
+                            android:drawablePadding="@dimen/dip_5"
+                            android:gravity="center"
+                            android:text="未设置，点击设置"
+                            android:textColor="@color/color_999999"
+                            android:textSize="@dimen/dip_11" />
+
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/mChooseUnit"
                         android:layout_width="match_parent"

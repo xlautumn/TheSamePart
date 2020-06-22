@@ -3,6 +3,7 @@ package com.same.part.assistant.app.util
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import androidx.fragment.app.Fragment
 import com.same.part.assistant.app.util.PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA
 import com.yzq.zxinglibrary.android.CaptureActivity
 import pub.devrel.easypermissions.EasyPermissions
@@ -40,12 +41,37 @@ object ScanBarCodeUtil {
             )
         }
     }
+    /**
+     * 启动扫码
+     */
+    fun startScanCode(fragment: Fragment) {
+        fragment.context?.let {
+            if (EasyPermissions.hasPermissions(it, *PERMISSIONS_REQUEST_LIST)) {
+                scannerBarCode(fragment)
+            } else {
+                EasyPermissions.requestPermissions(
+                    PermissionRequest.Builder(
+                        fragment,
+                        REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA,
+                        *PERMISSIONS_REQUEST_LIST
+                    ).setRationale("扫描商品条形码需要访问您的存储权限和照相机权限。").build()
+                )
+            }
+        }
 
+    }
     /**
      * 展示扫码页面
      */
     fun scannerBarCode(activity: Activity) {
         val intent = Intent(activity, CaptureActivity::class.java)
         activity.startActivityForResult(intent, REQUEST_CODE_SCAN)
+    }
+    /**
+     * 展示扫码页面
+     */
+    fun scannerBarCode(fragment: Fragment) {
+        val intent = Intent(fragment.context, CaptureActivity::class.java)
+        fragment.startActivityForResult(intent, REQUEST_CODE_SCAN)
     }
 }

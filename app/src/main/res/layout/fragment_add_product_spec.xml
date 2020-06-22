@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/color_F7F7F7"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbar_title"
+            layout="@layout/toolbar_title" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/sv_product_spec"
+            app:layout_constraintBottom_toTopOf="@+id/tv_save_spec"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_title">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/dip_14"
+                android:paddingEnd="@dimen/dip_14">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_product_spec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
+
+                <TextView
+                    android:id="@+id/tv_add_spec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dip_14"
+                    android:drawableStart="@mipmap/add_icon_oriange"
+                    android:drawablePadding="@dimen/dip_10"
+                    android:gravity="center_vertical"
+                    android:text="添加规格"
+                    android:textColor="@color/color_E76612"
+                    android:textSize="@dimen/dip_12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_product_spec" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dip_1"
+                    android:layout_marginTop="@dimen/dip_12"
+                    android:background="@color/color_CCCCCC" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dip_16"
+                    android:text="设置库存/价格等规格明细"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/dip_11" />
+
+                <LinearLayout
+                    android:id="@+id/ll_product_spec_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dip_10"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="规格明细"
+                        android:textColor="@color/color_333333"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/tv_spec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dip_10"
+                        android:drawableRight="@drawable/arrow_next_page"
+                        android:drawablePadding="@dimen/dip_5"
+                        android:gravity="center"
+                        android:text="未设置，点击设置"
+                        android:textColor="@color/color_999999"
+                        android:textSize="@dimen/dip_11" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <TextView
+            android:id="@+id/tv_save_spec"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            app:layout_constraintTop_toBottomOf="@+id/sv_product_spec"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="23dp"
+            android:background="@drawable/shape_half_circle_primary_color_rect"
+            android:gravity="center"
+            android:text="保存"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="13dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

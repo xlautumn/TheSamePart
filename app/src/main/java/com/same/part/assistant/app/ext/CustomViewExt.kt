@@ -1,6 +1,8 @@
 package com.same.part.assistant.app.ext
 
 import android.app.Activity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -83,6 +85,21 @@ fun EditText.setCanInput(canInput: Boolean) {
         requestFocus()
     }
 
+}
+
+fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) :TextWatcher{
+    val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            afterTextChanged.invoke(s.toString())
+        }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        }
+    }
+    this.addTextChangedListener(textWatcher)
+    return textWatcher
 }
 
 ///**

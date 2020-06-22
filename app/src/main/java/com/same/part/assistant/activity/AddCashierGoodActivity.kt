@@ -23,7 +23,9 @@ import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
 import com.same.part.assistant.data.model.CreateOrUpdateGoodsInfo
 import com.same.part.assistant.app.util.ScanBarCodeUtil
+import com.same.part.assistant.data.model.EditProductSku
 import com.same.part.assistant.data.model.ProductClassificationModel
+import com.same.part.assistant.data.model.RequestCreateProduct
 import com.same.part.assistant.databinding.ActivityAddCashierGoodBinding
 import com.same.part.assistant.viewmodel.request.RequestAddCashierGoodViewModel
 import com.same.part.assistant.viewmodel.request.RequestUploadDataViewModel
@@ -218,6 +220,9 @@ class AddCashierGoodActivity :
             mJumpFromType == JUMP_FROM_EDIT,
             mCashierEditId
         )
+        ll_product_spec.setOnClickListener {
+            startActivityForResult(Intent(this, EditProductSpecActivity::class.java),REQUEST_CODE_SPEC)
+        }
     }
 
     override fun createObserver() {
@@ -344,6 +349,9 @@ class AddCashierGoodActivity :
             else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_SCAN) {
                 val content = data?.getStringExtra(Constant.CODED_CONTENT).orEmpty()
                 barCode.setText(content)
+            } else if (requestCode == REQUEST_CODE_SPEC){
+                val spec = data?.getSerializableExtra(KEY_SETTING_PRODUCT_SPEC) as? List<EditProductSku>
+                ToastUtils.showShort("$spec")
             }
         }
     }
@@ -410,6 +418,11 @@ class AddCashierGoodActivity :
             ToastUtils.showShort("排序不可为空！")
             false
         }
+
+        mViewModel.specState.value == 1 && mViewModel.editProductSku.value == null -> {
+            ToastUtils.showShort("商品规格不能为空")
+            false
+        }
 //        mViewModel.productCategoryId.value.isEmpty() && mViewModel.type.value == "否"-> {
 //            ToastUtils.showShort("商品条码不可为空！")
 //            false
@@ -421,6 +434,7 @@ class AddCashierGoodActivity :
      * 更新/添加商品
      */
     private fun createOrUpdateCashierGood(img: String) {
+        if (mViewModel.specState.value ==0) {
         val requestShopCategoryInfo = CreateOrUpdateGoodsInfo(
             mViewModel.barcode.value,
             img,
@@ -436,7 +450,23 @@ class AddCashierGoodActivity :
         if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
             requestShopCategoryInfo.id = mCashierEditId
         }
-        mRequestAddCashierGoodViewModel.createOrUpdateCashierGood(requestShopCategoryInfo)
+            mRequestAddCashierGoodViewModel.createOrUpdateCashierGood(requestShopCategoryInfo)
+        }else{
+            val requestCreateProduct = RequestCreateProduct(
+                mViewModel.barcode.value,
+                img,
+                mViewModel.name.value,
+                mViewModel.price.value,
+                mViewModel.productCategoryId.value,
+                mViewModel.sequence.value,
+                if (mViewModel.type.value == "是") "1" else "2",
+                mViewModel.unit.value,
+                mViewModel.quantity.value,
+                state = mViewModel.shelvesState.value,
+                productSkus = mViewModel.editProductSku.value
+            )
+            mRequestAddCashierGoodViewModel.createProduct(requestCreateProduct)
+        }
     }
 
     /**
@@ -471,5 +501,15 @@ class AddCashierGoodActivity :
 
         //收银商品productId
         const val CASHIER_PRODUCT_ID = "CASHIER_PRODUCT_ID"
+
+        /**
+         * 多规格设置的数据
+         */
+        const val KEY_SETTING_PRODUCT_SPEC = "KEY_SETTING_PRODUCT_SPEC"
+
+        /**
+         * 设置多规格
+         */
+        const val REQUEST_CODE_SPEC = 10
     }
 }

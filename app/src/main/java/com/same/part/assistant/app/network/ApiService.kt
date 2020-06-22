@@ -299,4 +299,10 @@ interface ApiService {
         @Query("shopId") shopId: Int=2000,
         @Query("state") state: Int=1
     ): ResponseBody
+
+    /**
+     * 创建商品
+     */
+    @POST("product/createProduct")
+    suspend fun createProduct(@Body requestCreateProduct:RequestCreateProduct):ResponseBody
 }

@@ -237,6 +237,25 @@ data class CreateMemberCard(
 data class RequestConformDelivery(val appKey: String = CacheUtil.getAppKey(),
                            val appSecret: String = CacheUtil.getAppSecret())
 
+data class RequestCreateProduct(
+    val barcode: String,
+    val img: String,
+    val name: String,
+    val price: String,
+    val productCategoryId: String,
+    val sequence: String,
+    val type: String,
+    val unit: String,
+    val quantity: String,
+    val state: Int = 1,
+    val productSkus: List<ProductSkuV2>?,
+    val shopId: String = CacheUtil.getShopId()?.toString() ?: "",
+    val accessToken: String = CacheUtil.getToken(),
+    val appKey: String = CacheUtil.getAppKey(),
+    val appSecret: String = CacheUtil.getAppSecret()
+)
+
+
 
 
 

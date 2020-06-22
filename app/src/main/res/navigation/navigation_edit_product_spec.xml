@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_edit_product_spec"
+    app:startDestination="@id/addProductSpecFragment">
+
+    <fragment
+        android:id="@+id/addProductSpecFragment"
+        android:name="com.same.part.assistant.fragment.AddProductSpecFragment"
+        android:label="AddProductSpecFragment" >
+        <action
+            android:id="@+id/action_addProductSpecFragment_to_editProductSpecDetailFragment"
+            app:destination="@id/editProductSpecDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProductSpecDetailFragment"
+        android:name="com.same.part.assistant.fragment.EditProductSpecDetailFragment"
+        android:label="fragment_edit_product_spec_detail"
+        tools:layout="@layout/fragment_edit_product_spec_detail" />
+</navigation>

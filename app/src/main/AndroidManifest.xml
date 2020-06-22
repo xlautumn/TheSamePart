@@ -67,6 +67,7 @@
            />
         <activity android:name=".activity.SearchActivity"
             android:windowSoftInputMode="adjustNothing|stateVisible"/>
+        <activity android:name=".activity.EditProductSpecActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

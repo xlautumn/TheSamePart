@@ -7,6 +7,7 @@ import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.model.CashierDetailMode
 import com.same.part.assistant.data.model.CreateOrUpdateGoodsInfo
 import com.same.part.assistant.data.model.ProductClassificationModel
+import com.same.part.assistant.data.model.RequestCreateProduct
 import com.same.part.assistant.data.repository.request.HttpRequestManger
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.ext.request
@@ -34,6 +35,20 @@ class RequestAddCashierGoodViewModel(application: Application) : BaseViewModel(a
                 HttpRequestManger.instance.createOrUpdateCashierGood(
                     CacheUtil.getToken(),
                     createOrUpdateGoodsInfo
+                )
+            },
+            createOrUpdateCashierGoodsResult, isShowDialog = true
+        )
+    }
+
+    /**
+     * 创建商品
+     */
+    fun createProduct(requestCreateProduct: RequestCreateProduct) {
+        requestResponseBody(
+            {
+                HttpRequestManger.instance.createProduct(
+                    requestCreateProduct
                 )
             },
             createOrUpdateCashierGoodsResult, isShowDialog = true

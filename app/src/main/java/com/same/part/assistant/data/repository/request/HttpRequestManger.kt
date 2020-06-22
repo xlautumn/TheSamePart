@@ -324,4 +324,11 @@ class HttpRequestManger {
     suspend fun getSearchResult(name: String): ResponseBody{
         return NetworkApiv2.service.getSearchResult(name)
     }
+
+    /**
+     * 创建商品
+     */
+    suspend fun createProduct( requestCreateProduct:RequestCreateProduct):ResponseBody{
+        return NetworkApiv2.service.createProduct(requestCreateProduct)
+    }
 }
