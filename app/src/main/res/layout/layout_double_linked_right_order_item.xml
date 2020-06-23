@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/goodAvatar"
-            android:layout_width="@dimen/dip_57"
-            android:layout_height="@dimen/dip_57"
+            android:layout_width="@dimen/dip_66"
+            android:layout_height="@dimen/dip_66"
             android:scaleType="fitXY"
             android:src="@drawable/icn_head_img"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -31,10 +31,11 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text=""
-            android:textSize="15dp"
+            android:textSize="@dimen/dip_14"
+            android:textColor="@color/color_333333"
             app:layout_constraintEnd_toStartOf="@+id/buy_or_choose"
             app:layout_constraintStart_toEndOf="@+id/goodAvatar"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/goodAvatar" />
 
         <TextView
             android:id="@+id/goodNameExplain"
@@ -62,8 +63,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:paddingEnd="@dimen/dip_3"
-            android:paddingTop="@dimen/dip_1"
-            android:paddingBottom="@dimen/dip_1"
             android:paddingStart="@dimen/dip_3"
             android:text=""
             android:textColor="@color/color_FF0000"
@@ -77,8 +76,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="@dimen/dip_10"
+            android:layout_marginTop="@dimen/dip_7"
             app:layout_constraintStart_toEndOf="@+id/goodAvatar"
+            app:layout_constraintBottom_toBottomOf="@id/goodAvatar"
             app:layout_constraintTop_toBottomOf="@id/goodTag">
 
             <TextView
@@ -86,8 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="@color/color_FF0000"
-                android:textSize="@dimen/dip_14" />
+                android:textColor="@color/color_E15C00"
+                android:textSize="@dimen/dip_16" />
 
             <TextView
                 android:id="@+id/tv_sub_price"
