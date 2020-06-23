@@ -8,11 +8,13 @@ import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
+import com.same.part.assistant.app.ext.appendImageScaleSuffix
 import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.dialog.ChooseSpecsDialogFragment
 import com.same.part.assistant.fragment.PurchaseFragment
 import com.same.part.assistant.manager.PurchaseProductManager
+import com.same.part.assistant.utils.QiniuManager
 import com.same.part.assistant.viewmodel.request.RequestCartViewModel
 import java.util.*
 
@@ -64,7 +66,7 @@ class PurchaseProductAdapter(private var mContext: FragmentActivity,private val 
             goodViewHolder.price?.text = "￥$price"
             goodViewHolder.goodAvatar?.takeIf { !img.isNullOrEmpty() }?.let {
                 Glide.with(mContext)
-                    .load(img)
+                    .load(it.appendImageScaleSuffix(img!!))
                     .into(it)
             }
 

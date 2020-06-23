@@ -16,6 +16,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@color/color_FFFFFF"
         android:layout_height="match_parent">
 
         <include
@@ -24,22 +25,23 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rootSearch"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/dip_0"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dip_15"
+            android:layout_marginLeft="@dimen/dip_5"
             android:layout_marginTop="@dimen/dip_15"
-            android:layout_marginRight="@dimen/dip_70"
-            android:focusableInTouchMode="true"
             android:background="@drawable/shape_search_bg"
+            android:focusableInTouchMode="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvClose"
             app:layout_constraintTop_toBottomOf="@id/toolbar_title">
 
             <ImageView
                 android:id="@+id/ivSearch"
-                android:layout_width="@dimen/dip_20"
-                android:layout_height="@dimen/dip_20"
+                android:layout_width="@dimen/dip_12"
+                android:layout_height="@dimen/dip_10"
                 android:layout_marginLeft="@dimen/dip_10"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_search"
+                android:src="@drawable/icon_search_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/etSearch"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,10 +59,10 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textColor="@color/color_B4B4B4"
+                android:textColor="@color/color_333333"
                 android:textColorHint="@color/color_B4B4B4"
                 android:textCursorDrawable="@drawable/shape_search_cursor"
-                android:textSize="@dimen/dip_16"
+                android:textSize="@dimen/dip_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ivSearchClear"
                 app:layout_constraintStart_toEndOf="@id/ivSearch"
@@ -85,11 +87,14 @@
             android:id="@+id/tvClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dip_8"
+            android:layout_marginRight="@dimen/dip_10"
             android:onClick="@{()->click.cancel()}"
             android:paddingLeft="@dimen/dip_5"
             android:paddingRight="@dimen/dip_5"
             android:text="取消"
-            android:textSize="@dimen/dip_16"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dip_12"
             app:layout_constraintBottom_toBottomOf="@id/rootSearch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/rootSearch"
@@ -98,25 +103,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dip_15"
-            android:layout_marginRight="@dimen/dip_15"
             android:orientation="vertical"
+            android:layout_marginTop="@dimen/dip_7"
             app:isVisible="@{viewmodel.showHistory}"
             app:layout_constraintTop_toBottomOf="@id/rootSearch">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dip_7"
-                android:paddingBottom="@dimen/dip_7">
+                android:background="@color/color_F8F8F8"
+                android:paddingLeft="@dimen/dip_15"
+                android:paddingTop="@dimen/dip_10"
+                android:paddingRight="@dimen/dip_15"
+                android:paddingBottom="@dimen/dip_10">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="历史搜索"
-                    android:textColor="@color/color_B4B4B4"
-                    android:textSize="@dimen/dip_14" />
+                    android:textColor="@color/color_999999"
+                    android:textSize="@dimen/dip_11" />
 
                 <ImageView
                     android:layout_width="@dimen/dip_15"
@@ -133,8 +140,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dip_5"
-                android:paddingLeft="@dimen/dip_15"
-                android:paddingRight="@dimen/dip_15" />
+                android:paddingLeft="@dimen/dip_10"
+                android:paddingRight="@dimen/dip_10" />
         </LinearLayout>
 
 
@@ -144,15 +151,13 @@
             app:isVisible="@{viewmodel.showResult}"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="@dimen/dip_45"
+            android:layout_marginTop="@dimen/dip_7"
             app:layout_constraintTop_toBottomOf="@id/rootSearch">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dip_15"
-                android:paddingLeft="@dimen/dip_15"
-                android:paddingRight="@dimen/dip_15"
                 app:isVisible="@{viewmodel.hasSearchResult}" />
 
             <include
@@ -160,7 +165,6 @@
                 layout="@layout/empty_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dip_0"
-                android:layout_marginTop="@dimen/dip_15"
                 app:isVisible="@{!viewmodel.hasSearchResult}" />
 
         </RelativeLayout>

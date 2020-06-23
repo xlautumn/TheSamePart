@@ -112,7 +112,7 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>(), T
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         s?.let { chars ->
-            mViewModel.showClear.postValue(chars.isNotEmpty() && mDatabind.etSearch.isFocused)
+            mViewModel.showClear.postValue(chars.isNotEmpty())
             chars.takeIf { it.isEmpty() }?.apply {
                 mViewModel.showResult.postValue(false)
                 mViewModel.showHistory.postValue(mViewModel.searchHistoryData.value?.isNotEmpty())
@@ -122,12 +122,10 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>(), T
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-        if (hasFocus) {
-            mDatabind.etSearch.text?.takeIf { it.isNotEmpty() }?.let {
-                mViewModel.showClear.postValue(true)
-            }
-        } else {
-            mViewModel.showClear.postValue(false)
+        mDatabind.etSearch.text?.takeIf { it.isNotEmpty() }?.let {
+            mViewModel.showClear.postValue(true)
+        }
+        if (!hasFocus) {
             hideSoftKeyboard(this, v)
         }
     }

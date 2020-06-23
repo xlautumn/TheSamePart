@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.same.part.assistant.app.ext.appendImageScaleSuffix
 import com.same.part.assistant.data.model.CartProduct
 import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.databinding.CartProductItemBinding
@@ -48,7 +49,7 @@ class CartProductViewHolder(private val binding: CartProductItemBinding,private 
         cartProduct.shopProduct.productDetailData.apply {
             binding.goodAvatar.takeIf { !img.isNullOrEmpty() }?.let {
                 Glide.with(binding.root.context)
-                    .load(img)
+                    .load(it.appendImageScaleSuffix(img!!))
                     .into(it)
             }
 

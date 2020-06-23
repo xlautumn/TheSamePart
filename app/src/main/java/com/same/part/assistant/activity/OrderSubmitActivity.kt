@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
+import com.same.part.assistant.app.ext.appendImageScaleSuffix
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.data.PAYMENT_CATEGORY_FREIGHT_COLLECT
 import com.same.part.assistant.data.PAYMENT_CATEGORY_ONLINE_PAY
@@ -199,7 +200,7 @@ class OrderAdapter(private val data: List<CartProduct>) :
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         val cartProduct = data[position]
         val product = cartProduct.shopProduct.productDetailData
-        Glide.with(holder.itemView.context).load(product.img)
+        Glide.with(holder.itemView.context).load(holder.goodAvatar.appendImageScaleSuffix(product.img?:""))
             .into(holder.goodAvatar)
         holder.goodName.text = product.name
         holder.goodNum.text = "x${cartProduct.shopProduct.num}"

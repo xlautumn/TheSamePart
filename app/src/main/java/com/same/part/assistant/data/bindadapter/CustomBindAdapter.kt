@@ -10,6 +10,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.same.part.assistant.R
+import com.same.part.assistant.app.ext.appendImageScaleSuffix
+import com.same.part.assistant.utils.QiniuManager
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
@@ -20,8 +22,9 @@ object CustomBindAdapter {
     @BindingAdapter(value = ["circleImageUrl"])
     @JvmStatic
     fun imageUrl(view: ImageView, url: String) {
+        val temUrl = view.appendImageScaleSuffix(url)
         Glide.with(view.context.applicationContext)
-            .load(url)
+            .load(temUrl)
             .placeholder(R.drawable.home_user_avatar)
             .error(R.drawable.home_user_avatar)
             .into(object : SimpleTarget<Drawable>() {

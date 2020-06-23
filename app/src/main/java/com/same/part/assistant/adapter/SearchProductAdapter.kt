@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.SearchActivity
+import com.same.part.assistant.app.ext.appendImageScaleSuffix
 import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.data.model.ShopProduct
 import com.same.part.assistant.dialog.ChooseSpecsDialogFragment
@@ -63,7 +64,7 @@ class SearchProductAdapter(
                 holder.price.text = "￥$price"
                 holder.goodAvatar.takeIf { !img.isNullOrEmpty() }?.let {
                     Glide.with(mContext)
-                        .load(img)
+                        .load(it.appendImageScaleSuffix(img!!))
                         .into(it)
                 }
 
