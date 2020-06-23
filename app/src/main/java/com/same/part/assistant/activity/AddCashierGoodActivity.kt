@@ -433,11 +433,11 @@ class AddCashierGoodActivity :
             ToastUtils.showShort("单价不可为空！")
             false
         }
-        mViewModel.quantity.value.isEmpty() -> {
+        mViewModel.specState.value == 0 &&mViewModel.quantity.value.isEmpty() -> {
             ToastUtils.showShort("库存不可为空！")
             false
         }
-        mViewModel.quantity.value.contains(".") && mViewModel.type.value != "是" -> {
+        mViewModel.specState.value == 0 &&mViewModel.quantity.value.contains(".") && mViewModel.type.value != "是" -> {
             ToastUtils.showShort("非称重商品库存不能包含小数点！")
             false
         }
@@ -447,7 +447,7 @@ class AddCashierGoodActivity :
             false
         }
 
-        mViewModel.specState.value == 1 && mViewModel.editProductSku.value == null -> {
+        mViewModel.specState.value == 1 && mViewModel.editProductSku.value.isNullOrEmpty() -> {
             ToastUtils.showShort("商品规格不能为空")
             false
         }
