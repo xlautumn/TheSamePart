@@ -41,8 +41,15 @@ class AddProductSpecFragment : Fragment() {
             }
         }
         binding.tvAddSpec.setOnClickListener {
-            viewModel.addSpec()
-            viewModel.productSkuState.value = false
+            viewModel.productSpecList.value?.let {
+                if (it.size>=2){
+                    ToastUtils.showShort("最多只能添加两个规格！")
+                }else{
+                    viewModel.addSpec()
+                    viewModel.productSkuState.value = false
+                }
+            }
+
         }
         binding.tvSaveSpec.setOnClickListener {
             if (viewModel.productSkuState.value) {
