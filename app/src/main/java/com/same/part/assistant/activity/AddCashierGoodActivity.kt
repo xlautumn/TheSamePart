@@ -284,7 +284,7 @@ class AddCashierGoodActivity :
         mRequestAddCashierGoodViewModel.createOrUpdateCashierGoodsResult.observe(
             this,
             Observer { resultState ->
-                parseStateResponseBody(resultState, {
+                parseStateResponseBody(resultState, onSuccess = {
                     val jsonObject = JSON.parseObject(it.string())
                     if (jsonObject.getIntValue("code") == 1) {
                         ToastUtils.showLong(jsonObject.getString("msg"))
@@ -294,6 +294,8 @@ class AddCashierGoodActivity :
                     } else {
                         ToastUtils.showLong(jsonObject.getString("message"))
                     }
+                },onError = {
+                    ToastUtils.showLong(it.errorMsg)
                 })
             })
         //七牛云
@@ -498,7 +500,7 @@ class AddCashierGoodActivity :
                 mViewModel.unit.value,
                 mViewModel.quantity.value,
                 state = mViewModel.shelvesState.value,
-                productSkus = mViewModel.editProductSku.value
+                productSkus = if (mViewModel.specState.value == 1) mViewModel.editProductSku.value else null
             )
             if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
                 mRequestAddCashierGoodViewModel.updateProduct(mCashierEditId, requestCreateProduct)

@@ -54,7 +54,7 @@ fun <T> BaseVmDbActivity<*, *>.parseState(
 fun BaseVmDbActivity<*, *>.parseStateResponseBody(
     resultState: ResultResponseBodyState,
     onSuccess: (ResponseBody) -> Unit,
-    onError: ((Exception) -> Unit)? = null,
+    onError: ((AppException) -> Unit)? = null,
     onLoading: (() -> Unit)? = null
 ) {
     when (resultState) {

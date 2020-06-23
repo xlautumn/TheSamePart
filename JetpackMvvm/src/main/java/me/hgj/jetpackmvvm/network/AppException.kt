@@ -19,7 +19,7 @@ class AppException : Exception {
         this.errorLog = errorLog ?: this.errorMsg
     }
 
-    constructor(error: Error, e: Throwable?) {
+    constructor(error: Error, e: Throwable?) : super(e){
         errCode = error.getKey().toString()
         val message = if (e is HttpException) {
             e.response()?.errorBody()?.string()?:error.getValue()

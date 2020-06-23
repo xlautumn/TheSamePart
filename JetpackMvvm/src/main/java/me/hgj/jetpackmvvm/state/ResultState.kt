@@ -31,7 +31,7 @@ sealed class ResultResponseBodyState {
 
     data class Loading(val loadingMessage:String) : ResultResponseBodyState()
     data class Success(val data: ResponseBody) : ResultResponseBodyState()
-    data class Error(val error: Exception) : ResultResponseBodyState()
+    data class Error(val error: AppException) : ResultResponseBodyState()
 }
 
 
