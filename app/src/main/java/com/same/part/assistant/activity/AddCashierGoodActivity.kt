@@ -481,7 +481,7 @@ class AddCashierGoodActivity :
             mRequestAddCashierGoodViewModel.createOrUpdateCashierGood(requestShopCategoryInfo)
         } else {
             val requestCreateProduct = RequestCreateProduct(
-                mViewModel.barcode.value,
+                mViewModel.barcode.value.takeUnless { it.isNullOrEmpty() },//不需要条形码时，传null
                 img,
                 mViewModel.name.value,
                 mViewModel.price.value,

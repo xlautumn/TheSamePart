@@ -238,7 +238,7 @@ data class RequestConformDelivery(val appKey: String = CacheUtil.getAppKey(),
                            val appSecret: String = CacheUtil.getAppSecret())
 
 data class RequestCreateProduct(
-    val barcode: String,
+    val barcode: String?,
     val img: String,
     val name: String,
     val price: String,
