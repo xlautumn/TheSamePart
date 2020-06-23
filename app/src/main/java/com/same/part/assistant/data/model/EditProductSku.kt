@@ -33,12 +33,12 @@ data class SkuProperty(
 
 sealed class ProductSpecSectionEntity(val itemType: Int) {
 
-    data class ProductSpec(val id: Long, var name: String, val specValue: ArrayList<ProductSpecValue>) :
+    data class ProductSpec(val id: Long = System.currentTimeMillis(), var name: String, val specValue: ArrayList<ProductSpecValue>) :
         ProductSpecSectionEntity(SPEC_TITLE) {
         var position = -1
     }
 
-    data class ProductSpecValue(val id: Long, var value: String) : ProductSpecSectionEntity(SPEC_VALUE) {
+    data class ProductSpecValue(val id: Long=System.currentTimeMillis(), var value: String) : ProductSpecSectionEntity(SPEC_VALUE) {
         var isSelect = false
         var position = -1
     }
@@ -57,7 +57,7 @@ data class ProductSkuV2(
     var price: String = "",
     var quantity: String = "",
     var weight: String = "",
-    val properties: String
+    val properties: String //[{"project":"1","value":"2"}]
 ):Serializable
 
 data class SkuPropertyV2(

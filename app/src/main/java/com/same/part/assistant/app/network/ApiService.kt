@@ -305,4 +305,10 @@ interface ApiService {
      */
     @POST("product/createProduct")
     suspend fun createProduct(@Body requestCreateProduct:RequestCreateProduct):ResponseBody
+
+    /**
+     * 编辑商品信息
+     */
+    @PUT("product/updateProduct/{productId}")
+    suspend fun updateProduct( @Path("productId") productId: String,@Body requestCreateProduct:RequestCreateProduct):ResponseBody
 }

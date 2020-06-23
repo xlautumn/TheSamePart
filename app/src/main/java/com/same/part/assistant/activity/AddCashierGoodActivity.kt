@@ -21,11 +21,8 @@ import com.same.part.assistant.app.util.GlobalUtil
 import com.same.part.assistant.app.util.NumberInputUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
-import com.same.part.assistant.data.model.CreateOrUpdateGoodsInfo
 import com.same.part.assistant.app.util.ScanBarCodeUtil
-import com.same.part.assistant.data.model.EditProductSku
-import com.same.part.assistant.data.model.ProductClassificationModel
-import com.same.part.assistant.data.model.RequestCreateProduct
+import com.same.part.assistant.data.model.*
 import com.same.part.assistant.databinding.ActivityAddCashierGoodBinding
 import com.same.part.assistant.viewmodel.request.RequestAddCashierGoodViewModel
 import com.same.part.assistant.viewmodel.request.RequestUploadDataViewModel
@@ -155,10 +152,8 @@ class AddCashierGoodActivity :
                             //此时选择的是称重商品
                             if (position == 0) {
                                 mViewModel.unit.postValue(mWeightGoodUnitList[0])
-                                mScannerBarcode.visibility = View.GONE
                             } else {
                                 mViewModel.unit.postValue(mNotWeightGoodUnitList[0])
-                                mScannerBarcode.visibility = View.VISIBLE
                             }
                         }
                         dialog.dismissAllowingStateLoss()
@@ -221,7 +216,22 @@ class AddCashierGoodActivity :
             mCashierEditId
         )
         ll_product_spec.setOnClickListener {
-            startActivityForResult(Intent(this, EditProductSpecActivity::class.java),REQUEST_CODE_SPEC)
+            val intent = Intent(this, EditProductSpecActivity::class.java)
+            intent.putExtra(
+                EditProductSpecActivity.KEY_PRODUCT_TYPE,
+                if (mViewModel.type.value == "是") {
+                    EditProductSpecActivity.PRODUCT_TYPE_WEIGHT
+                } else {
+                    EditProductSpecActivity.PRODUCT_TYPE_NO_WEIGHT
+                }
+            )
+            mViewModel.editProductSku.value?.let {
+                intent.putExtra(EditProductSpecActivity.KEY_PRODUCT_SPEC,it)
+            }
+            startActivityForResult(
+                intent,
+                REQUEST_CODE_SPEC
+            )
         }
     }
 
@@ -250,9 +260,7 @@ class AddCashierGoodActivity :
                     mViewModel.quantity.postValue(cashDetailMode.quantity)
                     mQuantity.digitsWithHintText(cashDetailMode.type == "1")
                     if (cashDetailMode.type == "1") {
-                        mScannerBarcode.visibility = View.GONE
                     } else {
-                        mScannerBarcode.visibility = View.VISIBLE
                         mViewModel.barcode.postValue(cashDetailMode.barcode ?: "")
                     }
                     if (mProductClassificationList.size > 0) {
@@ -308,6 +316,25 @@ class AddCashierGoodActivity :
                 showLoading(it)
             }
         })
+        mViewModel.specState.observe(this, Observer {
+            mScannerBarcode.visibility = if (it == 0 && mViewModel.type.value == "否") {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        })
+        mViewModel.type.observe(this, Observer {
+            mScannerBarcode.visibility = if (it == "否" && mViewModel.specState.value == 0) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        })
+
+        mViewModel.editProductSku.observe(this, Observer {
+            tv_spec.text = if (it.isNullOrEmpty()) "未设置，点击设置" else "已设置，点击查看"
+        })
+
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
@@ -349,9 +376,10 @@ class AddCashierGoodActivity :
             else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_SCAN) {
                 val content = data?.getStringExtra(Constant.CODED_CONTENT).orEmpty()
                 barCode.setText(content)
-            } else if (requestCode == REQUEST_CODE_SPEC){
-                val spec = data?.getSerializableExtra(KEY_SETTING_PRODUCT_SPEC) as? List<EditProductSku>
-                ToastUtils.showShort("$spec")
+            } else if (requestCode == REQUEST_CODE_SPEC) {
+                val specList =
+                    data?.getSerializableExtra(KEY_SETTING_PRODUCT_SPEC) as? ArrayList<ProductSkuV2>
+                mViewModel.editProductSku.value = specList
             }
         }
     }
@@ -434,24 +462,24 @@ class AddCashierGoodActivity :
      * 更新/添加商品
      */
     private fun createOrUpdateCashierGood(img: String) {
-        if (mViewModel.specState.value ==0) {
-        val requestShopCategoryInfo = CreateOrUpdateGoodsInfo(
-            mViewModel.barcode.value,
-            img,
-            mViewModel.name.value,
-            mViewModel.price.value,
-            mViewModel.productCategoryId.value,
-            mViewModel.sequence.value,
-            if (mViewModel.type.value == "是") "1" else "2",
-            mViewModel.unit.value,
-            mViewModel.quantity.value,
-            state = mViewModel.shelvesState.value
-        )
-        if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
-            requestShopCategoryInfo.id = mCashierEditId
-        }
+        if (mViewModel.specState.value == 0) {
+            val requestShopCategoryInfo = CreateOrUpdateGoodsInfo(
+                mViewModel.barcode.value,
+                img,
+                mViewModel.name.value,
+                mViewModel.price.value,
+                mViewModel.productCategoryId.value,
+                mViewModel.sequence.value,
+                if (mViewModel.type.value == "是") "1" else "2",
+                mViewModel.unit.value,
+                mViewModel.quantity.value,
+                state = mViewModel.shelvesState.value
+            )
+            if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
+                requestShopCategoryInfo.id = mCashierEditId
+            }
             mRequestAddCashierGoodViewModel.createOrUpdateCashierGood(requestShopCategoryInfo)
-        }else{
+        } else {
             val requestCreateProduct = RequestCreateProduct(
                 mViewModel.barcode.value,
                 img,

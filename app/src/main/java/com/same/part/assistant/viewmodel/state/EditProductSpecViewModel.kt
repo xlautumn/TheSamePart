@@ -10,11 +10,15 @@ import com.same.part.assistant.data.model.EditProductSku
 import com.same.part.assistant.data.model.ProductSpecSectionEntity
 import com.same.part.assistant.data.model.SkuProperty
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
+import me.hgj.jetpackmvvm.callback.livedata.BooleanLiveData
+import me.hgj.jetpackmvvm.callback.livedata.IntLiveData
 
 /**
  * 编辑商品规格
  */
 class EditProductSpecViewModel(application: Application) : BaseViewModel(application) {
+
+    val productType = IntLiveData(0)
 
     /**
      * 商品规格属性map
@@ -26,22 +30,26 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
 
     init {
         _productSpecList.value = arrayListOf()
-        addSpec()
     }
 
     /**
-     * 商品规格集合
+     * 商品规格明细集合
      */
     private val _productSkus = MutableLiveData<ArrayList<EditProductSku>>()
     val productSkus: LiveData<ArrayList<EditProductSku>> = _productSkus
+
+    /**
+     * 规格明细状态
+     * false:未设置 true：已设置
+     */
+    val productSkuState = BooleanLiveData(false)
 
     /**
      * 商品规格属性增加规格值
      */
     fun addSpecValue(productSpec: ProductSpecSectionEntity.ProductSpec) {
         productSpec.specValue.apply {
-            val id = System.currentTimeMillis()
-            this.add(ProductSpecSectionEntity.ProductSpecValue(id = id, value = ""))
+            this.add(ProductSpecSectionEntity.ProductSpecValue(value = ""))
         }
         _productSpecList.value = _productSpecList.value
     }
@@ -99,12 +107,14 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
      */
     fun addSpec() {
         _productSpecList.value?.apply {
-            val id = System.currentTimeMillis()
             add(
                 ProductSpecSectionEntity.ProductSpec(
-                    id = id,
                     name = "",
-                    specValue = arrayListOf(ProductSpecSectionEntity.ProductSpecValue(System.currentTimeMillis(), ""))
+                    specValue = arrayListOf(
+                        ProductSpecSectionEntity.ProductSpecValue(
+                            value = ""
+                        )
+                    )
                 )
             )
         }
@@ -116,17 +126,21 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
      * 设置规格明细之前调用
      * 注：只检查规格名和规格值
      */
-    fun checkSpec(): Boolean {
+    fun checkSpec(showToast: Boolean = true): Boolean {
         var result = true
         _productSpecList.value?.forEachIndexed { index, productSpec ->
             if (productSpec.name.isEmpty()) {
-                ToastUtils.showShort("规格名${productSpec.position+1}不能为空")
+                if (showToast) {
+                    ToastUtils.showShort("规格名${productSpec.position + 1}不能为空")
+                }
                 result = false
                 return result
             } else {
                 productSpec.specValue.forEachIndexed { index, productSpecValue ->
                     if (productSpecValue.value.isEmpty()) {
-                        ToastUtils.showShort("规格值${productSpecValue.position+1}不能为空")
+                        if (showToast) {
+                            ToastUtils.showShort("规格值${productSpecValue.position + 1}不能为空")
+                        }
                         result = false
                         return result
                     }
@@ -135,7 +149,9 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
                 productSpec.specValue.apply {
                     val distinctList = distinctBy { it.value }
                     if (this.size != distinctList.size) {
-                        ToastUtils.showShort("规格值不能为重复")
+                        if (showToast) {
+                            ToastUtils.showShort("规格值不能为重复")
+                        }
                         result = false
                         return result
                     }
@@ -145,7 +161,9 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
         _productSpecList.value?.apply {
             val distinctList = distinctBy { it.name }
             if (this.size != distinctList.size) {
-                ToastUtils.showShort("规格名不能为重复")
+                if (showToast) {
+                    ToastUtils.showShort("规格名不能为重复")
+                }
                 result = false
                 return result
             }
@@ -156,26 +174,34 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
     /**
      * 检查商品规格明细
      */
-    fun checkSpecDetail(): Boolean {
+    fun checkSpecDetail(showToast: Boolean = true): Boolean {
         var result = true
         _productSkus.value?.forEachIndexed { index, editProductSku ->
             if (editProductSku.price.isEmpty()) {
-                ToastUtils.showShort("规格${editProductSku.propertyString}的价格不能为空")
+                if (showToast) {
+                    ToastUtils.showShort("规格${editProductSku.propertyString}的价格不能为空")
+                }
                 result = false
                 return result
             }
             if (editProductSku.quantity.isEmpty()) {
-                ToastUtils.showShort("规格${editProductSku.propertyString}的库存不能为空")
+                if (showToast) {
+                    ToastUtils.showShort("规格${editProductSku.propertyString}的库存不能为空")
+                }
                 result = false
                 return result
             }
             if (editProductSku.weight.isEmpty()) {
-                ToastUtils.showShort("规格${editProductSku.propertyString}的重量不能为空")
+                if (showToast) {
+                    ToastUtils.showShort("规格${editProductSku.propertyString}的重量不能为空")
+                }
                 result = false
                 return result
             }
             if (editProductSku.barcode.isEmpty()) {
-                ToastUtils.showShort("规格${editProductSku.propertyString}的商品条码不能为空")
+                if (showToast) {
+                    ToastUtils.showShort("规格${editProductSku.propertyString}的商品条码不能为空")
+                }
                 result = false
                 return result
             }
@@ -194,7 +220,17 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
      *创建_productSkus的值
      */
     fun createEditProductSku() {
-        val oldProductSkus = _productSkus.value.takeUnless { it.isNullOrEmpty() }?.let { ArrayList(it) }?: arrayListOf()
+
+        fun getKey(skuProperties: ArrayList<SkuProperty>): String {
+            //规格名和规格值的id作为key
+            return skuProperties.fold(StringBuffer()) { acc, skuProperty ->
+                acc.append(skuProperty.project.id).append(skuProperty.value.id)
+            }.toString()
+        }
+
+        val oldProductSkus =
+            _productSkus.value.takeUnless { it.isNullOrEmpty() }?.let { ArrayList(it) }
+                ?: arrayListOf()
         val editProductSkuResult = arrayListOf<EditProductSku>()
         _productSpecList.value?.map { spec ->
             val list = arrayListOf<SkuProperty>()
@@ -215,10 +251,10 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
         }?.map { skuProperties ->
             if (oldProductSkus.isNullOrEmpty()) {
                 EditProductSku(properties = skuProperties)
-            }else{
-                val key = skuProperties.joinToString()
+            } else {
+                val key = getKey(skuProperties)
                 oldProductSkus.find {
-                    it.properties.joinToString() == key
+                    getKey(it.properties) == key
                 } ?: EditProductSku(properties = skuProperties)
             }
         }?.let {
@@ -226,6 +262,14 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
         }
         LogUtils.d("createEditProductSku $editProductSkuResult")
         _productSkus.value = editProductSkuResult
+    }
+
+    fun setProductSkus(
+        productSpecList: List<ProductSpecSectionEntity.ProductSpec>,
+        editProductSkuList: List<EditProductSku>
+    ) {
+        _productSpecList.value = ArrayList(productSpecList)
+        _productSkus.value = ArrayList(editProductSkuList)
     }
 
     /**

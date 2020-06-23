@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.adapter.EditProductSpecDetailAdapter
@@ -21,6 +22,7 @@ import com.same.part.assistant.app.util.GlobalUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.ScanBarCodeUtil
 import com.same.part.assistant.databinding.FragmentEditProductSpecDetailBinding
+import com.same.part.assistant.dialog.SpecBatchSettingDialogFragment
 import com.same.part.assistant.utils.Util
 import com.same.part.assistant.viewmodel.state.EditProductSpecViewModel
 import com.yzq.zxinglibrary.common.Constant
@@ -29,14 +31,15 @@ import kotlinx.android.synthetic.main.activity_add_cashier_good.*
 import me.hgj.jetpackmvvm.ext.getActivityViewModel
 import pub.devrel.easypermissions.EasyPermissions
 
-class EditProductSpecDetailFragment : Fragment() ,EasyPermissions.PermissionCallbacks {
+class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var binding: FragmentEditProductSpecDetailBinding
     private lateinit var viewModel: EditProductSpecViewModel
 
-    private var scanCodeEditText:EditText?= null
+    private var scanCodeEditText: EditText? = null
     private val adapter: EditProductSpecDetailAdapter by lazy {
         EditProductSpecDetailAdapter(
+            viewModel.productType.value,
             ProxyClick()
         )
     }
@@ -49,9 +52,11 @@ class EditProductSpecDetailFragment : Fragment() ,EasyPermissions.PermissionCall
         binding.toolbarTitle.findViewById<TextView>(R.id.mToolbarTitle).text = "编辑规格明细"
         //返回按钮
         binding.toolbarTitle.findViewById<View>(R.id.mTitleBack).setOnClickListener {
-            if (viewModel.checkSpecDetail()){
+            if (viewModel.checkSpecDetail()) {
+                viewModel.productSkuState.value = true
                 findNavController().navigateUp()
-            }else{
+            } else {
+                viewModel.productSkuState.value = false
                 (activity as? AppCompatActivity)?.showMessage(
                     message = "是否放弃编辑规格明细内容",
                     positiveButtonText = "放弃",
@@ -63,23 +68,40 @@ class EditProductSpecDetailFragment : Fragment() ,EasyPermissions.PermissionCall
             }
         }
         binding.tvSaveSpecDetail.setOnClickListener {
-            if (viewModel.checkSpecDetail()){
+            if (viewModel.checkSpecDetail()) {
+                viewModel.productSkuState.value = true
                 findNavController().navigateUp()
+            }else{
+                viewModel.productSkuState.value = false
             }
         }
 
         binding.tvCheckAll.setOnClickListener {
-            val selectAll  = !binding.ivCheckAll.isSelected
+            val selectAll = !binding.ivCheckAll.isSelected
             binding.ivCheckAll.isSelected = selectAll
             viewModel.productSkus.value?.forEach { it.isSelect = selectAll }
             adapter.notifyDataSetChanged()
         }
 
+        //批量设置规格明细
         binding.tvBatchSetting.setOnClickListener {
-
+            val selectList = viewModel.productSkus.value?.filter { it.isSelect }
+            if (selectList.isNullOrEmpty()) {
+                ToastUtils.showShort("还未选择需要设置的规格")
+            } else {
+                SpecBatchSettingDialogFragment().apply {
+                    setConfirmAction { price, quantity ->
+                        selectList.forEach {
+                            it.price = price
+                            it.quantity = quantity
+                        }
+                        adapter.notifyDataSetChanged()
+                    }
+                    show(this@EditProductSpecDetailFragment.childFragmentManager, "设置规格")
+                }
+            }
         }
 
-        binding.rvProductSpecDetail.adapter = adapter
         binding.rvProductSpecDetail.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
@@ -96,6 +118,7 @@ class EditProductSpecDetailFragment : Fragment() ,EasyPermissions.PermissionCall
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = getActivityViewModel()
+        binding.rvProductSpecDetail.adapter = adapter
         viewModel.productSkus.value?.apply {
             adapter.setData(this)
         }
@@ -111,6 +134,7 @@ class EditProductSpecDetailFragment : Fragment() ,EasyPermissions.PermissionCall
             ScanBarCodeUtil.startScanCode(this)
         }
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -124,17 +148,17 @@ class EditProductSpecDetailFragment : Fragment() ,EasyPermissions.PermissionCall
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             //扫商品条形码
-             if (requestCode == ScanBarCodeUtil.REQUEST_CODE_SCAN) {
+            if (requestCode == ScanBarCodeUtil.REQUEST_CODE_SCAN) {
                 val content = data?.getStringExtra(Constant.CODED_CONTENT).orEmpty()
-                 scanCodeEditText?.setText(content)
-                 scanCodeEditText = null
+                scanCodeEditText?.setText(content)
+                scanCodeEditText = null
             }
         }
     }
 
     inner class ProxyClick {
         fun scanCode(editText: EditText) {
-            scanCodeEditText= editText
+            scanCodeEditText = editText
             ScanBarCodeUtil.startScanCode(this@EditProductSpecDetailFragment)
         }
 

@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
+import com.same.part.assistant.activity.EditProductSpecActivity
 import com.same.part.assistant.adapter.AddProductSpecAdapter
 import com.same.part.assistant.data.model.ProductSpecSectionEntity
 import com.same.part.assistant.databinding.FragmentAddProductSpecBinding
@@ -30,7 +32,7 @@ class AddProductSpecFragment : Fragment() {
         binding.toolbarTitle.findViewById<TextView>(R.id.mToolbarTitle).text = "商品规格"
         //返回按钮
         binding.toolbarTitle.findViewById<View>(R.id.mTitleBack).setOnClickListener {
-            activity?.finish()
+            activity?.onBackPressed()
         }
         binding.llProductSpecDetail.setOnClickListener {
             if (viewModel.checkSpec()) {
@@ -40,11 +42,13 @@ class AddProductSpecFragment : Fragment() {
         }
         binding.tvAddSpec.setOnClickListener {
             viewModel.addSpec()
+            viewModel.productSkuState.value = false
         }
         binding.tvSaveSpec.setOnClickListener {
-            if (viewModel.checkSpec()) {
-                viewModel.createEditProductSku()
-
+            if (viewModel.productSkuState.value) {
+                (activity as? EditProductSpecActivity)?.saveProductSpec()
+            } else {
+                ToastUtils.showShort("还未设置规格明细")
             }
 
         }
@@ -55,11 +59,20 @@ class AddProductSpecFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = getActivityViewModel()
-        viewModel.productSpecList.value?.let {
-            setData(it)
-        }
+//        viewModel.productSpecList.value?.let {
+//            setData(it)
+//        }
         viewModel.productSpecList.observe(viewLifecycleOwner, Observer {
+            if (it.isEmpty()) {
+                viewModel.addSpec()
+            }
             setData(it)
+        })
+//       viewModel.productSkuState.value?.let {
+//           binding.tvSpecReminder.text = if (it)"已设置，点击查看" else "未设置，点击设置"
+//       }
+        viewModel.productSkuState.observe(viewLifecycleOwner, Observer {
+            binding.tvSpecReminder.text = if (it) "已设置，点击查看" else "未设置，点击设置"
         })
     }
 
@@ -80,11 +93,14 @@ class AddProductSpecFragment : Fragment() {
     inner class ProxyClick {
         fun addSpecValue(productSpec: ProductSpecSectionEntity.ProductSpec) {
             viewModel.addSpecValue(productSpec)
+            viewModel.productSkuState.value = false
         }
 
         fun delSpecValue(productSpec: ProductSpecSectionEntity.ProductSpec) {
             viewModel.delSpecValue(productSpec)
-
+            if (!viewModel.productSkuState.value && viewModel.checkSpecDetail(false)) {
+                viewModel.productSkuState.value = true
+            }
         }
     }
 }

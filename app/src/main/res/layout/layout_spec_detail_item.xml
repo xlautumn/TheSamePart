@@ -9,11 +9,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="22dp"
+        android:background="@drawable/shape_spec_detail_item_bg"
         android:paddingStart="@dimen/dip_12"
+        android:paddingTop="22dp"
         android:paddingEnd="@dimen/dip_12"
-        android:paddingBottom="17dp"
-        android:background="@drawable/shape_spec_detail_item_bg">
+        android:paddingBottom="17dp">
 
         <ImageView
             android:id="@+id/iv_spec_check"
@@ -55,10 +55,10 @@
             android:layout_marginStart="75dp"
             android:layout_marginTop="@dimen/dip_16"
             android:layout_weight="1"
-            android:inputType="number|numberDecimal"
-            android:lines="1"
             android:background="@drawable/shape_gray_rect_border_input"
             android:hint="必填，值必须大于0.01，保留两位小数"
+            android:inputType="number|numberDecimal"
+            android:lines="1"
             android:paddingStart="@dimen/dip_19"
             android:paddingEnd="@dimen/dip_19"
             android:singleLine="true"
@@ -99,6 +99,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_price" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/product_weight_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_weight_title,et_weight,tv_barcode_title,et_barcode,scanBarCode" />
         <!--    重量   -->
         <TextView
             android:id="@+id/tv_weight_title"
@@ -122,6 +128,7 @@
             android:hint="选填，请输入重量"
             android:paddingStart="@dimen/dip_19"
             android:paddingEnd="@dimen/dip_19"
+            android:inputType="numberDecimal"
             android:singleLine="true"
             android:textColorHint="@color/color_999999"
             android:textSize="@dimen/dip_11"
@@ -150,16 +157,17 @@
             android:layout_weight="1"
             android:background="@drawable/shape_gray_rect_border_input"
             android:hint="选填，请输入商品条码"
+            android:inputType="number"
             android:paddingStart="@dimen/dip_19"
             android:paddingEnd="@dimen/dip_19"
             android:singleLine="true"
-            android:inputType="number"
             android:textColorHint="@color/color_999999"
             android:textSize="@dimen/dip_11"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_weight" />
+
         <ImageView
             android:id="@+id/scanBarCode"
             android:layout_width="wrap_content"
