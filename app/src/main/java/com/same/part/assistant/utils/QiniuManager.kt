@@ -30,7 +30,8 @@ import com.qiniu.android.storage.UploadOptions
  * @since 17/3/5
  */
 object QiniuManager {
-    private const val QNY_URL = "http://qiniu.vanceinno.cn/"
+//    private const val QNY_URL = "http://qiniu.vanceinno.cn/"
+    private const val QNY_URL = "http://qiniu.tfsq.vip/"
     private var uploadManager: UploadManager = UploadManager()
 
     private var isCanceled: Boolean = false
