@@ -4,9 +4,11 @@ import android.app.Activity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.same.part.assistant.utils.QiniuManager
 
 /**
  * 描述　:项目中自定义类的拓展函数
@@ -83,6 +85,19 @@ fun EditText.setCanInput(canInput: Boolean) {
         requestFocus()
     }
 
+}
+
+/**
+ * 添加图片压缩后缀地址
+ */
+fun ImageView.appendImageScaleSuffix(imgUrl: String, width: Int = -1, height: Int = -1): String {
+    val tempWidth = if (width == -1) this.measuredWidth else width
+    val tempHeight = if (height == -1) this.measuredHeight else height
+    return if (imgUrl.contains(QiniuManager.IMAGE_SCALE_TYPE_SUFFIX)) imgUrl
+    else imgUrl + QiniuManager.getImageScaleSuffix(
+        tempWidth,
+        tempHeight
+    )
 }
 
 ///**

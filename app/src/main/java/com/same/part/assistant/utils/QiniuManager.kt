@@ -32,6 +32,8 @@ import com.qiniu.android.storage.UploadOptions
 object QiniuManager {
 //    private const val QNY_URL = "http://qiniu.vanceinno.cn/"
     private const val QNY_URL = "http://qiniu.tfsq.vip/"
+    //图片压缩url后缀
+    const val IMAGE_SCALE_TYPE_SUFFIX = "?imageView2"
     private var uploadManager: UploadManager = UploadManager()
 
     private var isCanceled: Boolean = false
@@ -56,6 +58,13 @@ object QiniuManager {
 
     fun cancel() {
         isCanceled = true
+    }
+
+    /**
+     * 图片压缩url后缀
+     */
+    fun getImageScaleSuffix(width:Int,height:Int):String{
+        return "$IMAGE_SCALE_TYPE_SUFFIX/2/w/$width/h/$height"
     }
 
     interface UploadListener {
