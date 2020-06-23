@@ -1,5 +1,6 @@
 package me.hgj.jetpackmvvm.network
 
+import org.json.JSONObject
 import retrofit2.HttpException
 
 /**
@@ -22,7 +23,18 @@ class AppException : Exception {
     constructor(error: Error, e: Throwable?) {
         errCode = error.getKey().toString()
         val message = if (e is HttpException) {
-            e.response()?.errorBody()?.string()?:error.getValue()
+            val errorBody = e.response()?.errorBody()?.string()
+            if (errorBody != null) {
+                try {
+                    val jsonObject = JSONObject(errorBody)
+                    val message = jsonObject.optString("message", error.getValue())
+                    message
+                }catch (e:Exception){
+                    error.getValue()
+                }
+            } else {
+                error.getValue()
+            }
         } else error.getValue()
         errorMsg = message
         errorLog = e?.message
