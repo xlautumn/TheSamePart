@@ -331,4 +331,14 @@ class HttpRequestManger {
     suspend fun createProduct( requestCreateProduct:RequestCreateProduct):ResponseBody{
         return NetworkApiv2.service.createProduct(requestCreateProduct)
     }
+
+    /**
+     * 编辑商品
+     */
+    suspend fun updateProduct(
+        productId: String,
+        requestCreateProduct: RequestCreateProduct
+    ): ResponseBody {
+        return NetworkApiv2.service.updateProduct(productId, requestCreateProduct)
+    }
 }

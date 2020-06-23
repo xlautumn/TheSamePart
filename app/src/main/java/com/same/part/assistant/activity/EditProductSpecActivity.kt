@@ -113,15 +113,22 @@ class EditProductSpecActivity : BaseVmActivity<EditProductSpecViewModel>() {
             val properties: List<SkuPropertyV2> //[{"project":"1","value":"2"}]
         )
 
+        //规格明细数量= 每个规格的规格值的数量的乘积
+        val skuSize = productSkuV2List.size
+        //临时商品规格集合
         val tempProductSkuList = productSkuV2List.map {
             val properties = GsonUtils.fromJson<ArrayList<SkuPropertyV2>>(it.properties,
                 object :TypeToken<ArrayList<SkuPropertyV2>>(){}.type)
             TempProductSku(it.barcode,it.price,it.quantity,it.weight,properties)
         }
 
+        //对规格属性进行分组 Map<String,ProductSpecSectionEntity.ProductSpec(规格名：规格)
+        //其长度为规格的数量
         val skuMap = tempProductSkuList.flatMap { it.properties }.groupBy { it.project }.mapValues {
+            //规格值集合  其长度为此规格的规格值的数量
             val productSpecValueList =
-                ArrayList(it.value.map { ProductSpecSectionEntity.ProductSpecValue(value = it.value) })
+                ArrayList(it.value.distinctBy { skuPropertyV2 ->skuPropertyV2.value }//去重
+                    .map { skuPropertyV2 ->ProductSpecSectionEntity.ProductSpecValue(value = skuPropertyV2.value) })
             ProductSpecSectionEntity.ProductSpec(
                 name = it.key,
                 specValue = productSpecValueList
@@ -129,9 +136,27 @@ class EditProductSpecActivity : BaseVmActivity<EditProductSpecViewModel>() {
         }
 
         tempProductSkuList.map {
-           val properties =  ArrayList(it.properties.map { SkuProperty(skuMap[it.project]?: ProductSpecSectionEntity.ProductSpec(name = "",
-                specValue = arrayListOf()), ProductSpecSectionEntity.ProductSpecValue(value = it.value))})
-            EditProductSku(it.barcode,it.price,it.quantity,it.weight,properties)
+            val properties = ArrayList(
+                it.properties.map {skuPropertyV2 ->
+                    //规格
+                    val productSpec = skuMap[skuPropertyV2.project]
+                        ?: ProductSpecSectionEntity.ProductSpec(
+                            name = "",
+                            specValue = arrayListOf()
+                        )
+                    //规格值
+                    val productSpecValue =
+                        productSpec.specValue.find { specValue -> specValue.value == skuPropertyV2.value }
+                            ?: ProductSpecSectionEntity.ProductSpecValue(value = skuPropertyV2.value)
+                    SkuProperty(
+                        //规格
+                        productSpec,
+                        //规格值
+                        productSpecValue
+                    )
+                })
+
+            EditProductSku(it.barcode, it.price, it.quantity, it.weight, properties)
         }.let {
             mViewModel.setProductSkus(skuMap.values.toList(),it)
             mViewModel.productSkuState.value = true

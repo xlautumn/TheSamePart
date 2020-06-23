@@ -56,6 +56,24 @@ class RequestAddCashierGoodViewModel(application: Application) : BaseViewModel(a
     }
 
     /**
+     * 编辑商品
+     */
+    fun updateProduct(
+        productId: String,
+        requestCreateProduct: RequestCreateProduct
+    ) {
+        requestResponseBody(
+            {
+                HttpRequestManger.instance.updateProduct(
+                    productId,
+                    requestCreateProduct
+                )
+            },
+            createOrUpdateCashierGoodsResult, isShowDialog = true
+        )
+    }
+
+    /**
      * 编辑时需查询商品分类和详情，添加时只查商品分类
      */
     fun queryCashierGood(isEditPage: Boolean, productId: String) {

@@ -71,6 +71,7 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
         }
         if (productSpec.specValue.isEmpty()) {
             _productSpecList.value?.remove(productSpec)
+            //同步删除含有该规格的规格明细
             _productSkus.value?.takeIf { it.isNotEmpty() }?.apply {
                 forEach {
                     val iterator = it.properties.iterator()
@@ -83,6 +84,7 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
                 }
             }
         } else if (hasRemove) {
+            //同步删除含有该规格值的规格明细
             _productSkus.value?.takeIf { it.isNotEmpty() }?.apply {
                 forEach {
                     val iterator = it.properties.iterator()
@@ -224,7 +226,10 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
         fun getKey(skuProperties: ArrayList<SkuProperty>): String {
             //规格名和规格值的id作为key
             return skuProperties.fold(StringBuffer()) { acc, skuProperty ->
-                acc.append(skuProperty.project.id).append(skuProperty.value.id)
+                acc.append("projectId:")
+                    .append(skuProperty.project.id)
+                    .append("|valueId:")
+                    .append(skuProperty.value.id)
             }.toString()
         }
 

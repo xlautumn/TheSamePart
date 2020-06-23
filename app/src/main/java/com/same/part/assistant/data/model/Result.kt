@@ -51,7 +51,7 @@ data class ProductClassificationModel(
     var id: String,
     var name: String,
     var parentId: String,
-    var parentName:String = "--"
+    var parentName: String = "--"
 )
 
 /**
@@ -402,48 +402,20 @@ data class QiniuMode(
  * 收银商品详情
  */
 data class CashierDetailMode(
-    val addTime: String,
-    val auditResult: Any,
-    val auditState: Int,
     val barcode: String,
-    val brand: Any,
-    val coinRate: Double,
-    val content: Any,
-    val costPrice: Double,
-    val count: Int,
-    val deliveryTemplate: Any,
-    val description: Any,
-    val favoriteCount: Int,
-    val groupIds: List<Any>,
     val ifPlatformCut: Boolean,
-    val ifWarn: Boolean,
     val img: String,
-    val imgs: String,
-    val linePrice: Double,
     val name: String,
-    val number: String,
-    val platformCutRate: Double,
-    val pointRate: Double,
-    val postFee: Double,
-    val postType: Any,
     val price: Double,
     val productCategory: Any,
-    val productExtends: List<Any>,
     val customCategoryProductId: Int,
     val productId: Int,
     val quantity: String,
-    val ratio: Double,
     val sequence: Int,
-    val shop: Shop,
-    val specification: Any,
     val state: Int,
     val type: String,
     val unit: String,
-    val updateTime: String,
-    val volume: Any,
-    val warnQuantity: Int,
-    val weight: Double,
-    val withHoldQuantity: Int
+    val productSkus: List<ProductSkuV2>
 )
 
 /**

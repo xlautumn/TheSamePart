@@ -226,7 +226,7 @@ class AddCashierGoodActivity :
                 }
             )
             mViewModel.editProductSku.value?.let {
-                intent.putExtra(EditProductSpecActivity.KEY_PRODUCT_SPEC,it)
+                intent.putExtra(EditProductSpecActivity.KEY_PRODUCT_SPEC, it)
             }
             startActivityForResult(
                 intent,
@@ -258,6 +258,7 @@ class AddCashierGoodActivity :
                     mViewModel.sequence.postValue(cashDetailMode.sequence.toString())
                     mViewModel.shelvesState.postValue(cashDetailMode.state)
                     mViewModel.quantity.postValue(cashDetailMode.quantity)
+                    mViewModel.editProductSku.postValue(ArrayList(cashDetailMode.productSkus))
                     mQuantity.digitsWithHintText(cashDetailMode.type == "1")
                     if (cashDetailMode.type == "1") {
                     } else {
@@ -332,7 +333,13 @@ class AddCashierGoodActivity :
         })
 
         mViewModel.editProductSku.observe(this, Observer {
-            tv_spec.text = if (it.isNullOrEmpty()) "未设置，点击设置" else "已设置，点击查看"
+            if (it.isNullOrEmpty()) {
+                mSpecState.isChecked = false
+                tv_spec.text = "未设置，点击设置"
+            } else {
+                mSpecState.isChecked = true
+                tv_spec.text = "已设置，点击查看"
+            }
         })
 
     }
@@ -433,11 +440,11 @@ class AddCashierGoodActivity :
             ToastUtils.showShort("单价不可为空！")
             false
         }
-        mViewModel.specState.value == 0 &&mViewModel.quantity.value.isEmpty() -> {
+        mViewModel.specState.value == 0 && mViewModel.quantity.value.isEmpty() -> {
             ToastUtils.showShort("库存不可为空！")
             false
         }
-        mViewModel.specState.value == 0 &&mViewModel.quantity.value.contains(".") && mViewModel.type.value != "是" -> {
+        mViewModel.specState.value == 0 && mViewModel.quantity.value.contains(".") && mViewModel.type.value != "是" -> {
             ToastUtils.showShort("非称重商品库存不能包含小数点！")
             false
         }
@@ -493,7 +500,11 @@ class AddCashierGoodActivity :
                 state = mViewModel.shelvesState.value,
                 productSkus = mViewModel.editProductSku.value
             )
-            mRequestAddCashierGoodViewModel.createProduct(requestCreateProduct)
+            if (mJumpFromType == JUMP_FROM_EDIT) {//编辑商品
+                mRequestAddCashierGoodViewModel.updateProduct(mCashierEditId, requestCreateProduct)
+            } else {
+                mRequestAddCashierGoodViewModel.createProduct(requestCreateProduct)
+            }
         }
     }
 

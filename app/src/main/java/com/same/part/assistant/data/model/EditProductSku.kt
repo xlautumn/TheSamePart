@@ -6,6 +6,8 @@ import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.chad.library.adapter.base.entity.SectionEntity
 import java.io.Serializable
 import java.lang.reflect.Array
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 编辑收银商品规格
@@ -33,12 +35,17 @@ data class SkuProperty(
 
 sealed class ProductSpecSectionEntity(val itemType: Int) {
 
-    data class ProductSpec(val id: Long = System.currentTimeMillis(), var name: String, val specValue: ArrayList<ProductSpecValue>) :
+    data class ProductSpec(
+        val id: String = UUID.randomUUID().toString(),
+        var name: String,
+        val specValue: ArrayList<ProductSpecValue>
+    ) :
         ProductSpecSectionEntity(SPEC_TITLE) {
         var position = -1
     }
 
-    data class ProductSpecValue(val id: Long=System.currentTimeMillis(), var value: String) : ProductSpecSectionEntity(SPEC_VALUE) {
+    data class ProductSpecValue(val id: String = UUID.randomUUID().toString(), var value: String) :
+        ProductSpecSectionEntity(SPEC_VALUE) {
         var isSelect = false
         var position = -1
     }
@@ -58,9 +65,9 @@ data class ProductSkuV2(
     var quantity: String = "",
     var weight: String = "",
     val properties: String //[{"project":"1","value":"2"}]
-):Serializable
+) : Serializable
 
 data class SkuPropertyV2(
-    val project:String,
+    val project: String,
     val value: String
-):Serializable
+) : Serializable
