@@ -17,6 +17,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.app.base.BaseActivity
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.app.util.GlobalUtil
 import com.same.part.assistant.app.util.NumberInputUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil
@@ -46,6 +47,9 @@ import pub.devrel.easypermissions.EasyPermissions
 class AddCashierGoodActivity :
     BaseActivity<AddCashierGoodViewModel, ActivityAddCashierGoodBinding>(),
     EasyPermissions.PermissionCallbacks {
+
+    private var hasShowMessage = false
+
     /**
      * 跳转来源
      */
@@ -137,33 +141,52 @@ class AddCashierGoodActivity :
         }
         //是否是称重商品
         mChooseIfWeightGood.setOnClickListener {
-            val dialog = BottomDialog.create(supportFragmentManager)
-            dialog.setViewListener {
-                //选择商品分类列表
-                it.findViewById<RecyclerView>(R.id.recyclerview).apply {
-                    layoutManager = LinearLayoutManager(this@AddCashierGoodActivity)
-                    adapter = CustomAdapter(mIfWeightGoodList) { position ->
-                        if (position >= 0 && position < mIfWeightGoodList.size) {
-                            val option = mIfWeightGoodList[position]
-                            mViewModel.type.postValue(option)
-                            selectedIfWeightGood.text = option
-                            //库存
-                            mQuantity.digitsWithHintText(position == 0)
-                            //此时选择的是称重商品
-                            if (position == 0) {
-                                mViewModel.unit.postValue(mWeightGoodUnitList[0])
-                            } else {
-                                mViewModel.unit.postValue(mNotWeightGoodUnitList[0])
-                            }
+            if (!mViewModel.editProductSku.value.isNullOrEmpty() && mSpecState.isChecked) {
+                if (!hasShowMessage) {
+                    hasShowMessage = true
+                    showMessage(
+                        "切换商品称重类型，将会清空已有的商品规格数据",
+                        positiveButtonText = "确定",
+                        positiveAction = {
+                            hasShowMessage = false
+                            showChooseIfWeightGoodDialog()
+                            mViewModel.editProductSku.value = arrayListOf()
+                        },
+                        negativeButtonText = "取消",
+                        negativeAction = {
+                            hasShowMessage = false
                         }
-                        dialog.dismissAllowingStateLoss()
-                    }
+                    )
                 }
+            }else{
+                showChooseIfWeightGoodDialog()
+            }
 
-            }.setLayoutRes(R.layout.bottom_dialog_list).setDimAmount(0.4F)
-                .setCancelOutside(true).setTag("mChooseIfWeightGood").show()
         }
         //多规格
+        mSpecState.setOnTouchListener { v, event ->
+            if (!mViewModel.editProductSku.value.isNullOrEmpty() && mSpecState.isChecked) {
+                if (!hasShowMessage) {
+                    hasShowMessage = true
+                    showMessage(
+                        "关闭多规格，将会清空已有的商品规格数据",
+                        positiveButtonText = "确定",
+                        positiveAction = {
+                            hasShowMessage = false
+                            mViewModel.editProductSku.value = arrayListOf()
+                        },
+                        negativeButtonText = "取消",
+                        negativeAction = {
+                            hasShowMessage = false
+                        }
+                    )
+                }
+                true
+            }else{
+                false
+            }
+
+        }
         mSpecState.setOnCheckedChangeListener { _, isChecked ->
             mViewModel.specState.value = if (isChecked) 1 else 0
         }
@@ -225,7 +248,7 @@ class AddCashierGoodActivity :
                     EditProductSpecActivity.PRODUCT_TYPE_NO_WEIGHT
                 }
             )
-            mViewModel.editProductSku.value?.let {
+            mViewModel.editProductSku.value?.takeIf { it.isNotEmpty() }?.let {
                 intent.putExtra(EditProductSpecActivity.KEY_PRODUCT_SPEC, it)
             }
             startActivityForResult(
@@ -234,6 +257,26 @@ class AddCashierGoodActivity :
             )
         }
     }
+//
+//    private fun checkSkuAndWeightType(): Boolean {
+//        if (mViewModel.specState.value == 1) {
+//            if (mViewModel.editProductSku.value.isNullOrEmpty()) {
+//                return true
+//            } else {
+//                val isSkuWeight = mViewModel.editProductSku.value?.get(0)?.weight.isNullOrEmpty()
+//                val isWeight = mViewModel.type.value == "是"
+//                if (isWeight == isSkuWeight) {
+//                    return true
+//                } else {
+//                    //                        showMessage("")
+//                    //当前规格与商品称重类型不一致
+//                    return false
+//                }
+//            }
+//        } else {
+//            return true
+//        }
+//    }
 
     override fun createObserver() {
         //商品分类名称数据
@@ -521,6 +564,37 @@ class AddCashierGoodActivity :
             hint = "非称重商品库存为数量"
             inputType = InputType.TYPE_CLASS_NUMBER
         }
+    }
+
+    /**
+     * 选择是否是称重商品Dialog
+     */
+    private fun showChooseIfWeightGoodDialog() {
+        val dialog = BottomDialog.create(supportFragmentManager)
+        dialog.setViewListener {
+            //选择商品分类列表
+            it.findViewById<RecyclerView>(R.id.recyclerview).apply {
+                layoutManager = LinearLayoutManager(this@AddCashierGoodActivity)
+                adapter = CustomAdapter(mIfWeightGoodList) { position ->
+                    if (position >= 0 && position < mIfWeightGoodList.size) {
+                        val option = mIfWeightGoodList[position]
+                        mViewModel.type.postValue(option)
+                        selectedIfWeightGood.text = option
+                        //库存
+                        mQuantity.digitsWithHintText(position == 0)
+                        //此时选择的是称重商品
+                        if (position == 0) {
+                            mViewModel.unit.postValue(mWeightGoodUnitList[0])
+                        } else {
+                            mViewModel.unit.postValue(mNotWeightGoodUnitList[0])
+                        }
+                    }
+                    dialog.dismissAllowingStateLoss()
+                }
+            }
+
+        }.setLayoutRes(R.layout.bottom_dialog_list).setDimAmount(0.4F)
+            .setCancelOutside(true).setTag("mChooseIfWeightGood").show()
     }
 
     class ChooseItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

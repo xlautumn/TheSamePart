@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.EditProductSpecActivity
 import com.same.part.assistant.adapter.AddProductSpecAdapter
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.data.model.ProductSpecSectionEntity
 import com.same.part.assistant.databinding.FragmentAddProductSpecBinding
 import com.same.part.assistant.viewmodel.state.EditProductSpecViewModel
@@ -42,11 +43,23 @@ class AddProductSpecFragment : Fragment() {
         }
         binding.tvAddSpec.setOnClickListener {
             viewModel.productSpecList.value?.let {
-                if (it.size>=2){
+                if (it.size >= 2) {
                     ToastUtils.showShort("最多只能添加两个规格！")
-                }else{
-                    viewModel.addSpec()
-                    viewModel.productSkuState.value = false
+                } else {
+                    if (viewModel.productSkuState.value) {
+                        showMessage(
+                            "此时添加规格，将会清除已有的规格明细，是否确定添加",
+                            positiveButtonText = "确定",
+                            positiveAction = {
+                                viewModel.addSpec()
+                                viewModel.productSkuState.value = false
+                            },
+                            negativeButtonText = "取消"
+                        )
+                    } else {
+                        viewModel.addSpec()
+                        viewModel.productSkuState.value = false
+                    }
                 }
             }
 
@@ -104,9 +117,23 @@ class AddProductSpecFragment : Fragment() {
         }
 
         fun delSpecValue(productSpec: ProductSpecSectionEntity.ProductSpec) {
-            viewModel.delSpecValue(productSpec)
-            if (!viewModel.productSkuState.value && viewModel.checkSpecDetail(false)) {
-                viewModel.productSkuState.value = true
+            if (viewModel.productSkuState.value&& productSpec.specValue.size==1&&productSpec.specValue[0].isSelect){
+                showMessage(
+                    "规格至少需要一个规格值，将会把该规格一起删除，以及规格明细有可能清空，是否确定删除",
+                    positiveButtonText = "确定",
+                    positiveAction = {
+                        viewModel.delSpecValue(productSpec)
+                        if (!viewModel.productSkuState.value && viewModel.checkSpecDetail(false)) {
+                            viewModel.productSkuState.value = true
+                        }
+                    },
+                    negativeButtonText = "取消"
+                )
+            }else {
+                viewModel.delSpecValue(productSpec)
+                if (!viewModel.productSkuState.value && viewModel.checkSpecDetail(false)) {
+                    viewModel.productSkuState.value = true
+                }
             }
         }
     }

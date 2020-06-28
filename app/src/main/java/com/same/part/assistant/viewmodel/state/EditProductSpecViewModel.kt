@@ -120,6 +120,7 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
                 )
             )
         }
+        clearProductSkuDetail()
         _productSpecList.value = _productSpecList.value
     }
 
