@@ -193,19 +193,22 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
                 result = false
                 return result
             }
-            if (editProductSku.weight.isEmpty()) {
-                if (showToast) {
-                    ToastUtils.showShort("规格${editProductSku.propertyString}的重量不能为空")
+
+            if (productType.value != 1) {
+                if (editProductSku.weight.isEmpty()) {
+                    if (showToast) {
+                        ToastUtils.showShort("规格${editProductSku.propertyString}的重量不能为空")
+                    }
+                    result = false
+                    return result
                 }
-                result = false
-                return result
-            }
-            if (editProductSku.barcode.isEmpty()) {
-                if (showToast) {
-                    ToastUtils.showShort("规格${editProductSku.propertyString}的商品条码不能为空")
+                if (editProductSku.barcode.isEmpty()) {
+                    if (showToast) {
+                        ToastUtils.showShort("规格${editProductSku.propertyString}的商品条码不能为空")
+                    }
+                    result = false
+                    return result
                 }
-                result = false
-                return result
             }
         }
         return result
