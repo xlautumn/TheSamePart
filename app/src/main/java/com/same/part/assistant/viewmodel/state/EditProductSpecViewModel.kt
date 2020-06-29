@@ -212,6 +212,17 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
                 }
             }
         }
+
+        if (result && productType.value != 1) {
+            result = _productSkus.value?.let {
+                it.distinctBy { editProductSku -> editProductSku.barcode }.size.let { size -> size == it.size }
+            } ?: true
+            if (!result) {
+                if (showToast) {
+                    ToastUtils.showShort("规格的商品条码不能重复")
+                }
+            }
+        }
         return result
     }
 

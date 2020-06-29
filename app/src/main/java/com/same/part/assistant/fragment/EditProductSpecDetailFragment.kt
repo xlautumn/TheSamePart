@@ -63,7 +63,8 @@ class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCall
                     positiveAction = {
                         viewModel.clearProductSkuDetail()
                         findNavController().navigateUp()
-                    }
+                    },
+                    negativeButtonText = "取消"
                 )
             }
         }
@@ -92,6 +93,7 @@ class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCall
                 SpecBatchSettingDialogFragment().apply {
                     setConfirmAction { price, quantity ->
                         selectList.forEach {
+                            it.isSelect = false
                             it.price = price
                             it.quantity = quantity
                         }
@@ -154,6 +156,12 @@ class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCall
                 scanCodeEditText = null
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val selectList = viewModel.productSkus.value?.filter { it.isSelect }
+        selectList?.forEach { it.isSelect = false }
     }
 
     inner class ProxyClick {
