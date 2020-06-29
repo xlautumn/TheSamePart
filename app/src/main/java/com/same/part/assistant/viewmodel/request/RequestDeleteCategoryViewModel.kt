@@ -31,8 +31,7 @@ class RequestDeleteCategoryViewModel(application: Application) : BaseViewModel(a
                     deleteShopCategoryResult.postValue(position)
                 }
             }, error = {
-                val jsonObject = JSON.parseObject(it.errorMsg)
-                ToastUtils.showLong(jsonObject.getString("message"))
+                ToastUtils.showLong(it.errorMsg)
             }, isShowDialog = true
         )
     }
