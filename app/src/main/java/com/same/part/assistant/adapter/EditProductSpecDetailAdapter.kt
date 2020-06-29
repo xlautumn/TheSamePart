@@ -68,6 +68,7 @@ class EditProductSpecDetailViewHolder(private val binding: LayoutSpecDetailItemB
         binding.ivSpecCheck.setOnClickListener {
             productSku.isSelect = !productSku.isSelect
             binding.ivSpecCheck.isSelected = productSku.isSelect
+            proxyClick.productSkuDataStateChanged()
         }
 
         /**

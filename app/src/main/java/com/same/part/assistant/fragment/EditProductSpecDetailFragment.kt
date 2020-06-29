@@ -4,21 +4,19 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
-import com.bumptech.glide.Glide
 import com.same.part.assistant.R
 import com.same.part.assistant.adapter.EditProductSpecDetailAdapter
 import com.same.part.assistant.app.ext.showMessage
-import com.same.part.assistant.app.util.GlobalUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.ScanBarCodeUtil
 import com.same.part.assistant.databinding.FragmentEditProductSpecDetailBinding
@@ -26,8 +24,6 @@ import com.same.part.assistant.dialog.SpecBatchSettingDialogFragment
 import com.same.part.assistant.utils.Util
 import com.same.part.assistant.viewmodel.state.EditProductSpecViewModel
 import com.yzq.zxinglibrary.common.Constant
-import com.zhihu.matisse.Matisse
-import kotlinx.android.synthetic.main.activity_add_cashier_good.*
 import me.hgj.jetpackmvvm.ext.getActivityViewModel
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -98,6 +94,7 @@ class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCall
                             it.quantity = quantity
                         }
                         adapter.notifyDataSetChanged()
+                        binding.ivCheckAll.isSelected = false
                     }
                     show(this@EditProductSpecDetailFragment.childFragmentManager, "设置规格")
                 }
@@ -168,6 +165,13 @@ class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCall
         fun scanCode(editText: EditText) {
             scanCodeEditText = editText
             ScanBarCodeUtil.startScanCode(this@EditProductSpecDetailFragment)
+        }
+
+        fun productSkuDataStateChanged(){
+            viewModel.productSkus.value?.apply {
+                val allCheck = this.none { editProductSku ->!editProductSku.isSelect }
+                binding.ivCheckAll.isSelected = allCheck
+            }
         }
 
     }
