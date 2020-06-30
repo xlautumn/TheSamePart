@@ -22,6 +22,7 @@ class TheSamePartApplication : BaseApp() {
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
+        CrashHandler.instance.init(applicationContext)
         MultiDex.install(this)
         MMKV.initialize(this.filesDir.absolutePath + "/mmkv")
         //设置全局的Header构建器

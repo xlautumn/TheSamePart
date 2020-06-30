@@ -124,13 +124,19 @@ class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCall
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        if (requestCode == PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
+        } else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA_FOR_SCAN_BARCODE) {
+            ToastUtils.showShort("扫描商品条形码需要访问您的存储权限和照相机权限,请在手机设置中打开以上权限")
+        }
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
             activity?.let { PhotoPickerUtil.showPhotoPicker(it) }
         } else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA_FOR_SCAN_BARCODE) {
-            ScanBarCodeUtil.startScanCode(this)
+            if (perms.size == ScanBarCodeUtil.PERMISSIONS_REQUEST_LIST.size) {
+                ScanBarCodeUtil.startScanCode(this)
+            }
         }
     }
 

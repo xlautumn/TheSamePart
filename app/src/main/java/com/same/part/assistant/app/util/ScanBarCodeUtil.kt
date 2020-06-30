@@ -35,7 +35,7 @@ object ScanBarCodeUtil {
             EasyPermissions.requestPermissions(
                 PermissionRequest.Builder(
                     activity,
-                    REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA,
+                    REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA_FOR_SCAN_BARCODE,
                     *PERMISSIONS_REQUEST_LIST
                 ).setRationale("扫描商品条形码需要访问您的存储权限和照相机权限。").build()
             )
@@ -52,7 +52,7 @@ object ScanBarCodeUtil {
                 EasyPermissions.requestPermissions(
                     PermissionRequest.Builder(
                         fragment,
-                        REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA,
+                        REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA_FOR_SCAN_BARCODE,
                         *PERMISSIONS_REQUEST_LIST
                     ).setRationale("扫描商品条形码需要访问您的存储权限和照相机权限。").build()
                 )

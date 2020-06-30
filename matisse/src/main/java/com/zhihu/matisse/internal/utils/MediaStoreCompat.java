@@ -25,7 +25,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Size;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.FileProvider;
 import androidx.core.os.EnvironmentCompat;
@@ -162,5 +166,31 @@ public class MediaStoreCompat {
 
     public String getCurrentPhotoPath() {
         return mCurrentPhotoPath;
+    }
+
+    public static boolean hasPermissions(@NonNull Context context,
+                                         @Size(min = 1) @NonNull String... perms) {
+        // Always return true for SDK < M, let the system deal with the permissions
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Log.w("MediaStoreCompat", "hasPermissions: API version < M, returning true by default");
+
+            // DANGER ZONE!!! Changing this will break the library.
+            return true;
+        }
+
+        // Null context may be passed if we have detected Low API (less than M) so getting
+        // to this point with a null context should not be possible.
+        if (context == null) {
+            throw new IllegalArgumentException("Can't check permissions for null context");
+        }
+
+        for (String perm : perms) {
+            if (ContextCompat.checkSelfPermission(context, perm)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

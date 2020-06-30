@@ -15,6 +15,7 @@
  */
 package com.zhihu.matisse.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -38,6 +39,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.Album;
@@ -429,8 +431,12 @@ public class MatisseActivity extends AppCompatActivity implements
 
     @Override
     public void capture() {
-        if (mMediaStoreCompat != null) {
-            mMediaStoreCompat.dispatchCaptureIntent(this, REQUEST_CODE_CAPTURE);
+        if (MediaStoreCompat.hasPermissions(this, Manifest.permission.CAMERA)){
+            if (mMediaStoreCompat != null) {
+                mMediaStoreCompat.dispatchCaptureIntent(this, REQUEST_CODE_CAPTURE);
+            }
+        }else {
+            Toast.makeText(this, "您还未提供照相机权限，请在手机设置中打开该权限", Toast.LENGTH_SHORT).show();
         }
     }
 
