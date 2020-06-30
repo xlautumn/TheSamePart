@@ -195,26 +195,26 @@ class EditProductSpecViewModel(application: Application) : BaseViewModel(applica
                 return result
             }
 
-            if (productType.value != 1) {
-                if (editProductSku.weight.isEmpty()) {
-                    if (showToast) {
-                        ToastUtils.showShort("规格${editProductSku.propertyString}的重量不能为空")
-                    }
-                    result = false
-                    return result
-                }
-                if (editProductSku.barcode.isEmpty()) {
-                    if (showToast) {
-                        ToastUtils.showShort("规格${editProductSku.propertyString}的商品条码不能为空")
-                    }
-                    result = false
-                    return result
-                }
-            }
+//            if (productType.value != 1) {
+//                if (editProductSku.weight.isEmpty()) {
+//                    if (showToast) {
+//                        ToastUtils.showShort("规格${editProductSku.propertyString}的重量不能为空")
+//                    }
+//                    result = false
+//                    return result
+//                }
+//                if (editProductSku.barcode.isEmpty()) {
+//                    if (showToast) {
+//                        ToastUtils.showShort("规格${editProductSku.propertyString}的商品条码不能为空")
+//                    }
+//                    result = false
+//                    return result
+//                }
+//            }
         }
 
         if (result && productType.value != 1) {
-            result = _productSkus.value?.let {
+            result = _productSkus.value?.filter {it.barcode.isNotEmpty()  }?.let {
                 it.distinctBy { editProductSku -> editProductSku.barcode }.size.let { size -> size == it.size }
             } ?: true
             if (!result) {
