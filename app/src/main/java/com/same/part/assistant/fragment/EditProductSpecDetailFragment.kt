@@ -48,7 +48,7 @@ class EditProductSpecDetailFragment : Fragment(), EasyPermissions.PermissionCall
         binding.toolbarTitle.findViewById<TextView>(R.id.mToolbarTitle).text = "编辑规格明细"
         //返回按钮
         binding.toolbarTitle.findViewById<View>(R.id.mTitleBack).setOnClickListener {
-            if (viewModel.checkSpecDetail()) {
+            if (viewModel.checkSpecDetail(false)) {
                 viewModel.productSkuState.value = true
                 findNavController().navigateUp()
             } else {
