@@ -146,6 +146,9 @@ class ProductClassificationFragment : Fragment() {
                                 productRecyclerView.setEmptyView(emptyView)
                             } else {
                                 //通知刷新结束
+                                if (isRefresh){
+                                    mProductClassificationList.clear()
+                                }
                                 mSmartRefreshLayout?.refreshComplete(false)
                                 mCurrentPage--
                                 //检查是否展示空布局
@@ -197,6 +200,9 @@ class ProductClassificationFragment : Fragment() {
                             productRecyclerView.setEmptyView(emptyView)
                         } else {
                             //通知刷新结束
+                            if (isRefresh){
+                                mProductClassificationList.clear()
+                            }
                             mSmartRefreshLayout?.refreshComplete(false)
                             mCurrentPage--
                             //检查是否展示空布局

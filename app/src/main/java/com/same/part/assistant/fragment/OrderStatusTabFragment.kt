@@ -101,6 +101,9 @@ class OrderStatusTabFragment(var mContext: PurchaseOrderActivity, var title: Str
                 resultJson.apply {
                     getJSONArray("content")?.takeIf { array -> array.size > 0 }?.apply {
                         if (this.size == 0) {
+                            if (isRefresh) {
+                                mOrderStatusList.clear()
+                            }
                             //通知刷新结束
                             mSmartRefreshLayout?.refreshComplete(false)
                             mCurrentPage--

@@ -123,6 +123,9 @@ class CashierFragment : Fragment() {
                                 //检查是否展示空布局
                                 cashierRecyclerView.setEmptyView(emptyView)
                             } else {
+                                if (isRefresh){
+                                    mCashierList.clear()
+                                }
                                 //通知刷新结束
                                 mSmartRefreshLayout?.refreshComplete(false)
                                 mCurrentPage--
