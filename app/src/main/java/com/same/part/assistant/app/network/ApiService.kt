@@ -311,4 +311,13 @@ interface ApiService {
      */
     @PUT("product/updateProduct/{productId}")
     suspend fun updateProduct( @Path("productId") productId: String,@Body requestCreateProduct:RequestCreateProduct):ResponseBody
+
+    /**
+     * 删除店铺会员卡
+     */
+    @DELETE("biz/card/{cardId}")
+    suspend fun delVIPCard(
+        @Path("cardId") cardId: Int, @Query("appKey") appKey: String = CacheUtil.getAppKey(),
+        @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
+    ): ResponseBody
 }

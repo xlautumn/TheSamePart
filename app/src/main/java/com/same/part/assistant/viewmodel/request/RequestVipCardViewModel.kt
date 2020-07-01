@@ -108,6 +108,26 @@ class RequestVipCardViewModel(application: Application) : BaseViewModel(applicat
     }
 
     /**
+     * 删除会员卡
+     */
+    fun delVIPCard(cardId: Int,onSuccess:()->Unit) {
+        requestResponseBody(
+            { HttpRequestManger.instance.delVIPCard(cardId) },
+            success = {
+                val response: String = it.string()
+                val jsonObject = JSON.parseObject(response)
+                val msg = jsonObject.getString("message")
+                if (jsonObject.getInteger("code") == 1) {
+                    onSuccess()
+                }
+                ToastUtils.showShort(msg)
+            },
+            error = {
+                ToastUtils.showShort(it.errorMsg)
+            },isShowDialog = true)
+    }
+
+    /**
      * 判断添加/编辑是否成功
      */
     private fun postMemberCardResult(responsebody: ResponseBody) {

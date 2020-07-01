@@ -13,14 +13,10 @@ import com.same.part.assistant.activity.AddVipCardActivity.Companion.HAND_CARD_S
 import com.same.part.assistant.activity.AddVipCardActivity.Companion.JUMP_FORM_ADD
 import com.same.part.assistant.activity.AddVipCardActivity.Companion.JUMP_FORM_EDIT
 import com.same.part.assistant.activity.AddVipCardActivity.Companion.JUMP_FORM_TYPE
-import com.same.part.assistant.app.util.CacheUtil
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.data.model.MemberCardModel
 import com.same.part.assistant.viewmodel.request.RequestVipCardViewModel
 import kotlinx.android.synthetic.main.activity_vip_card_manager.*
-import kotlinx.android.synthetic.main.activity_vip_card_manager.mSmartRefreshLayout
-import kotlinx.android.synthetic.main.activity_vip_card_manager.mTitleBack
-import kotlinx.android.synthetic.main.activity_vip_card_manager.mToolbarAdd
-import kotlinx.android.synthetic.main.activity_vip_card_manager.mToolbarTitle
 import me.hgj.jetpackmvvm.ext.getViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -83,17 +79,35 @@ class VipCardManagerActivity : AppCompatActivity() {
         }
         //适配器
         mCardAdapter.apply {
-            addChildClickViewIds(R.id.editCard)
+            addChildClickViewIds(R.id.editCard, R.id.delCard)
             setOnItemChildClickListener { adapter, view, position ->
-                startActivity(
-                    Intent(
-                        this@VipCardManagerActivity,
-                        AddVipCardActivity::class.java
-                    ).apply {
-                        putExtra(CARD_DATA, mCardAdapter.data[position])
-                        putExtra(JUMP_FORM_TYPE, JUMP_FORM_EDIT)
+                when (view.id) {
+                    R.id.editCard -> {
+                        startActivity(
+                            Intent(
+                                this@VipCardManagerActivity,
+                                AddVipCardActivity::class.java
+                            ).apply {
+                                putExtra(CARD_DATA, mCardAdapter.data[position])
+                                putExtra(JUMP_FORM_TYPE, JUMP_FORM_EDIT)
+                            }
+                        )
                     }
-                )
+                    R.id.delCard -> {
+                        showMessage(
+                            "请确认是否删除",
+                            positiveAction = {
+                                mRequestVipCardViewModel.delVIPCard(
+                                    mCardAdapter.data[position].cardId,
+                                    onSuccess = {
+                                        mRequestVipCardViewModel.getMemberCardList(true)
+                                    })
+                            },
+                            negativeButtonText = "取消"
+                        )
+                    }
+                }
+
             }
         }
         //获取会员卡列表数据

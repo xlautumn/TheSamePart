@@ -341,4 +341,11 @@ class HttpRequestManger {
     ): ResponseBody {
         return NetworkApiv2.service.updateProduct(productId, requestCreateProduct)
     }
+
+    /**
+     * 删除店铺会员卡
+     */
+    suspend fun delVIPCard(cardId:Int):ResponseBody{
+        return NetworkApiv2.service.delVIPCard(cardId)
+    }
 }

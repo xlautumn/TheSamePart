@@ -59,7 +59,15 @@ class CouponManagerActivity :
             startActivity(Intent(this@CouponManagerActivity, AddCouponActivity::class.java))
         }
         //列表数据
-        mCouponAdapter = CouponAdapter(arrayListOf(),ProxyClick())
+        mCouponAdapter = CouponAdapter(arrayListOf())
+        mCouponAdapter.apply {
+            addChildClickViewIds(R.id.llOperation)
+            setOnItemChildClickListener { adapter, view, position ->
+                if (view.id == R.id.llOperation) {
+                    provideCoupon(mCouponAdapter.data[position])
+                }
+            }
+        }
         mCouponRecyclerView.apply {
             adapter = mCouponAdapter
             layoutManager = LinearLayoutManager(context)
@@ -92,23 +100,23 @@ class CouponManagerActivity :
         EventBus.getDefault().unregister(this)
     }
 
-    inner class ProxyClick{
-        /**
-         * 发放优惠券
-         */
-        fun provideCoupon(coupon: CouponInfoModel) {
-            startActivityForResult(
-                Intent(
-                    this@CouponManagerActivity,
-                    ProvideCouponActivity::class.java
-                ).apply {
-                    putExtra(ProvideCouponActivity.KEY_DATA_COUPON,coupon)
-                }, REQUEST_CODE_PROVIDE_COUPON
-            )
-        }
+
+    /**
+     * 发放优惠券
+     */
+    private fun provideCoupon(coupon: CouponInfoModel) {
+        startActivityForResult(
+            Intent(
+                this@CouponManagerActivity,
+                ProvideCouponActivity::class.java
+            ).apply {
+                putExtra(ProvideCouponActivity.KEY_DATA_COUPON, coupon)
+            }, REQUEST_CODE_PROVIDE_COUPON
+        )
     }
 
-    class CouponAdapter(data: ArrayList<CouponInfoModel>,private val proxyClick:ProxyClick) :
+
+    class CouponAdapter(data: ArrayList<CouponInfoModel>) :
         BaseQuickAdapter<CouponInfoModel, BaseViewHolder>(R.layout.coupon_info_item, data) {
 
         override fun convert(holder: BaseViewHolder, item: CouponInfoModel) {
@@ -127,9 +135,6 @@ class CouponManagerActivity :
                 )
 
                 holder.setText(R.id.tvOperation, "发放")
-                holder.getView<View>(R.id.llOperation).setOnClickListener {
-                    proxyClick.provideCoupon(item)
-                }
             }
         }
     }
