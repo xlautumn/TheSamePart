@@ -57,6 +57,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
+                    android:singleLine="true"
                     android:text="@={viewmodel.name}"
                     android:background="@null"
                     android:hint="（必填，例如中秋优惠券）"
@@ -103,6 +104,7 @@
                     android:text="@={viewmodel.distributionTotal}"
                     android:hint="（必填，最多100000000张）"
                     android:inputType="number"
+                    android:singleLine="true"
                     android:lines="1"
                     android:paddingLeft="5dp"
                     android:textSize="11dp" />
@@ -143,6 +145,7 @@
                     android:inputType="number|numberDecimal"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:singleLine="true"
                     android:hint="（减免多少元）"
                     android:text="@={viewmodel.creditAmount}"
                     android:lines="1"
