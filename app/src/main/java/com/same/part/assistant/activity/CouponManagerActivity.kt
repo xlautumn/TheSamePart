@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_cashier.*
 import kotlinx.android.synthetic.main.fragment_product_classification.*
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.ext.getViewModel
+import me.hgj.jetpackmvvm.ext.parseState
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -75,8 +76,13 @@ class CouponManagerActivity :
 
     override fun createObserver() {
         mRequestCouponsViewModel.couponsListResult.observe(this, Observer {
-            mCouponAdapter.setNewInstance(it)
-            mSmartRefreshLayout.refreshComplete()
+            parseState(it, onSuccess = {
+                mCouponAdapter.setNewInstance(it)
+                mSmartRefreshLayout.refreshComplete()
+            }, onError = {
+                ToastUtils.showShort(it.errorMsg)
+                mSmartRefreshLayout.refreshComplete()
+            })
         })
     }
 

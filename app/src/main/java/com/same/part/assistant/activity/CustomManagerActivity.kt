@@ -76,6 +76,9 @@ class CustomManagerActivity : AppCompatActivity() {
                 resultJson.apply {
                     getJSONArray("content")?.takeIf { array -> array.size > 0 }?.apply {
                         if (this.size == 0) {
+                            if (isRefresh){
+                                mCustomList.clear()
+                            }
                             //通知刷新结束
                             mSmartRefreshLayout?.refreshComplete(false)
                             mCurrentPage--
@@ -108,6 +111,9 @@ class CustomManagerActivity : AppCompatActivity() {
                             mManagerRecyclerView.setEmptyView(emptyView)
                         }
                     } ?: also {
+                        if (isRefresh){
+                            mCustomList.clear()
+                        }
                         //通知刷新结束
                         mSmartRefreshLayout?.refreshComplete(false)
                         mCurrentPage--
