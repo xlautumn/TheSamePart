@@ -147,7 +147,7 @@ data class CouponInfoModel(
     var used: String,
     var status: String,
     var statements: String?
-)
+):Serializable
 
 /**
  * 账号数据类

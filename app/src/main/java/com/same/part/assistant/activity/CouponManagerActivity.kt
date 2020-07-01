@@ -2,6 +2,7 @@ package com.same.part.assistant.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
@@ -58,7 +59,7 @@ class CouponManagerActivity :
             startActivity(Intent(this@CouponManagerActivity, AddCouponActivity::class.java))
         }
         //列表数据
-        mCouponAdapter = CouponAdapter(arrayListOf())
+        mCouponAdapter = CouponAdapter(arrayListOf(),ProxyClick())
         mCouponRecyclerView.apply {
             adapter = mCouponAdapter
             layoutManager = LinearLayoutManager(context)
@@ -86,7 +87,28 @@ class CouponManagerActivity :
         })
     }
 
-    class CouponAdapter(data: ArrayList<CouponInfoModel>) :
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    inner class ProxyClick{
+        /**
+         * 发放优惠券
+         */
+        fun provideCoupon(coupon: CouponInfoModel) {
+            startActivityForResult(
+                Intent(
+                    this@CouponManagerActivity,
+                    ProvideCouponActivity::class.java
+                ).apply {
+                    putExtra(ProvideCouponActivity.KEY_DATA_COUPON,coupon)
+                }, REQUEST_CODE_PROVIDE_COUPON
+            )
+        }
+    }
+
+    class CouponAdapter(data: ArrayList<CouponInfoModel>,private val proxyClick:ProxyClick) :
         BaseQuickAdapter<CouponInfoModel, BaseViewHolder>(R.layout.coupon_info_item, data) {
 
         override fun convert(holder: BaseViewHolder, item: CouponInfoModel) {
@@ -103,13 +125,17 @@ class CouponManagerActivity :
                         else -> 0xFF999999.toInt()
                     }
                 )
+
+                holder.setText(R.id.tvOperation, "发放")
+                holder.getView<View>(R.id.llOperation).setOnClickListener {
+                    proxyClick.provideCoupon(item)
+                }
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
+    companion object{
+        const val REQUEST_CODE_PROVIDE_COUPON = 10 //发放请求码
     }
 
 }

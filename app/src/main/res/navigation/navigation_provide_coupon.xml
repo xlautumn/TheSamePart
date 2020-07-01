@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_edit_product_spec"
+    app:startDestination="@id/provideCouponFragment">
+
+    <fragment
+        android:id="@+id/provideCouponFragment"
+        android:name="com.same.part.assistant.fragment.ProvideCouponFragment"
+        android:label="ProvideCouponFragment">
+        <action
+            android:id="@+id/action_provideCouponFragment_to_selectCustomFragment"
+            app:destination="@id/selectCustomFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/selectCustomFragment"
+        android:name="com.same.part.assistant.fragment.SelectCustomFragment"
+        android:label="SelectCustomFragment" >
+        <action
+            android:id="@+id/action_selectCustomFragment_to_searchBaseFragment"
+            app:destination="@id/searchBaseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchBaseFragment"
+        android:name="com.same.part.assistant.fragment.SearchCustomFragment"
+        android:label="SearchBaseFragment" />
+</navigation>
