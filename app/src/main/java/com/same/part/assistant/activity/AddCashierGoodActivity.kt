@@ -391,6 +391,7 @@ class AddCashierGoodActivity :
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
+            ToastUtils.showShort("设置头像需要访问您的存储权限和照相机权限,请在手机设置中打开以上权限")
         } else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA_FOR_SCAN_BARCODE) {
             ToastUtils.showShort("扫描商品条形码需要访问您的存储权限和照相机权限,请在手机设置中打开以上权限")
         }
@@ -398,7 +399,9 @@ class AddCashierGoodActivity :
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
-            PhotoPickerUtil.showPhotoPicker(this)
+            if (perms.size==PhotoPickerUtil.PERMISSIONS_REQUEST_LIST.size) {
+                PhotoPickerUtil.showPhotoPicker(this)
+            }
         } else if (requestCode == ScanBarCodeUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA_FOR_SCAN_BARCODE) {
             if (perms.size == ScanBarCodeUtil.PERMISSIONS_REQUEST_LIST.size) {
                 ScanBarCodeUtil.startScanCode(this)

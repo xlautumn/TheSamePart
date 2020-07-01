@@ -13,6 +13,7 @@ import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.app.ext.setCanInput
 import com.same.part.assistant.app.util.CacheUtil
 import com.same.part.assistant.app.util.GlobalUtil
+import com.same.part.assistant.app.util.PhotoPickerUtil
 import com.same.part.assistant.app.util.PhotoPickerUtil.REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA
 import com.same.part.assistant.app.util.PhotoPickerUtil.RESULT_CODE_PHOTO_PICKER
 import com.same.part.assistant.app.util.PhotoPickerUtil.choosePhoto
@@ -148,11 +149,16 @@ class ShopManagerActivity : BaseActivity<ShopManagerViewModel, ActivityShopManag
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        if (requestCode == REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
+            ToastUtils.showShort("设置头像需要访问您的存储权限和照相机权限,请在手机设置中打开以上权限")
+        }
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == REQUEST_CODE_EXTERNAL_STORAGE_AND_CAMERA) {
-            showPhotoPicker(this)
+            if (perms.size == PhotoPickerUtil.PERMISSIONS_REQUEST_LIST.size) {
+                showPhotoPicker(this)
+            }
         }
     }
 
