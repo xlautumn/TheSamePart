@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">同方云商</string>
     <string name="purchase_statement">去结算(%1$d)</string>
+    <string name="vip_card_remark">备注：该会员卡为会员权益卡，客户在领取该卡后，在卡片有效期内将享有折扣优惠。</string>
 </resources>

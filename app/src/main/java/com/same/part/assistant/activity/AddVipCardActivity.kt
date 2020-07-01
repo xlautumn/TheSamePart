@@ -1,6 +1,11 @@
 package com.same.part.assistant.activity
 
 import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +17,6 @@ import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.data.model.CreateMemberCard
 import com.same.part.assistant.data.model.MemberCardModel
 import com.same.part.assistant.databinding.ActivityAddVipCardBinding
-
 import com.same.part.assistant.viewmodel.request.RequestVipCardViewModel
 import com.same.part.assistant.viewmodel.state.AddVipCardViewModel
 import kotlinx.android.synthetic.main.toolbar_title.*
@@ -58,6 +62,8 @@ class AddVipCardActivity : BaseActivity<AddVipCardViewModel, ActivityAddVipCardB
                 mViewModel.discount.set(discount.toString())
                 mViewModel.description.set(description)
             }
+            mDatabind.etDiscount.setFocusable(false)
+            mDatabind.etDiscount.isFocusableInTouchMode = false
         }
         //返回按钮
         mTitleBack.setOnClickListener {
@@ -118,8 +124,52 @@ class AddVipCardActivity : BaseActivity<AddVipCardViewModel, ActivityAddVipCardB
             }.setLayoutRes(R.layout.bottom_dialog_list).setDimAmount(0.4F)
                 .setCancelOutside(true).setTag("mChooseUnit").show()
         }
+
+        //卡片有效期
+        fun chooseCardPeriodOfValidity() {
+            val dialog = BottomDialog.create(supportFragmentManager)
+            dialog.setViewListener {
+                handleCardPeriodOfValidityDialogView(it, dialog)
+            }.setLayoutRes(R.layout.dialog_card_period_of_validity).setDimAmount(0.4F)
+                .setCancelOutside(true).setTag("mChooseCardPeriodOfValidity").show()
+        }
     }
 
+    /**
+     * 卡片有效期
+     */
+    private fun handleCardPeriodOfValidityDialogView(
+        it: View,
+        dialog: BottomDialog
+    ) {
+        val ivLifeTime = it.findViewById<ImageView>(R.id.ivLifeTime)
+        val ivLimited = it.findViewById<ImageView>(R.id.ivLimited)
+        val etLimitedDayNum = it.findViewById<EditText>(R.id.etLimitedDayNum)
+        if (mViewModel.cardPeriodOfValidity.get() == "0") {
+            ivLifeTime.isSelected = true
+            ivLimited.isSelected = false
+        } else {
+            ivLifeTime.isSelected = false
+            ivLimited.isSelected = true
+            etLimitedDayNum.setText(mViewModel.cardPeriodOfValidity.get())
+        }
+        it.findViewById<LinearLayout>(R.id.llLifeTime).setOnClickListener {
+            ivLifeTime.isSelected = true
+            ivLimited.isSelected = false
+        }
+        it.findViewById<LinearLayout>(R.id.llLimited).setOnClickListener {
+            ivLifeTime.isSelected = false
+            ivLimited.isSelected = true
+        }
+        it.findViewById<TextView>(R.id.tvConfirm).setOnClickListener {
+            if (etLimitedDayNum.text.isEmpty() && ivLimited.isSelected) {
+                ToastUtils.showLong("请填写天数")
+                return@setOnClickListener
+            }
+            mViewModel.cardPeriodOfValidity.set(if (ivLifeTime.isSelected) "0" else etLimitedDayNum.text.toString())
+            dialog.dismissAllowingStateLoss()
+        }
+    }
 
     inner class WayAdapter(data: ArrayList<String>) :
         BaseQuickAdapter<String, BaseViewHolder>(R.layout.choose_list_item, data) {

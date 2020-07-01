@@ -19,4 +19,7 @@ class AddVipCardViewModel (application: Application) : BaseViewModel(application
     /** 描述 */
     var description = StringObservableField()
 
+    /** 卡片有效期 */
+    var cardPeriodOfValidity = StringObservableField("0")
+
 }

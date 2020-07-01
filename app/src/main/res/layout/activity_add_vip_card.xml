@@ -55,6 +55,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="end|center_vertical"
                     android:singleLine="true"
                     android:text="@={viewmodel.name}"
                     android:hint="（必填，长度限制6个字符）"
@@ -119,12 +120,14 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                     android:textSize="12dp" />
 
                 <EditText
+                    android:id="@+id/et_discount"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:singleLine="true"
+                    android:gravity="end|center_vertical"
                     android:inputType="numberDecimal|number"
                     android:text="@={viewmodel.discount}"
                     android:hint="（必填，数字，例如95代表9.5折）"
@@ -140,7 +143,32 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                 android:layout_marginLeft="@dimen/dip_15"
                 android:layout_marginRight="@dimen/dip_15"
                 android:background="@color/color_D2D2D2" />
+            <LinearLayout
+                android:id="@+id/llPeriodOfValidity"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:onClick="@{()->click.chooseCardPeriodOfValidity()}"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="卡片有效期"
+                    android:textColor="@color/color_333333"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardPeriodDayNum="@{viewmodel.cardPeriodOfValidity}"
+                    android:drawableRight="@drawable/arrow_next_page"
+                    android:text="终身有效"
+                    android:textSize="11dp"/>
+
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/llSort"
                 android:layout_width="match_parent"
@@ -163,6 +191,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                     android:layout_weight="1"
                     android:background="@null"
                     android:singleLine="true"
+                    android:gravity="end|center_vertical"
                     android:hint="请输入描述信息"
                     android:lines="1"
                     android:text="@={viewmodel.description}"
@@ -197,6 +226,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="是"
+                    android:drawableRight="@drawable/arrow_next_page"
                     android:textSize="11dp"/>
 
             </LinearLayout>
@@ -204,6 +234,19 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_remark"
+            app:layout_constraintTop_toBottomOf="@+id/llTop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dip_10"
+            android:textSize="@dimen/dip_14"
+            android:layout_marginStart="@dimen/dip_15"
+            android:layout_marginEnd="@dimen/dip_15"
+            android:textColor="@color/color_666666"
+            android:layout_width="0dp"
+            android:text="@string/vip_card_remark"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:layout_width="285dp"
@@ -217,7 +260,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
             android:textSize="13dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llTop" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_remark" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

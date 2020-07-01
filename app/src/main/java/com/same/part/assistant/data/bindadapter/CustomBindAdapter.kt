@@ -57,6 +57,16 @@ object CustomBindAdapter {
         }
     }
 
+    @BindingAdapter(value = ["cardPeriodDayNum"])
+    @JvmStatic
+    fun cardPeriodDayNum(textView: TextView, num: String) {
+        textView.text = if (num == "0") {
+            "终生有效"
+        } else {
+            "领卡后${num}天内有效"
+        }
+    }
+
 
     @BindingAdapter(value = ["switchButton"])
     @JvmStatic
