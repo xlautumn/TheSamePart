@@ -54,7 +54,9 @@ class AddCouponActivity :
         }
         //领取渠道
         pickUpChannel.setOnClickListener {
-            startActivityForResult(Intent(this, ChannelActivity::class.java), CHANNEL_NUM_SETTING)
+            startActivityForResult(Intent(this, ChannelActivity::class.java).apply {
+                putExtra(ChannelActivity.LITMIT_NUM, mViewModel.couponReceiveChannel.get())
+            }, CHANNEL_NUM_SETTING)
         }
 
     }

@@ -39,6 +39,12 @@ class ChannelActivity : AppCompatActivity() {
             }.setLayoutRes(R.layout.dialog_channel_num).setDimAmount(0.4F)
                 .setCancelOutside(true).setTag("mChooseUsingThreshold").show()
         }
+        mLimitNum = intent.getIntExtra(LITMIT_NUM,mLimitNum)
+        tvNum.text = if (mLimitNum == 0) {
+            "不限制"
+        } else {
+            "${mLimitNum}次"
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
