@@ -256,6 +256,8 @@ class AddCashierGoodActivity :
                 REQUEST_CODE_SPEC
             )
         }
+
+        NumberInputUtil.setPriceMode(et_price, 2)
     }
 //
 //    private fun checkSkuAndWeightType(): Boolean {

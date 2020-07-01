@@ -64,6 +64,8 @@
                 android:layout_marginEnd="5dp"
                 android:layout_width="56dp"
                 android:layout_height="23dp"
+                android:singleLine="true"
+                android:inputType="numberDecimal"
                 android:background="@drawable/shape_gray_rect_border_input"
                 android:lines="1"
                 android:gravity="center"

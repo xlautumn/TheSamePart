@@ -20,6 +20,7 @@ import com.same.part.assistant.R
 import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.app.util.DatetimeUtil
 import com.same.part.assistant.app.util.DatetimeUtil.now
+import com.same.part.assistant.app.util.NumberInputUtil
 import com.same.part.assistant.data.model.RequestCreateCouponInfo
 import com.same.part.assistant.databinding.ActivityAddCouponBinding
 import com.same.part.assistant.viewmodel.request.RequestCreateCouponViewModel
@@ -208,6 +209,7 @@ class AddCouponActivity :
         val ivNoThreshold = it.findViewById<ImageView>(R.id.ivNoThreshold)
         val ivHasThreshold = it.findViewById<ImageView>(R.id.ivHasThreshold)
         val etThresholdNum = it.findViewById<EditText>(R.id.etThresholdNum)
+        NumberInputUtil.setPriceMode(etThresholdNum, 2)
         if (mViewModel.usingThreshold.get() == "0") {
             ivNoThreshold.isSelected = true
             ivHasThreshold.isSelected = false

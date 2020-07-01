@@ -270,6 +270,7 @@
                             android:textSize="13dp" />
 
                         <EditText
+                            android:id="@+id/et_price"
                             android:layout_width="0dp"
                             android:layout_height="35dp"
                             android:layout_marginHorizontal="10dp"
