@@ -162,11 +162,19 @@ class AddVipCardActivity : BaseActivity<AddVipCardViewModel, ActivityAddVipCardB
             ivLimited.isSelected = true
         }
         it.findViewById<TextView>(R.id.tvConfirm).setOnClickListener {
-            if (etLimitedDayNum.text.isEmpty() && ivLimited.isSelected) {
-                ToastUtils.showLong("请填写天数")
-                return@setOnClickListener
+            if (ivLimited.isSelected) {
+                val dayNum = etLimitedDayNum.text.toString().toIntOrNull()
+                if (dayNum == null) {
+                    ToastUtils.showLong("请填写天数")
+                    return@setOnClickListener
+                } else if (dayNum == 0) {
+                    ToastUtils.showLong("天数不能为0")
+                    return@setOnClickListener
+                }
+                mViewModel.cardPeriodOfValidity.set(dayNum.toString())
+            } else {
+                mViewModel.cardPeriodOfValidity.set("0")
             }
-            mViewModel.cardPeriodOfValidity.set(if (ivLifeTime.isSelected) "0" else etLimitedDayNum.text.toString())
             dialog.dismissAllowingStateLoss()
         }
     }
