@@ -96,7 +96,7 @@ class AddVipCardActivity : BaseActivity<AddVipCardViewModel, ActivityAddVipCardB
             val memberCard = CreateMemberCard(
                 mViewModel.description.get(),
                 mViewModel.discount.get().toDouble(),
-                JSONObject().put("type", 1).toString(),
+                mViewModel.getCardPeriodOfValidityJson(),
                 mViewModel.name.get(),
                 mViewModel.receiveWay.get()
             )
