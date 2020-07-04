@@ -35,6 +35,7 @@ class RequestCouponsViewModel(application: Application) : BaseViewModel(applicat
                         it.getJSONObject(i)?.apply {
                             couponList.add(
                                 CouponInfoModel(
+                                    getString("couponActivityId"),
                                     getString("title"),
                                     getString("totalTake"),
                                     getString("stockQty"),

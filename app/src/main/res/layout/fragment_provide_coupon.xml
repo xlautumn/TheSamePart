@@ -10,6 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@color/color_F8F8F8"
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
@@ -60,8 +61,11 @@
         </androidx.appcompat.widget.Toolbar>
 
         <com.same.part.assistant.view.RecyclerViewWithEmpty
+            android:id="@+id/rv_provider_customer"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dip_13"
+            android:layout_marginEnd="@dimen/dip_13"
             app:layout_constraintBottom_toTopOf="@+id/tv_provide"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +75,7 @@
             android:id="@+id/emptyView"
             layout="@layout/empty_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/tv_provide"
             app:layout_constraintEnd_toEndOf="parent"

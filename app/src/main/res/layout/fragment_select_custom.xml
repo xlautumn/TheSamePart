@@ -8,7 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/color_F8F8F8">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tool_bar"
@@ -46,6 +47,7 @@
                     android:id="@+id/toolbar_search"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:visibility="invisible"
                     android:layout_alignParentRight="true"
                     android:padding="@dimen/dip_14"
                     android:src="@drawable/icon_search" />
@@ -54,29 +56,50 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/custom_tabs"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:background="@color/color_FFFFFF"
-            android:overScrollMode="never"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_bar"
-            app:tabIndicatorColor="@color/colorPrimary"
-            app:tabIndicatorFullWidth="false"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            app:tabTextColor="@color/color_000000" />
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/custom_view_pager"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/smartRefreshLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_confirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/custom_tabs" />
+            app:layout_constraintTop_toBottomOf="@+id/tool_bar">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.same.part.assistant.view.RecyclerViewWithEmpty
+                    android:id="@+id/rv_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dip_13"
+                    android:layout_marginEnd="@dimen/dip_13"
+                    android:layout_marginBottom="@dimen/dip_13" />
+
+                <include
+                    android:id="@+id/emptyView"
+                    layout="@layout/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="@dimen/dip_20"
+            android:background="@drawable/shape_half_circle_primary_color_rect"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/color_FFFFFF"
+            android:textSize="13dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

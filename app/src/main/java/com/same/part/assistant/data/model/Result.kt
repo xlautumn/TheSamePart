@@ -1,5 +1,6 @@
 package com.same.part.assistant.data.model
 
+import com.google.gson.annotations.SerializedName
 import com.qiniu.android.http.ResponseInfo
 import java.io.Serializable
 
@@ -141,13 +142,14 @@ data class PurchaseGoodItemModel(
  * 优惠券数据类
  */
 data class CouponInfoModel(
+    val couponActivityId:String,
     var name: String,
     var issued: String,
     var remain: String,
     var used: String,
     var status: String,
     var statements: String?
-):Serializable
+) : Serializable
 
 /**
  * 账号数据类
@@ -504,6 +506,16 @@ data class CustomCategory(
     val son: List<CustomCategory>
 )
 
+/**
+ * 客户
+ */
+data class Customer(
+    val mobile: String,
+    val nickname: String,
+    val photo: String,
+    @SerializedName(alternate = ["id"], value = "userId")
+    val userId: String
+)
 
 
 

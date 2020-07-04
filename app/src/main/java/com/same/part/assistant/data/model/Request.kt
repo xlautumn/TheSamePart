@@ -255,6 +255,13 @@ data class RequestCreateProduct(
     val appSecret: String = CacheUtil.getAppSecret()
 )
 
+data class RequestSendCoupon(
+    val appKey: String,
+    val appSecret: String,
+    val id: String,
+    val userIds: String
+)
+
 
 
 

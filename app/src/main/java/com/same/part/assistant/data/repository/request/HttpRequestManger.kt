@@ -360,4 +360,28 @@ class HttpRequestManger {
             shopId = shopId
         )
     }
+
+    /**
+     * 会员客户列表
+     */
+    suspend fun getMemberCustomer(
+        token: String = CacheUtil.getToken(),
+        shopId: String = CacheUtil.getShopId().toString()
+    ): ApiResponse<List<Customer>> {
+        return NetworkApi.service.getMemberCustomer(token, shopId = shopId)
+    }
+
+    /**
+     * 发放优惠券
+     */
+    suspend fun sendCoupon(couponId: String, userIds: List<String>): ApiResponse<String> {
+        return NetworkApi.service.sendCoupon(
+            RequestSendCoupon(
+                appKey = CacheUtil.getAppKey(),
+                appSecret = CacheUtil.getAppSecret(),
+                id = couponId,
+                userIds = userIds.joinToString()
+            )
+        )
+    }
 }

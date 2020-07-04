@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_FEFEFE"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dip_3">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radio_general"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:background="@null"
+            android:checked="true"
+            android:drawableEnd="@drawable/selector_dot"
+            android:paddingStart="40dp"
+            android:paddingTop="18dp"
+            android:paddingEnd="@dimen/dip_30"
+            android:paddingBottom="18dp"
+            android:text="下单客户"
+            android:textColor="#ff333333"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_D2D2D2" />
+
+        <RadioButton
+            android:id="@+id/radio_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:background="@null"
+            android:drawableEnd="@drawable/selector_dot"
+            android:paddingStart="40dp"
+            android:paddingTop="18dp"
+            android:paddingEnd="@dimen/dip_30"
+            android:paddingBottom="18dp"
+            android:text="会员客户"
+            android:textColor="#ff333333"
+            android:textSize="12sp"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_confirm"
+        android:layout_width="226dp"
+        android:layout_height="38dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="27dp"
+        android:background="@drawable/shape_half_circle_primary_color_rect"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/color_FFFFFF"
+        android:textSize="13dp" />
+
+</LinearLayout>

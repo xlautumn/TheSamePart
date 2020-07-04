@@ -42,6 +42,7 @@
     <color name="color_D4D3D4">#D4D3D4</color>
     <color name="color_9F9F9F">#9F9F9F</color>
     <color name="color_47B3FC">#47B3FC</color>
+    <color name="color_item_customer_foreground">#4DCCCCCC</color>
 
     <color name="color_shadow_bg">#990B0A0A</color>
 

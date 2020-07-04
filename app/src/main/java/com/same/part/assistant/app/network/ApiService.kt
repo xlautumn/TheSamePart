@@ -334,11 +334,18 @@ interface ApiService {
     ): ApiResponse<List<CustomCategory>>
 
     /**
-     * VIP客户列表
+     * 会员客户列表
      */
     @GET("wx/getVipCustomer")
-    suspend fun getVipCustomer(
-        @Header("WSCX") token: String = CacheUtil.getToken(),
+    suspend fun getMemberCustomer(
+        @Header("WSCX") token: String,
         @Query("shopId") shopId: String
-    ): ResponseBody
+    ): ApiResponse<List<Customer>>
+
+    /**
+     * 发放优惠券
+     */
+    @POST("biz/coupon-activity/send")
+    suspend fun sendCoupon(@Body requestSendCoupon: RequestSendCoupon):ApiResponse<String>
+
 }
