@@ -348,4 +348,16 @@ class HttpRequestManger {
     suspend fun delVIPCard(cardId:Int):ResponseBody{
         return NetworkApiv2.service.delVIPCard(cardId)
     }
+
+    /**
+     * 获取商品全部分类
+     */
+    suspend fun getAllCustomCategoryList(
+        shopId: String
+    ): ApiResponse<List<CustomCategory>> {
+        return NetworkApi.service.getAllCustomCategoryList(
+            token = CacheUtil.getToken(),
+            shopId = shopId
+        )
+    }
 }
