@@ -384,4 +384,13 @@ class HttpRequestManger {
             )
         )
     }
+
+    /**
+     * 获取收银商品列表
+     */
+    suspend fun getCashierProductList(page: Int,size:Int):ApiResponse<GetCashierProductMsg>{
+        return NetworkApi.service.getCashierProductList(
+            token = CacheUtil.getToken(),
+            page = page, size = size, type="1,2")
+    }
 }

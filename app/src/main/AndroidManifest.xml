@@ -69,6 +69,7 @@
             android:windowSoftInputMode="adjustNothing|stateVisible"/>
         <activity android:name=".activity.EditProductSpecActivity"/>
         <activity android:name=".activity.ProvideCouponActivity"/>
+        <activity android:name=".activity.SuitableProductActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

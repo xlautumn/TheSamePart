@@ -518,6 +518,22 @@ data class Customer(
 )
 
 
+/**
+ * 收银商品
+ */
+data class CashierProduct(
+    val img: String?,
+    val name: String,
+    val price: String,
+    val productId: String,
+    val quantity: String,
+    val unit:String
+):Serializable
+
+
+
+
+
 
 
 

@@ -130,13 +130,15 @@ data class CreateOrUpdateGoodsInfo(
  * 创建优惠劵活动
  */
 data class RequestCreateCouponInfo(
-    val title: String,
-    val totalQty: Int,
-    val conditionPrice: Double,
-    val denominations: Double,
-    val ifLimit: Int,
-    val validEndTime: String,
-    val validStartTime: String,
+    val title: String,//优惠券名称
+    val totalQty: Int,//总发放量
+    val conditionPrice: Double,//使用门槛（0：无限制）
+    val denominations: Double,//减免金额
+    val ifLimit: Int,//限领次数（0：不限制）
+    val validEndTime: String,//有效结束时间
+    val validStartTime: String,//有效开始时间
+    val rangeType:String,//使用范围类型。partIn：部分商品可用;partOut：部分商品不可用；all：全部商品可用(默认all)
+    val rangeValue:List<String>?,//使用范围值(商品JSON数组)(range_type=part时启用) [1,2,3,商品ID]
     val shopId: Int? = CacheUtil.getShopId(),
     val appKey: String = CacheUtil.getAppKey(),
     val appSecret: String = CacheUtil.getAppSecret()
@@ -260,6 +262,12 @@ data class RequestSendCoupon(
     val appSecret: String,
     val id: String,
     val userIds: String
+)
+
+data class RequestCashierProduct(
+    val page:Int,
+    val size: Int,
+    val type: String
 )
 
 

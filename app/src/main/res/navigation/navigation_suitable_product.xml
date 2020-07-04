@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_edit_product_spec"
+    app:startDestination="@id/suitableProductFragment">
+
+    <fragment
+        android:id="@+id/suitableProductFragment"
+        android:name="com.same.part.assistant.fragment.SuitableProductFragment"
+        android:label="SuitableProductFragment" >
+        <action
+            android:id="@+id/action_suitableProductFragment_to_selectSuitableProductFragment"
+            app:destination="@id/selectSuitableProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectSuitableProductFragment"
+        android:name="com.same.part.assistant.fragment.SelectSuitableProductFragment"
+        android:label="SelectSuitableProductFragment" />
+</navigation>

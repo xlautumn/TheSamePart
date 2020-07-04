@@ -6,14 +6,8 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.Observer
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.datetime.datePicker
-import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
@@ -21,18 +15,20 @@ import com.same.part.assistant.app.base.BaseActivity
 import com.same.part.assistant.app.util.DatetimeUtil
 import com.same.part.assistant.app.util.DatetimeUtil.now
 import com.same.part.assistant.app.util.NumberInputUtil
+import com.same.part.assistant.data.model.CashierProduct
 import com.same.part.assistant.data.model.RequestCreateCouponInfo
 import com.same.part.assistant.databinding.ActivityAddCouponBinding
 import com.same.part.assistant.viewmodel.request.RequestCreateCouponViewModel
 import com.same.part.assistant.viewmodel.state.CreateCouponViewModel
-import kotlinx.android.synthetic.main.activity_add_coupon.*
+import com.same.part.assistant.viewmodel.state.CreateCouponViewModel.Companion.RANGE_TYPE_ALL
+import com.same.part.assistant.viewmodel.state.CreateCouponViewModel.Companion.RANGE_TYPE_PART_IN
 import kotlinx.android.synthetic.main.toolbar_title.*
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseStateResponseBody
-import me.hgj.jetpackmvvm.ext.util.dp2px
 import me.shaohui.bottomdialog.BottomDialog
 import org.greenrobot.eventbus.EventBus
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 添加会员卡
@@ -53,13 +49,6 @@ class AddCouponActivity :
         mTitleBack.setOnClickListener {
             finish()
         }
-        //领取渠道
-        pickUpChannel.setOnClickListener {
-            startActivityForResult(Intent(this, ChannelActivity::class.java).apply {
-                putExtra(ChannelActivity.LITMIT_NUM, mViewModel.couponReceiveChannel.get())
-            }, CHANNEL_NUM_SETTING)
-        }
-
     }
 
     override fun createObserver() {
@@ -85,12 +74,18 @@ class AddCouponActivity :
                 mViewModel.couponReceiveChannel.set(
                     data?.getIntExtra(ChannelActivity.LITMIT_NUM, 1) ?: 1
                 )
+            } else if (requestCode == REQUEST_CODE_SUITABLE_PRODUCT) {
+                val list =
+                    data?.getSerializableExtra(SuitableProductActivity.KEY_SUITABLE_PRODUCT_LIST) as? ArrayList<CashierProduct>
+                mViewModel.rangeValue = list
             }
         }
     }
+
     /** 开始时间与结束*/
     private val mStartTimeDate = DatePickerInfo()
     private val mEndTimeDate = DatePickerInfo()
+
     class DatePickerInfo() {
         val ca = Calendar.getInstance()
         var year: Int = ca[Calendar.YEAR]
@@ -109,7 +104,9 @@ class AddCouponActivity :
                     mViewModel.creditAmount.get().toDouble(),
                     mViewModel.couponReceiveChannel.get(),
                     mViewModel.endTime.get(),
-                    mViewModel.startTime.get()
+                    mViewModel.startTime.get(),
+                    mViewModel.rangeType.get(),
+                    mViewModel.rangeValue?.map { it.productId }
                 )
                 mRequestCreateCouponViewModel.createCouponActivity(requestCreateCouponInfo)
             }
@@ -149,6 +146,31 @@ class AddCouponActivity :
                 handleThresholdDialogView(it, dialog)
             }.setLayoutRes(R.layout.dialog_use_threshold).setDimAmount(0.4F)
                 .setCancelOutside(true).setTag("mChooseUsingThreshold").show()
+        }
+
+        /**
+         * 领取渠道
+         */
+        fun pickUpChannel() {
+            startActivityForResult(
+                Intent(
+                    this@AddCouponActivity,
+                    ChannelActivity::class.java
+                ).apply {
+                    putExtra(ChannelActivity.LITMIT_NUM, mViewModel.couponReceiveChannel.get())
+                }, CHANNEL_NUM_SETTING
+            )
+        }
+
+        /**
+         * 选择使用商品
+         */
+        fun suitableProduct() {
+            val dialog = BottomDialog.create(supportFragmentManager)
+            dialog.setViewListener {
+                handleSuitableProductDialogView(it, dialog)
+            }.setLayoutRes(R.layout.dialog_select_suitable_product).setDimAmount(0.4F)
+                .setCancelOutside(true).setTag("suitableProduct").show()
         }
     }
 
@@ -196,6 +218,11 @@ class AddCouponActivity :
             return false
         }
 
+        if (mViewModel.rangeType.get() == RANGE_TYPE_PART_IN && mViewModel.rangeValue.isNullOrEmpty()) {
+            ToastUtils.showShort("请选择适用商品")
+            return false
+        }
+
         return true
     }
 
@@ -236,12 +263,41 @@ class AddCouponActivity :
         }
     }
 
+    private fun handleSuitableProductDialogView(view: View, dialog: BottomDialog) {
+        val radioAllProduct = view.findViewById<RadioButton>(R.id.radio_all_product)
+        val radioPartProduct = view.findViewById<RadioButton>(R.id.radio_part_product)
+        if (mViewModel.rangeType.get() == RANGE_TYPE_ALL) {
+            radioAllProduct.isChecked = true
+        } else {
+            radioPartProduct.isChecked = true
+        }
+        view.findViewById<TextView>(R.id.tv_confirm).setOnClickListener {
+            when {
+                radioAllProduct.isChecked -> {
+                    mViewModel.rangeType.set(RANGE_TYPE_ALL)
+                    mViewModel.rangeValue = null
+                    mDatabind.tvSuitableProduct.text = "全部商品"
+                }
+                radioPartProduct.isChecked -> {
+                    mViewModel.rangeType.set(RANGE_TYPE_PART_IN)
+                    mDatabind.tvSuitableProduct.text = "部分商品"
+                    startActivityForResult(Intent(this,SuitableProductActivity::class.java).putExtra(
+                        SuitableProductActivity.KEY_SUITABLE_PRODUCT_LIST,mViewModel.rangeValue
+                    ),REQUEST_CODE_SUITABLE_PRODUCT)
+                }
+            }
+            dialog.dismissAllowingStateLoss()
+        }
+    }
+
     companion object {
         /** 添加优惠券成功*/
         const val ADD_COUPON_SUCCESS = "ADD_COUPON_SUCCESS"
 
         /** 领取渠道*/
         const val CHANNEL_NUM_SETTING = 1000
+
+        const val REQUEST_CODE_SUITABLE_PRODUCT = 200
     }
 
 

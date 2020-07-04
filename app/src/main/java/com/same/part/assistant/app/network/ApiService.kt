@@ -346,6 +346,18 @@ interface ApiService {
      * 发放优惠券
      */
     @POST("biz/coupon-activity/send")
-    suspend fun sendCoupon(@Body requestSendCoupon: RequestSendCoupon):ApiResponse<String>
+    suspend fun sendCoupon(@Body requestSendCoupon: RequestSendCoupon): ApiResponse<String>
+
+    /**
+     * 获取收银商品列表
+     */
+    @POST("amountCommodity/get" )
+    @FormUrlEncoded
+    suspend fun getCashierProductList(
+        @Header("WSCX") token: String,
+        @Field("page") page: Int,
+        @Field("size") size: Int,
+        @Field("type") type: String
+    ): ApiResponse<GetCashierProductMsg>
 
 }

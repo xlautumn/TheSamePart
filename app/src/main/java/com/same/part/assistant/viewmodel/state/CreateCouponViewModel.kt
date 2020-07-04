@@ -1,6 +1,7 @@
 package com.same.part.assistant.viewmodel.state
 
 import android.app.Application
+import com.same.part.assistant.data.model.CashierProduct
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.callback.databind.IntObservableField
 import me.hgj.jetpackmvvm.callback.databind.StringObservableField
@@ -33,5 +34,15 @@ class CreateCouponViewModel(application: Application) : BaseViewModel(applicatio
     /** 结束 */
     var endTime = StringObservableField()
 
+    /**使用范围类型。partIn：部分商品可用;partOut：部分商品不可用；all：全部商品可用(默认all)*/
+    val rangeType = StringObservableField(RANGE_TYPE_ALL)
+
+    /**使用范围值(商品JSON数组)(range_type=part时启用) [1,2,3,商品ID]*/
+    var rangeValue:ArrayList<CashierProduct>? = null
+
+    companion object{
+        const val RANGE_TYPE_ALL = "all"//全部商品
+        const val RANGE_TYPE_PART_IN = "partIn"//部分商品可用
+    }
 
 }
