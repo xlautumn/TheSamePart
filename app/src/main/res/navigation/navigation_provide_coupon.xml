@@ -11,19 +11,16 @@
         android:label="ProvideCouponFragment">
         <action
             android:id="@+id/action_provideCouponFragment_to_selectCustomFragment"
-            app:destination="@id/selectCustomFragment" />
+            app:destination="@id/selectCustomFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
         android:id="@+id/selectCustomFragment"
         android:name="com.same.part.assistant.fragment.SelectCustomFragment"
         android:label="SelectCustomFragment" >
-        <action
-            android:id="@+id/action_selectCustomFragment_to_searchBaseFragment"
-            app:destination="@id/searchBaseFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/searchBaseFragment"
-        android:name="com.same.part.assistant.fragment.SearchCustomFragment"
-        android:label="SearchBaseFragment" />
 </navigation>

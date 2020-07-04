@@ -11,10 +11,33 @@
         android:label="SuitableProductFragment" >
         <action
             android:id="@+id/action_suitableProductFragment_to_selectSuitableProductFragment"
-            app:destination="@id/selectSuitableProductFragment" />
+            app:destination="@id/selectSuitableProductFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
     </fragment>
     <fragment
         android:id="@+id/selectSuitableProductFragment"
         android:name="com.same.part.assistant.fragment.SelectSuitableProductFragment"
-        android:label="SelectSuitableProductFragment" />
+        android:label="SelectSuitableProductFragment" >
+        <action
+            android:id="@+id/action_selectSuitableProductFragment_to_searchCashierProductHostFragment"
+            app:destination="@id/searchCashierProductHostFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/searchCashierProductHostFragment"
+        android:name="com.same.part.assistant.fragment.SearchCashierProductHostFragment"
+        android:label="SearchCashierProductHostFragment" >
+        <action
+            android:id="@+id/action_searchCashierProductHostFragment_to_suitableProductFragment"
+            app:popUpTo="@id/suitableProductFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/suitableProductFragment" />
+    </fragment>
 </navigation>

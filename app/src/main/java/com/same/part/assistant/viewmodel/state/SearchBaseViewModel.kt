@@ -75,6 +75,12 @@ abstract class SearchBaseViewModel<E>(application: Application) : BaseViewModel(
         _searchHistoryData.postValue(_searchHistoryData.value)
     }
 
+    fun setSearchResultList(data:List<E>){
+        if (data.isNotEmpty()){
+            _searchResultList.value?.addAll(data)
+            _searchResultList.value = _searchResultList.value
+        }
+    }
     /**
      * 请求搜索结果
      */

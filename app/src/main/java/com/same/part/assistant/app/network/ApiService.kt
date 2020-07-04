@@ -355,6 +355,7 @@ interface ApiService {
     @FormUrlEncoded
     suspend fun getCashierProductList(
         @Header("WSCX") token: String,
+        @Field("name") name: String,
         @Field("page") page: Int,
         @Field("size") size: Int,
         @Field("type") type: String

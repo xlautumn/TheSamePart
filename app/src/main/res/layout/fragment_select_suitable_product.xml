@@ -47,6 +47,44 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <LinearLayout
+            android:id="@+id/rootSearch"
+            android:layout_width="@dimen/dip_0"
+            android:layout_height="@dimen/dip_55"
+            android:background="@color/color_0EB170"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tool_bar">
+
+            <LinearLayout
+                android:id="@+id/layoutSearch"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_30"
+                android:layout_marginLeft="@dimen/dip_30"
+                android:layout_marginRight="@dimen/dip_30"
+                android:background="@drawable/shape_search_white_rect"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_search_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dip_5"
+                    android:text="输入商品名称"
+                    android:textColor="@color/color_B4B4B4"
+                    android:textSize="@dimen/dip_12" />
+
+            </LinearLayout>
+        </LinearLayout>
+
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/smartRefreshLayout"
             android:layout_width="0dp"
@@ -54,7 +92,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_confirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tool_bar">
+            app:layout_constraintTop_toBottomOf="@+id/rootSearch">
 
             <RelativeLayout
                 android:layout_width="match_parent"

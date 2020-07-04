@@ -3,6 +3,7 @@ package com.same.part.assistant.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.navigation.findNavController
 import com.same.part.assistant.R
 import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.data.model.CashierProduct
@@ -35,16 +36,18 @@ class SuitableProductActivity : BaseVmActivity<SuitableProductViewModel>() {
     }
 
     override fun onBackPressed() {
-        showMessage("请确认商品是否完成选择", positiveAction = {
-            val list =
-                mViewModel.suitableProductList.value?.let { ArrayList(it) }
-                    ?: arrayListOf()
-            setResult(
-                Activity.RESULT_OK,
-                Intent().putExtra(KEY_SUITABLE_PRODUCT_LIST, list)
-            )
-            finish()
-        }, negativeButtonText = "取消")
+        if (!findNavController(R.id.navHostFragment).navigateUp()){
+            showMessage("请确认商品是否完成选择", positiveAction = {
+                val list =
+                    mViewModel.suitableProductList.value?.let { ArrayList(it) }
+                        ?: arrayListOf()
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(KEY_SUITABLE_PRODUCT_LIST, list)
+                )
+                finish()
+            }, negativeButtonText = "取消")
+        }
 //        super.onBackPressed()
     }
 

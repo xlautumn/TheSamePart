@@ -84,7 +84,7 @@ class SuitableProductViewModel(application: Application) : BaseViewModel(applica
      */
     fun getCashierProductList(page: Int, size: Int) {
         request(
-            { HttpRequestManger.instance.getCashierProductList(page, size) },
+            { HttpRequestManger.instance.getCashierProductList("",page, size) },
             cashierProductResultState, true
         )
     }
