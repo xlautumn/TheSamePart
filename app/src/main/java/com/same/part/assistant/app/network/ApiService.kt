@@ -293,24 +293,27 @@ interface ApiService {
      */
     @GET("products")
     suspend fun getSearchResult(
-        @Query("name")  name: String,
+        @Query("name") name: String,
         @Query("appKey") appKey: String = CacheUtil.getAppKey(),
         @Query("appSecret") appSecret: String = CacheUtil.getAppSecret(),
-        @Query("shopId") shopId: Int=2000,
-        @Query("state") state: Int=1
+        @Query("shopId") shopId: Int = 2000,
+        @Query("state") state: Int = 1
     ): ResponseBody
 
     /**
      * 创建商品
      */
     @POST("product/createProduct")
-    suspend fun createProduct(@Body requestCreateProduct:RequestCreateProduct):ResponseBody
+    suspend fun createProduct(@Body requestCreateProduct: RequestCreateProduct): ResponseBody
 
     /**
      * 编辑商品信息
      */
     @PUT("product/updateProduct/{productId}")
-    suspend fun updateProduct( @Path("productId") productId: String,@Body requestCreateProduct:RequestCreateProduct):ResponseBody
+    suspend fun updateProduct(
+        @Path("productId") productId: String,
+        @Body requestCreateProduct: RequestCreateProduct
+    ): ResponseBody
 
     /**
      * 删除店铺会员卡
@@ -319,5 +322,23 @@ interface ApiService {
     suspend fun delVIPCard(
         @Path("cardId") cardId: Int, @Query("appKey") appKey: String = CacheUtil.getAppKey(),
         @Query("appSecret") appSecret: String = CacheUtil.getAppSecret()
+    ): ResponseBody
+
+    /**
+     * 获取商品全部分类
+     */
+    @GET("wscx/getAllCustomCategoryList")
+    suspend fun getAllCustomCategoryList(
+        @Header("WSCX") token: String,
+        @Query("shopId") shopId: String
+    ): ApiResponse<List<CustomCategory>>
+
+    /**
+     * VIP客户列表
+     */
+    @GET("wx/getVipCustomer")
+    suspend fun getVipCustomer(
+        @Header("WSCX") token: String = CacheUtil.getToken(),
+        @Query("shopId") shopId: String
     ): ResponseBody
 }

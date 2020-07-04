@@ -493,6 +493,17 @@ data class Address(
     val zip: Any
 )
 
+/**
+ * 含有二级分类的商品分类
+ */
+data class CustomCategory(
+    val customCategoryId: String,
+    val description: String,
+    val img: String,
+    val name: String,
+    val son: List<CustomCategory>
+)
+
 
 
 
