@@ -71,6 +71,7 @@
         <activity android:name=".activity.ProvideCouponActivity"/>
         <activity android:name=".activity.SuitableProductActivity"/>
         <activity android:name=".activity.ProductClassificationActivity" />
+        <activity android:name=".activity.SearchCashierProductToEditActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

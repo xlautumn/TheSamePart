@@ -1,5 +1,6 @@
 package com.same.part.assistant.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddCashierGoodActivity
+import com.same.part.assistant.activity.SearchCashierProductToEditActivity
 import com.same.part.assistant.adapter.CashierFirstLevelAdapter
 import com.same.part.assistant.adapter.CashierProductAdapter
 import com.same.part.assistant.adapter.CashierSecondLevelAdapter
@@ -43,7 +45,7 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
         }
     }
     private val mCashierProductAdapter by lazy {
-        CashierProductAdapter(Proxy()).apply {
+        CashierProductAdapter().apply {
             addChildClickViewIds(R.id.tv_operation)
             setOnItemChildClickListener { adapter, view, position ->
                 if (view.id == R.id.tv_operation) {
@@ -102,6 +104,13 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
         mDatabind.mSmartRefreshLayout.setEnableLoadMore(false)
         mDatabind.mSmartRefreshLayout.setOnRefreshListener {
             mViewModel.queryShopCategoryDetail()
+        }
+
+        mDatabind.layoutSearch.setOnClickListener {
+            startActivityForResult(
+                Intent(context, SearchCashierProductToEditActivity::class.java),
+                REQUEST_CODE_SEARCH_PRODUCT_TO_EDIT
+            )
         }
     }
 
@@ -164,6 +173,21 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
         })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_SEARCH_PRODUCT_TO_EDIT) {
+                val list =
+                    data?.getSerializableExtra(KEY_CASHIER_PRODUCT_CHANGE_LIST) as? ArrayList<CashierProduct>
+                if (!list.isNullOrEmpty()) {
+                    mViewModel.updateProductBecauseOfSearch(list){
+                        mCashierProductAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+    }
+
     private fun setData(cashierAllProduct: CashierAllProduct?) {
         cashierAllProduct?.let {
             mViewModel.setCashierAllProduct(it)
@@ -181,6 +205,18 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
     inner class Proxy {
         fun getCurrentSecondCategoryId() = mViewModel.currentSecondCategoryId.value
         fun getCurrentFirstCategoryId() = mViewModel.firstCategoryId.value
+    }
+
+    companion object {
+        /**
+         * 搜索收银商品（编辑商品）
+         */
+        const val REQUEST_CODE_SEARCH_PRODUCT_TO_EDIT = 300
+
+        /**
+         * 发生变化的收银商品集合
+         */
+        const val KEY_CASHIER_PRODUCT_CHANGE_LIST = "KEY_CASHIER_PRODUCT_CHANGE_LIST"
     }
 
 }

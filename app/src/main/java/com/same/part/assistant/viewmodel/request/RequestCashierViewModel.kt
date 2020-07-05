@@ -96,7 +96,7 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
         onSuccess: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-         fun parseResponseBody(
+        fun parseResponseBody(
             it: ResponseBody,
             onSuccess: (String) -> Unit,
             onError: (String) -> Unit
@@ -129,6 +129,29 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
     }
 
 
+    /**
+     * @param list 商品数据发生变化的商品集合
+     * @param notifyCurrentVisibleProductChange 通知当前正在显示的商品数据发生变化
+     */
+    fun updateProductBecauseOfSearch(
+        list: List<CashierProduct>,
+        notifyCurrentVisibleProductChange: () -> Unit
+    ) {
+        cashierAllProduct?.categoryProductMap?.entries?.forEach { entry ->
+            val secondCategoryId = entry.key
+            entry.value.filter { cashierProduct ->
+                list.find { changeItem -> cashierProduct.productId == changeItem.productId }
+                    ?.let {
+                        cashierProduct.state = it.state
+                        true
+                    } ?: false
+            }.also {
+                if (it.isNotEmpty() && secondCategoryId == currentSecondCategoryId.value) {
+                    notifyCurrentVisibleProductChange()
+                }
+            }
+        }
+    }
 
 
     fun setCashierAllProduct(cashierAllProduct: CashierAllProduct) {
@@ -154,13 +177,4 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
     fun getProductList(secondCategoryId: String): ArrayList<CashierProduct> =
         this.cashierAllProduct?.getProductList(secondCategoryId) ?: arrayListOf()
 
-    companion object {
-
-        fun get(activity: FragmentActivity): RequestCashierViewModel {
-            return ViewModelProvider(
-                activity,
-                ViewModelProvider.AndroidViewModelFactory(activity.application)
-            ).get(RequestCashierViewModel::class.java)
-        }
-    }
 }

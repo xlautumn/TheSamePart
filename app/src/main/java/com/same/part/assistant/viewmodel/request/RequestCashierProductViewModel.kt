@@ -15,7 +15,7 @@ import me.hgj.jetpackmvvm.ext.request
 import me.hgj.jetpackmvvm.state.ResultState
 
 /**
- * 搜索客户
+ * 搜索收银商品(添加适用商品)
  */
 class RequestCashierProductViewModel(application: Application) :
     SearchBaseViewModel<CashierProduct>(application) {

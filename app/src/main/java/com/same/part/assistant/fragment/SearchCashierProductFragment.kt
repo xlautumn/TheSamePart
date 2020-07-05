@@ -14,7 +14,7 @@ import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState
 
 /**
- * 搜索客户
+ * 搜索商品(添加适用商品)
  */
 class SearchCashierProductFragment :
     SearchBaseFragment<RequestCashierProductViewModel, CashierProduct>() {

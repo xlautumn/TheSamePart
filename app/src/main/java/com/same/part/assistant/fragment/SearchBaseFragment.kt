@@ -39,7 +39,7 @@ abstract class SearchBaseFragment<VM:SearchBaseViewModel<E>,E>:BaseFragment<VM,L
 
         mToolbarTitle.text = "搜索"
         mTitleBack.setOnClickListener {
-            findNavController().navigateUp()
+            goBack()
         }
 
         mDatabind.searchHistory.layoutManager = CustomerLayoutManager(0)
@@ -112,6 +112,10 @@ abstract class SearchBaseFragment<VM:SearchBaseViewModel<E>,E>:BaseFragment<VM,L
 
     abstract fun updateRecyclerView(data:List<E>)
 
+    open fun goBack(){
+        findNavController().navigateUp()
+    }
+
     private fun subscribeSearchResultUi() {
         mViewModel.searchResultList.observe(this, Observer {
             val search = mDatabind.etSearch.text?.toString() ?: ""
@@ -141,7 +145,7 @@ abstract class SearchBaseFragment<VM:SearchBaseViewModel<E>,E>:BaseFragment<VM,L
      * 右上角取消按钮
      */
     fun cancel() {
-        fragment.findNavController().navigateUp()
+        fragment.goBack()
     }
 
     /**

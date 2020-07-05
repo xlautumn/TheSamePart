@@ -52,7 +52,7 @@ class CashierSecondLevelAdapter(private val proxy: CashierFragmentV2.Proxy) :
 /**
  * 收银商品
  */
-class CashierProductAdapter(private val proxy: CashierFragmentV2.Proxy) :
+class CashierProductAdapter() :
     BaseQuickAdapter<CashierProduct, BaseViewHolder>(R.layout.layout_item_cashier_product) {
     override fun convert(holder: BaseViewHolder, item: CashierProduct) {
         if (item.img.isNullOrEmpty()) {
