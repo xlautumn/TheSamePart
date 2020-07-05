@@ -70,6 +70,7 @@
         <activity android:name=".activity.EditProductSpecActivity"/>
         <activity android:name=".activity.ProvideCouponActivity"/>
         <activity android:name=".activity.SuitableProductActivity"/>
+        <activity android:name=".activity.ProductClassificationActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

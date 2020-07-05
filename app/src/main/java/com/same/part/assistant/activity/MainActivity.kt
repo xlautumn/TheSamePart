@@ -18,9 +18,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.tabs.TabLayout
 import com.same.part.assistant.BuildConfig
 import com.same.part.assistant.R
-import com.same.part.assistant.fragment.GoodsFragment
-import com.same.part.assistant.fragment.MyFragment
-import com.same.part.assistant.fragment.PurchaseFragment
+import com.same.part.assistant.fragment.*
 import com.same.part.assistant.helper.detectVersion
 import com.same.part.assistant.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -42,64 +40,14 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
             addOnTabSelectedListener(this@MainActivity)
         }
         setupTabLayout()
-        //初始化的时候隐藏加号和搜索
+        //初始化的时候隐藏加号和分类
         mToolbarAdd.visibility = View.GONE
-        mToolbarSearch.apply {
-            visibility = View.GONE
-            setOnClickListener {
-                mSearchView.visibility = View.VISIBLE
-            }
-        }
-        //搜索按钮
-        mSearchEdit.apply {
-            setOnEditorActionListener { v, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    //点击搜索的时候隐藏软键盘
-                    hideKeyboard(v)
-                    if (text.isNotEmpty()) {
-                        (mFragmentList[TAB_GOODS_INDEX] as? GoodsFragment)?.apply {
-                            if (mCurrentTab == GoodsFragment.TAB_CASHIER_INDEX) {
-                                this.searchData(GoodsFragment.TAB_CASHIER_INDEX, text.toString())
-                            } else {
-                                this.searchData(GoodsFragment.TAB_PRODUCT_INDEX, text.toString())
-                            }
-                        }
-                    }
-                    true
-                } else {
-                    false
-                }
-            }
-            hint = "搜索商品名称"
-        }
-        //取消按钮
-        mCancelSearch.setOnClickListener {
-            mSearchView.visibility = View.GONE
-            mSearchEdit.setText("")
-            (mFragmentList[TAB_GOODS_INDEX] as? GoodsFragment)?.apply {
-                if (mCurrentTab == GoodsFragment.TAB_CASHIER_INDEX) {
-                    this.cancelSearch(GoodsFragment.TAB_CASHIER_INDEX)
-                } else {
-                    this.cancelSearch(GoodsFragment.TAB_PRODUCT_INDEX)
-                }
-            }
-        }
+        mToolbarRight.visibility = View.GONE
         //版本检测
         detectVersion(this)
         if (BuildConfig.IS_TEST_URL){
             ToastUtils.showLong("亲,当前是测试环境哦!")
         }
-    }
-
-    /**
-     * 隐藏软键盘
-     * @param context :上下文
-     * @param view    :一般为EditText
-     */
-    private fun hideKeyboard(view: View) {
-        val manager: InputMethodManager =
-            view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        manager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 
@@ -129,12 +77,10 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         mToolbarTitle.text = TITLES[tab?.position ?: 0]
         //如果在商品Tab需要显示天添加和搜索按钮
         if (tab?.position == TAB_GOODS_INDEX) {
-            val fragment = mFragmentList[TAB_GOODS_INDEX] as GoodsFragment
             //添加商品分类
             mToolbarAdd.apply {
                 visibility = View.VISIBLE
                 setOnClickListener {
-                    if (fragment.mCurrentTab == GoodsFragment.TAB_CASHIER_INDEX) {
                         startActivity(
                             Intent(context, AddCashierGoodActivity::class.java).apply {
                                 putExtra(
@@ -143,33 +89,18 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
                                 )
                             }
                         )
-                    } else {
-                        startActivity(
-                            Intent(
-                                this@MainActivity,
-                                AddProductClassificationActivity::class.java
-                            ).apply {
-                                putExtra(
-                                    AddProductClassificationActivity.JUMP_FROM_TYPE,
-                                    AddProductClassificationActivity.JUMP_FROM_ADD_SECOND_CATEGORY
-                                )
-                                putExtra(
-                                    AddProductClassificationActivity.PARENT_ID,
-                                    ""
-                                )
-                            }
-                        )
-                    }
                 }
             }
-            //搜索商品
-            mToolbarSearch.apply {
+            //分类
+            mToolbarRight.apply {
                 visibility = View.VISIBLE
+                setOnClickListener {
+                    startActivity(Intent(this@MainActivity,ProductClassificationActivity::class.java))
+                }
             }
         } else {
             mToolbarAdd.visibility = View.GONE
-            mToolbarSearch.visibility = View.GONE
-            mSearchView.visibility = View.GONE
+            mToolbarRight.visibility = View.GONE
         }
     }
 
@@ -225,19 +156,6 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         }
     }
 
-    /**
-     * 改变搜索的提示
-     */
-    fun changeSearchHint() {
-        //改变搜索的hint提示
-        val fragment = mFragmentList[TAB_GOODS_INDEX] as? GoodsFragment
-        if (fragment?.mCurrentTab == GoodsFragment.TAB_CASHIER_INDEX) {
-            mSearchEdit.hint = "搜索商品名称"
-        } else {
-            mSearchEdit.hint = "搜索分类名称"
-        }
-    }
-
     companion object {
         //底部Tab
         val TITLES = arrayOf("概览", "商品", "采购", "我的")
@@ -255,7 +173,7 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
 
         //页面Fragment
         val mFragmentList =
-            arrayOf(HomeFragment(), GoodsFragment(), PurchaseFragment(), MyFragment())
+            arrayOf(HomeFragment(), CashierFragmentV2(), PurchaseFragment(), MyFragment())
         const val TAB_HOME_INDEX = 0
         const val TAB_GOODS_INDEX = 1
         const val TAB_PURCHASE_INDEX = 2

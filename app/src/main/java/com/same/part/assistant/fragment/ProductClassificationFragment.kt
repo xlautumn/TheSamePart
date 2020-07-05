@@ -1,10 +1,13 @@
 package com.same.part.assistant.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +23,7 @@ import com.same.part.assistant.activity.AddProductClassificationActivity.Compani
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_EDIT
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.JUMP_FROM_TYPE
 import com.same.part.assistant.activity.AddProductClassificationActivity.Companion.PARENT_ID
+import com.same.part.assistant.activity.MainActivity
 import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.app.network.ApiService
 import com.same.part.assistant.app.util.CacheUtil
@@ -72,6 +76,52 @@ class ProductClassificationFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         EventBus.getDefault().register(this)
+        mToolbarTitle.text = "商品分类"
+        mToolbarBack.setOnClickListener { activity?.finish() }
+        mToolbarSearch.apply {
+            setOnClickListener {
+                mSearchView.visibility = View.VISIBLE
+            }
+        }
+        //搜索按钮
+        mSearchEdit.apply {
+            setOnEditorActionListener { v, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    //点击搜索的时候隐藏软键盘
+                    hideKeyboard(v)
+                    if (text.isNotEmpty()) {
+                        searchData(text.toString(), true)
+                    }
+                    true
+                } else {
+                    false
+                }
+            }
+            hint = "搜索分类名称"
+        }
+        //取消按钮
+        mCancelSearch.setOnClickListener {
+            mSearchView.visibility = View.GONE
+            mSearchEdit.setText("")
+            cancelSearch()
+        }
+        tv_add.setOnClickListener {
+            startActivity(
+                Intent(
+                    context,
+                    AddProductClassificationActivity::class.java
+                ).apply {
+                    putExtra(
+                        JUMP_FROM_TYPE,
+                        JUMP_FROM_ADD_SECOND_CATEGORY
+                    )
+                    putExtra(
+                        PARENT_ID,
+                        ""
+                    )
+                }
+            )
+        }
         //列表数据
         mCategoryAdapter = CustomAdapter(mProductClassificationList)
         productRecyclerView.apply {
@@ -108,6 +158,17 @@ class ProductClassificationFragment : Fragment() {
                 mProductClassificationList.removeAt(position)
                 mCategoryAdapter.notifyItemRemoved(position)
             })
+    }
+
+    /**
+     * 隐藏软键盘
+     * @param context :上下文
+     * @param view    :一般为EditText
+     */
+    private fun hideKeyboard(view: View) {
+        val manager: InputMethodManager =
+            view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     /**

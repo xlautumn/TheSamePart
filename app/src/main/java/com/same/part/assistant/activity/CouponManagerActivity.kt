@@ -17,8 +17,6 @@ import com.same.part.assistant.helper.refreshComplete
 import com.same.part.assistant.viewmodel.request.RequestCouponsViewModel
 import kotlinx.android.synthetic.main.activity_coupon_manager.*
 import kotlinx.android.synthetic.main.activity_coupon_manager.mSmartRefreshLayout
-import kotlinx.android.synthetic.main.fragment_cashier.*
-import kotlinx.android.synthetic.main.fragment_product_classification.*
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.ext.getViewModel
 import me.hgj.jetpackmvvm.ext.parseState

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.zhouwei.library.CustomPopWindow
 import com.same.part.assistant.R
 import com.same.part.assistant.data.model.ProductModel
-import kotlinx.android.synthetic.main.fragment_product_classification.*
+import kotlinx.android.synthetic.main.activity_view_product.*
 import kotlinx.android.synthetic.main.toolbar_title.*
 
 /**

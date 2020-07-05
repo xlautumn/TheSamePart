@@ -51,7 +51,6 @@ class GoodsFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         mCurrentTab = tab?.position ?: 0
-        (activity as? MainActivity)?.changeSearchHint()
     }
 
     /**

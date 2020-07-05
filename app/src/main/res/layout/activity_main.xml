@@ -37,66 +37,17 @@
                 android:textSize="16dp"
                 tools:text="商品" />
 
-            <ImageView
-                android:id="@+id/mToolbarSearch"
-                android:layout_width="50dp"
+            <TextView
+                android:id="@+id/mToolbarRight"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:text="分类"
+                android:gravity="center"
+                android:textColor="@color/color_FFFFFF"
+                android:textSize="14dp"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/dip_14"
-                android:src="@drawable/icon_search" />
-
-            <RelativeLayout
-                android:id="@+id/mSearchView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/mToolbarAdd"
-                android:background="@color/colorPrimary"
-                android:visibility="gone">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dip_30"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/mCancelSearch"
-                    android:background="@drawable/shape_half_circle_white_color_rect"
-                    android:paddingHorizontal="@dimen/dip_10">
-
-                    <ImageView
-                        android:id="@+id/searchIcon"
-                        android:layout_width="@dimen/dip_15"
-                        android:layout_height="@dimen/dip_15"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/icon_search_gray" />
-
-                    <EditText
-                        android:id="@+id/mSearchEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dip_10"
-                        android:layout_toRightOf="@+id/searchIcon"
-                        android:background="@null"
-                        android:imeOptions="actionSearch"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:textColor="@color/color_333333"
-                        android:textSize="@dimen/dip_12" />
-
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/mCancelSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:gravity="center"
-                    android:paddingHorizontal="@dimen/dip_15"
-                    android:text="取消"
-                    android:textColor="@color/color_FFFFFF"
-                    android:textSize="13dp" />
-
-
-            </RelativeLayout>
+               />
 
         </RelativeLayout>
 
