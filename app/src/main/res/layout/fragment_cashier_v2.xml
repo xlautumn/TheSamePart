@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_F8F8F8">
+
+        <LinearLayout
+            android:id="@+id/rootSearch"
+            android:layout_width="@dimen/dip_0"
+            android:layout_height="@dimen/dip_55"
+            android:background="@color/color_0EB170"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/layoutSearch"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dip_30"
+                android:layout_marginLeft="@dimen/dip_30"
+                android:layout_marginRight="@dimen/dip_30"
+                android:background="@drawable/shape_search_white_rect"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_search_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dip_5"
+                    android:text="输入商品名称"
+                    android:textColor="@color/color_B4B4B4"
+                    android:textSize="@dimen/dip_12" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_first_level"
+            app:layout_constraintTop_toBottomOf="@+id/rootSearch"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/rv_second_level"
+            app:layout_constraintHorizontal_weight="1"
+            android:background="@color/color_F7F7F7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="0dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_second_level"
+            android:layout_width="@dimen/dip_0"
+            app:layout_constraintTop_toBottomOf="@+id/rootSearch"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rv_first_level"
+            android:background="@color/color_FFFFFF"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/divider_1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dip_05"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/rv_second_level"
+            app:layout_constraintTop_toBottomOf="@+id/rv_second_level"
+            android:background="@color/color_E5E5E5" />
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/mSmartRefreshLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/color_FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/rv_second_level"
+            app:layout_constraintTop_toBottomOf="@+id/divider_1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.same.part.assistant.view.RecyclerViewWithEmpty
+                    android:id="@+id/cashierRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    android:id="@+id/emptyView"
+                    layout="@layout/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

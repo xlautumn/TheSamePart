@@ -527,7 +527,9 @@ data class CashierProduct(
     val price: String,
     val productId: String,
     val quantity: String,
-    val unit:String
+    val unit:String,
+    var state:String,
+    val type: String
 ):Serializable
 
 

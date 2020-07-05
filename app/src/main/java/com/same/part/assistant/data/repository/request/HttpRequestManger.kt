@@ -394,4 +394,30 @@ class HttpRequestManger {
             name = name,
             page = page, size = size, type="1,2")
     }
+
+    /**
+     * 下架
+     */
+    suspend fun undercarriageProduct(productId: String): ResponseBody {
+        return NetworkApi.service.undercarriageProduct(
+            RequestWithToken(
+                appSecret = CacheUtil.getAppSecret(),
+                appKey = CacheUtil.getAppKey(),
+                accessToken = CacheUtil.getToken()
+            ), productId
+        )
+    }
+
+    /**
+     * 上架
+     */
+    suspend fun putawayProduct(productId: String): ResponseBody {
+        return NetworkApi.service.putawayProduct(
+            RequestWithToken(
+                appSecret = CacheUtil.getAppSecret(),
+                appKey = CacheUtil.getAppKey(),
+                accessToken = CacheUtil.getToken()
+            ), productId
+        )
+    }
 }

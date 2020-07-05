@@ -270,6 +270,12 @@ data class RequestCashierProduct(
     val type: String
 )
 
+data class RequestWithToken(
+    val accessToken: String,
+    val appKey: String,
+    val appSecret: String
+)
+
 
 
 

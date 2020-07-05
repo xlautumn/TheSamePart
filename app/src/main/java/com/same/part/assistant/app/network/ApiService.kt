@@ -361,4 +361,15 @@ interface ApiService {
         @Field("type") type: String
     ): ApiResponse<GetCashierProductMsg>
 
+    /**
+     * 下架
+     */
+    @PUT("product/undercarriageProduct/{productId}")
+    suspend fun undercarriageProduct(@Body requestWithToken:RequestWithToken,@Path("productId")productId:String):ResponseBody
+
+    /**
+     * 上架
+     */
+    @PUT("product/putawayProduct/{productId}")
+    suspend fun putawayProduct(@Body requestWithToken:RequestWithToken,@Path("productId")productId:String):ResponseBody
 }

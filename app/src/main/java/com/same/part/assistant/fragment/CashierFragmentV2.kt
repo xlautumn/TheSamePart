@@ -2,291 +2,185 @@ package com.same.part.assistant.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alibaba.fastjson.JSONObject
+import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddCashierGoodActivity
-import com.same.part.assistant.activity.AddCashierGoodActivity.Companion.ADD_OR_UPDATE_CASHIER_SUCCESS
-import com.same.part.assistant.activity.AddCashierGoodActivity.Companion.CASHIER_PRODUCT_ID
-import com.same.part.assistant.app.network.ApiService
-import com.same.part.assistant.app.util.CacheUtil
-import com.same.part.assistant.data.model.CashierModel
-import com.same.part.assistant.helper.refreshComplete
-import com.same.part.assistant.utils.HttpUtil
-import kotlinx.android.synthetic.main.fragment_cashier.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import com.same.part.assistant.adapter.CashierFirstLevelAdapter
+import com.same.part.assistant.adapter.CashierProductAdapter
+import com.same.part.assistant.adapter.CashierSecondLevelAdapter
+import com.same.part.assistant.app.base.BaseFragment
+import com.same.part.assistant.data.model.CashierAllProduct
+import com.same.part.assistant.data.model.CashierProduct
+import com.same.part.assistant.data.model.CustomCategory
+import com.same.part.assistant.data.model.GetCashierCategoryDetail
+import com.same.part.assistant.databinding.FragmentCashierV2Binding
+import com.same.part.assistant.viewmodel.request.RequestCashierViewModel
+import me.hgj.jetpackmvvm.ext.parseState
 
 
 /**
  * 收银商品
  */
-class CashierFragmentV2 : Fragment() {
-    //数据列表
-    private val mCashierList = arrayListOf<CashierModel>()
+class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV2Binding>() {
 
-    //当前请求第几页的数据
-    private var mCurrentPage = 0
+    private val mFirstLevelAdapter by lazy {
+        CashierFirstLevelAdapter(Proxy()).apply {
+            setOnItemClickListener { adapter, view, position ->
+                val customCategory = adapter.data[position] as CustomCategory
+                mViewModel.firstCategoryId.value = customCategory.customCategoryId
+            }
+        }
+    }
+    private val mSecondLevelAdapter by lazy {
+        CashierSecondLevelAdapter(Proxy()).apply {
+            setOnItemClickListener { adapter, view, position ->
+                val customCategory = adapter.data[position] as CustomCategory
+                mViewModel.currentSecondCategoryId.value = customCategory.customCategoryId
+            }
+        }
+    }
+    private val mCashierProductAdapter by lazy {
+        CashierProductAdapter(Proxy()).apply {
+            addChildClickViewIds(R.id.tv_operation)
+            setOnItemChildClickListener { adapter, view, position ->
+                if (view.id == R.id.tv_operation) {
+                    val cashierProduct = adapter.data[position] as CashierProduct
+                    mViewModel.updateProduct(cashierProduct, onSuccess = {
+//                        mViewModel.queryShopCategoryDetail()
+                        ToastUtils.showShort(it)
+                        cashierProduct.state = if (cashierProduct.state == "1") "0" else "1"
+                        adapter.notifyItemChanged(position)
+                    }, onError = {
+                        ToastUtils.showShort(it)
+                    })
+                }
+            }
 
-    //是否是搜索模式
-    private var mIsSearchMode = false
-
-    //当前搜索的关键字
-    private var mCurrentSearchKey = ""
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun eventRefresh(messageEvent: String) {
-        if (ADD_OR_UPDATE_CASHIER_SUCCESS == messageEvent) {
-            mSmartRefreshLayout.autoRefresh()
+            setOnItemClickListener { adapter, view, position ->
+                val cashierProduct = adapter.data[position] as CashierProduct
+                startActivity(
+                    Intent(context, AddCashierGoodActivity::class.java).apply {
+                        putExtra(
+                            AddCashierGoodActivity.JUMP_FROM_TYPE,
+                            AddCashierGoodActivity.JUMP_FROM_EDIT
+                        )
+                        putExtra(
+                            AddCashierGoodActivity.CASHIER_PRODUCT_ID,
+                            cashierProduct.productId
+                        )
+                    }
+                )
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_cashier, container, false)
+    override fun layoutId(): Int = R.layout.fragment_cashier_v2
 
 
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        EventBus.getDefault().register(this)
-        //列表数据
-        cashierRecyclerView.apply {
-            adapter = CustomAdapter(mCashierList)
+    override fun initView(savedInstanceState: Bundle?) {
+        mDatabind.rvFirstLevel.apply {
             layoutManager = LinearLayoutManager(context)
+            adapter = mFirstLevelAdapter
         }
-        //下拉刷新
-        mSmartRefreshLayout.apply {
-            //下拉刷新
-            setOnRefreshListener {
-                if (mIsSearchMode) {
-                    searchData(mCurrentSearchKey, true)
-                } else {
-                    mCurrentPage = 0
-                    loadCashierList(page = mCurrentPage, isRefresh = true)
-                }
-            }
-            //上拉加载
-            setOnLoadMoreListener {
-                mCurrentPage++
-                if (mIsSearchMode) {
-                    searchData(mCurrentSearchKey, false)
-                } else {
-                    loadCashierList(page = mCurrentPage, isRefresh = false)
-                }
-            }
+        mDatabind.rvSecondLevel.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                RecyclerView.HORIZONTAL,
+                false
+            )
+            adapter = mSecondLevelAdapter
         }
-        //加载数据
-        loadCashierList(page = mCurrentPage, isRefresh = true)
+        mDatabind.cashierRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = mCashierProductAdapter
+            setEmptyView(mDatabind.emptyView)
+        }
+
+        mDatabind.mSmartRefreshLayout.setEnableLoadMore(false)
+        mDatabind.mSmartRefreshLayout.setOnRefreshListener {
+            mViewModel.queryShopCategoryDetail()
+        }
     }
 
-    /**
-     * 请求收银商品列表
-     * type中的1代表的是收银称重商品，2代表收银非称重商品
-     */
-    private fun loadCashierList(
-        name: String = "",
-        page: Int = 0,
-        size: String = "20",
-        type: String = "1,2",
-        isRefresh: Boolean
-    ) {
-        val url = "${ApiService.SERVER_URL}amountCommodity/get"
-        val jsonMap = hashMapOf(
-            "page" to "$page",
-            "name" to name,
-            "size" to size,
-            "type" to type
-        )
-        HttpUtil.instance.postUrlWithHeader("WSCX", CacheUtil.getToken(), url, jsonMap, {
-            try {
-                val resultJson = JSONObject.parseObject(it)
-                resultJson.apply {
-                    getJSONObject("msg")?.getJSONArray("data")?.takeIf { it.size >= 0 }?.apply {
-                        if (this.size == 0) {
-                            if (mIsSearchMode) {
-                                //清空数据，展示没数据
-                                mCashierList.clear()
-                                //刷新数据
-                                cashierRecyclerView.adapter?.notifyDataSetChanged()
-                                //检查是否展示空布局
-                                cashierRecyclerView.setEmptyView(emptyView)
-                            } else {
-                                if (isRefresh){
-                                    mCashierList.clear()
-                                }
-                                //通知刷新结束
-                                mSmartRefreshLayout?.refreshComplete(false)
-                                mCurrentPage--
-                                //检查是否展示空布局
-                                cashierRecyclerView.setEmptyView(emptyView)
-                            }
-                        } else {
-                            val itemList = ArrayList<CashierModel>()
-                            for (i in 0 until this.size) {
-                                getJSONObject(i)?.apply {
-                                    val id = getString("productId")
-                                    val name = getString("name")
-                                    val price = getString("price")
-                                    val unit = getString("unit")
-                                    val type = getString("type")
-                                    val state = getString("state")
-                                    val quantity = getString("quantity")
-                                    CashierModel(
-                                        id,
-                                        name,
-                                        price,
-                                        unit,
-                                        state,
-                                        quantity = quantity,
-                                        type = type
-                                    ).apply {
-                                        itemList.add(this)
-                                    }
-                                }
-                            }
-                            //如果是刷新需要清空之前的数据
-                            if (isRefresh && itemList.size > 0) {
-                                mCashierList.clear()
-                                mCashierList.addAll(itemList)
-                            } else {
-                                mCashierList.addAll(itemList)
-                            }
-                            //通知刷新结束
-                            mSmartRefreshLayout?.refreshComplete(true)
-                            //刷新数据
-                            cashierRecyclerView.adapter?.notifyDataSetChanged()
-                            //检查是否展示空布局
-                            cashierRecyclerView.setEmptyView(emptyView)
-                        }
+    override fun lazyLoadData() {
+        mViewModel.requestCashierClassification()
+    }
 
-                    } ?: also {
-                        if (mIsSearchMode) {
-                            //清空数据，展示没数据
-                            mCashierList.clear()
-                            //刷新数据
-                            cashierRecyclerView.adapter?.notifyDataSetChanged()
-                            //检查是否展示空布局
-                            cashierRecyclerView.setEmptyView(emptyView)
-                        } else {
-                            //通知刷新结束
-                            mSmartRefreshLayout?.refreshComplete(false)
-                            mCurrentPage--
-                            //检查是否展示空布局
-                            cashierRecyclerView.setEmptyView(emptyView)
-                        }
+    override fun createObserver() {
+        mViewModel.resultState.observe(viewLifecycleOwner, Observer {
+            parseState(it, onSuccess = {
+                if (mViewModel.getCashierAllProduct()?.categoryList != it) {
+                    setData(CashierAllProduct(it))
+                } else {
+                    setData(mViewModel.getCashierAllProduct())
+                }
+            }, onError = {
+                ToastUtils.showShort(it.errorMsg)
+            })
+        })
+
+        mViewModel.productResultState.observe(viewLifecycleOwner, Observer {
+            parseState(it, onSuccess = { getCashierCategoryDetail ->
+                mDatabind.mSmartRefreshLayout.finishRefresh()
+                getCashierCategoryDetail.customCategoryProducts.map { it.product }.let {
+                    mViewModel.getProductList(getCashierCategoryDetail.customCategoryId).apply {
+                        clear()
+                        addAll(it)
+                        mCashierProductAdapter.setList(it)
                     }
                 }
-            } catch (e: Exception) {
-                //请求失败回退请求的页数
-                if (mCurrentPage > 0) mCurrentPage--
-                //通知刷新结束
-                mSmartRefreshLayout?.refreshComplete(false)
-                //检查是否展示空布局
-                cashierRecyclerView.setEmptyView(emptyView)
+            }, onError = {
+                mDatabind.mSmartRefreshLayout.finishRefresh()
+                ToastUtils.showShort(it.errorMsg)
+            })
+        })
+        mViewModel.firstCategoryId.observe(viewLifecycleOwner, Observer {
+            mFirstLevelAdapter.notifyDataSetChanged()
+            val list = mViewModel.getSecondTitleList(it)
+            if (list.isNullOrEmpty()) {
+                mViewModel.currentSecondCategoryId.value = ""
+                mSecondLevelAdapter.setList(arrayListOf())
+            } else {
+                mViewModel.currentSecondCategoryId.value = list[0].customCategoryId
+                mSecondLevelAdapter.setList(list)
             }
-        }, {
-            //请求失败回退请求的页数
-            if (mCurrentPage > 0) mCurrentPage--
-            //通知刷新结束
-            mSmartRefreshLayout?.refreshComplete(true)
-            //检查是否展示空布局
-            cashierRecyclerView.setEmptyView(emptyView)
+        })
+        mViewModel.currentSecondCategoryId.observe(viewLifecycleOwner, Observer {
+            mSecondLevelAdapter.notifyDataSetChanged()
+            if (it.isNullOrEmpty()) {
+                mCashierProductAdapter.setList(arrayListOf())
+            } else {
+                val list = mViewModel.getProductList(it)
+                if (list.isNullOrEmpty()) {
+                    mCashierProductAdapter.setList(arrayListOf())
+                    mViewModel.queryShopCategoryDetail()
+                } else {
+                    mCashierProductAdapter.setList(list)
+                }
+            }
         })
     }
 
-    inner class CustomAdapter(var dataList: ArrayList<CashierModel>) :
-        RecyclerView.Adapter<CashierItemHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CashierItemHolder =
-            CashierItemHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.cashier_good_item,
-                    parent,
-                    false
-                )
-            )
-
-
-        override fun getItemCount(): Int = dataList.size
-
-
-        override fun onBindViewHolder(holder: CashierItemHolder, position: Int) {
-            val model = dataList[position]
-            holder.cashierName.text = model.name
-            holder.cashierPrice.text = "￥${model.price}"
-            var cashQuantity = model.quantity
-            if (model.type != "1" && cashQuantity.isNotEmpty() && cashQuantity.contains(".")) {
-                val index = cashQuantity.indexOf(".")
-                cashQuantity = cashQuantity.substring(0, index)
+    private fun setData(cashierAllProduct: CashierAllProduct?) {
+        cashierAllProduct?.let {
+            mViewModel.setCashierAllProduct(it)
+            if (it.categoryList.isNullOrEmpty()) {
+                mViewModel.firstCategoryId.value = ""
+            } else {
+                mViewModel.firstCategoryId.value = it.categoryList[0].customCategoryId
             }
-
-            holder.cashierUnit.text = "${cashQuantity}${model.unit}"
-            holder.shelves.text = if (model.status == "1") "上架" else "下架"
-            holder.edit.apply {
-                setOnClickListener {
-                    startActivity(
-                        Intent(context, AddCashierGoodActivity::class.java).apply {
-                            putExtra(
-                                AddCashierGoodActivity.JUMP_FROM_TYPE,
-                                AddCashierGoodActivity.JUMP_FROM_EDIT
-                            )
-                            putExtra(CASHIER_PRODUCT_ID, model.id)
-                        }
-                    )
-                }
-            }
+            mFirstLevelAdapter.setList(it.categoryList)
         }
 
     }
 
-    class CashierItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var cashierName: TextView = itemView.findViewById(R.id.cashierName)
-        var cashierPrice: TextView = itemView.findViewById(R.id.cashierPrice)
-        var cashierUnit: TextView = itemView.findViewById(R.id.cashierUnit)
-        var edit: TextView = itemView.findViewById(R.id.edit)
-        var shelves: TextView = itemView.findViewById(R.id.shelves)
+
+    inner class Proxy {
+        fun getCurrentSecondCategoryId() = mViewModel.currentSecondCategoryId.value
+        fun getCurrentFirstCategoryId() = mViewModel.firstCategoryId.value
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
-    }
-
-    /**
-     * 搜索
-     */
-    fun searchData(text: String, isRefresh: Boolean) {
-        mCurrentSearchKey = text
-        mIsSearchMode = true
-        //从外面点击搜索的时候第一次会走这里
-        if (isRefresh) {
-            mCurrentPage = 0
-        }
-        loadCashierList(text, mCurrentPage, isRefresh = isRefresh)
-    }
-
-    /**
-     * 取消搜索
-     */
-    fun cancelSearch() {
-        if (mIsSearchMode) {
-            mCurrentSearchKey = ""
-            mIsSearchMode = false
-            mCurrentPage = 0
-            loadCashierList(page = mCurrentPage, isRefresh = true)
-            mSmartRefreshLayout?.setNoMoreData(false)
-        }
-    }
 }
