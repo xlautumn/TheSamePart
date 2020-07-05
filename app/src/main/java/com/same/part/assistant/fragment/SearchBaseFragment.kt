@@ -41,7 +41,6 @@ abstract class SearchBaseFragment<VM:SearchBaseViewModel<E>,E>:BaseFragment<VM,L
         mTitleBack.setOnClickListener {
             goBack()
         }
-
         mDatabind.searchHistory.layoutManager = CustomerLayoutManager(0)
         val historyAdapter = SearchHistoryAdapter()
         historyAdapter.setItemOnClickListener {

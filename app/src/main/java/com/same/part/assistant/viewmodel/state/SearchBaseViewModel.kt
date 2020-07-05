@@ -11,7 +11,7 @@ import me.hgj.jetpackmvvm.callback.livedata.BooleanLiveData
 
 abstract class SearchBaseViewModel<E>(application: Application) : BaseViewModel(application) {
 
-    abstract val KEY_HISTORY_DATA :String
+    abstract val KEY_HISTORY_DATA: String
 
     private val _searchResultList = MutableLiveData<ArrayList<E>>()
     val searchResultList: LiveData<ArrayList<E>> = _searchResultList
@@ -27,6 +27,7 @@ abstract class SearchBaseViewModel<E>(application: Application) : BaseViewModel(
     private val _searchHistoryData = MutableLiveData<ArrayList<String>>()
 
     val searchHistoryData: LiveData<ArrayList<String>> = _searchHistoryData
+
     init {
         _searchHistoryData.value = arrayListOf()
         _searchResultList.value = arrayListOf()
@@ -70,17 +71,21 @@ abstract class SearchBaseViewModel<E>(application: Application) : BaseViewModel(
         }
     }
 
-    fun clearHistory(){
-        _searchHistoryData.value= arrayListOf()
+    fun clearHistory() {
+        _searchHistoryData.value = arrayListOf()
         _searchHistoryData.postValue(_searchHistoryData.value)
     }
 
-    fun setSearchResultList(data:List<E>){
-        if (data.isNotEmpty()){
-            _searchResultList.value?.addAll(data)
-            _searchResultList.value = _searchResultList.value
+    fun setSearchResultList(data: List<E>) {
+        _searchResultList.value?.apply {
+            if (data != this) {
+                clear()
+                addAll(data)
+            }
         }
+        _searchResultList.value = _searchResultList.value
     }
+
     /**
      * 请求搜索结果
      */

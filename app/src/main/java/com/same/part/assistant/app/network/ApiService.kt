@@ -351,7 +351,7 @@ interface ApiService {
     /**
      * 获取收银商品列表
      */
-    @POST("amountCommodity/get" )
+    @POST("amountCommodity/get")
     @FormUrlEncoded
     suspend fun getCashierProductList(
         @Header("WSCX") token: String,
@@ -365,11 +365,27 @@ interface ApiService {
      * 下架
      */
     @PUT("product/undercarriageProduct/{productId}")
-    suspend fun undercarriageProduct(@Body requestWithToken:RequestWithToken,@Path("productId")productId:String):ResponseBody
+    suspend fun undercarriageProduct(
+        @Body requestWithToken: RequestWithToken,
+        @Path("productId") productId: String
+    ): ResponseBody
 
     /**
      * 上架
      */
     @PUT("product/putawayProduct/{productId}")
-    suspend fun putawayProduct(@Body requestWithToken:RequestWithToken,@Path("productId")productId:String):ResponseBody
+    suspend fun putawayProduct(
+        @Body requestWithToken: RequestWithToken,
+        @Path("productId") productId: String
+    ): ResponseBody
+
+    /**
+     * 批量删除收银商品
+     */
+    @DELETE("biz/product/{productIds}")
+    suspend fun delCashierProduct(
+        @Path("productIds") productIds: String,
+        @Query("appKey") appKey: String,
+        @Query("appSecret") appSecret: String
+    ): ResponseBody
 }

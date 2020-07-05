@@ -420,4 +420,17 @@ class HttpRequestManger {
             ), productId
         )
     }
+
+    /**
+     * 批量删除收银商品
+     */
+    suspend fun delCashierProduct(
+        productIds: List<String>
+    ): ResponseBody {
+        return NetworkApi.service.delCashierProduct(
+            productIds = productIds.joinToString (separator = ","),
+            appKey = CacheUtil.getAppKey(),
+            appSecret = CacheUtil.getAppSecret()
+        )
+    }
 }

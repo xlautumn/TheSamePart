@@ -85,6 +85,37 @@ class RequestCashierProductEditViewModel(application: Application) :
         }
     }
 
-
+    /**
+     * 批量删除收银商品
+     */
+    fun delCashierProduct(cashierProduct: CashierProduct,
+                          onSuccess: (String) -> Unit,
+                          onError: (String) -> Unit){
+        fun parseResponseBody(
+            it: ResponseBody,
+            onSuccess: (String) -> Unit,
+            onError: (String) -> Unit
+        ) {
+            val response: String = it.string()
+            val responseObject = JSON.parseObject(response)
+            val code = responseObject.getInteger("code")
+            val msg = responseObject.getString("message")
+            if (code == 1) {
+                searchResultList.value?.let {
+                    it.remove(cashierProduct)
+                    setSearchResultList(it)
+                }
+                onSuccess(msg)
+            } else {
+                onError(msg)
+            }
+        }
+        requestResponseBody({ HttpRequestManger.instance.delCashierProduct(arrayListOf(cashierProduct.productId)) },
+            success = {
+                parseResponseBody(it, onSuccess, onError)
+            }, error = {
+                onError(it.errorMsg)
+            })
+    }
 
 }

@@ -148,6 +148,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dip_0"
+            android:background="@color/color_FFFFFF"
             app:isVisible="@{viewmodel.showResult}"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="@dimen/dip_7"
@@ -163,7 +164,7 @@
                 android:id="@+id/emptyView"
                 layout="@layout/empty_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dip_0"
+                android:layout_height="match_parent"
                 app:isVisible="@{!viewmodel.hasSearchResult}" />
 
         </RelativeLayout>

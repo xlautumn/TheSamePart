@@ -11,7 +11,7 @@ import com.same.part.assistant.viewmodel.state.SearchCashierProductToEditViewMod
 /**
  * 搜索收银商品(编辑商品)
  */
-class SearchCashierProductToEditActivity:AppCompatActivity() {
+class SearchCashierProductToEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cashier_product_to_edit)
@@ -19,12 +19,15 @@ class SearchCashierProductToEditActivity:AppCompatActivity() {
 
     override fun onBackPressed() {
         val viewModel = SearchCashierProductToEditViewModel.get(this)
-        if (viewModel.changeCashierProductList.isNotEmpty()) {
+        if (viewModel.changeCashierProductList.isNotEmpty() || viewModel.delCashierProductList.isNotEmpty()) {
             setResult(
                 Activity.RESULT_OK,
                 Intent().putExtra(
                     CashierFragmentV2.KEY_CASHIER_PRODUCT_CHANGE_LIST,
                     viewModel.changeCashierProductList
+                ).putExtra(
+                    CashierFragmentV2.KEY_CASHIER_PRODUCT_DEL_LIST,
+                    viewModel.delCashierProductList
                 )
             )
         }

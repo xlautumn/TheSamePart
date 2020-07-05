@@ -13,8 +13,20 @@ class SearchCashierProductToEditViewModel(application: Application):BaseViewMode
      */
     val changeCashierProductList = arrayListOf<CashierProduct>()
 
+    /**
+     * 已删除的商品集合
+     */
+    val delCashierProductList = arrayListOf<CashierProduct>()
+
      fun addChangeCashierProductList(cashierProduct: CashierProduct){
         changeCashierProductList.apply {
+            add(cashierProduct)
+            distinctBy { it.productId }
+        }
+    }
+
+    fun addDelCashierProductList(cashierProduct: CashierProduct){
+        delCashierProductList.apply {
             add(cashierProduct)
             distinctBy { it.productId }
         }

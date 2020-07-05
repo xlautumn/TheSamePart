@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddCashierGoodActivity
 import com.same.part.assistant.adapter.CashierProductAdapter
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.data.model.CashierProduct
 import com.same.part.assistant.data.model.ProductDetailData
 import com.same.part.assistant.viewmodel.request.RequestCashierProductEditViewModel
@@ -60,6 +61,25 @@ class SearchCashierProductEditFragment :
                     )
                 }
             )
+        }
+
+
+        setOnItemLongClickListener { adapter, view, position ->
+            val cashierProduct = adapter.data[position] as CashierProduct
+            showMessage("请确认是否删除该商品", positiveAction = {
+                mViewModel.delCashierProduct(cashierProduct, onSuccess = {
+//                        mViewModel.queryShopCategoryDetail()
+                    ToastUtils.showShort(it)
+                    adapter.notifyItemRemoved(position)
+                    activity?.let {
+                        SearchCashierProductToEditViewModel.get(it)
+                            .addDelCashierProductList(cashierProduct)
+                    }
+                }, onError = {
+                    ToastUtils.showShort(it)
+                })
+            }, negativeButtonText = "取消")
+            true
         }
     }
 

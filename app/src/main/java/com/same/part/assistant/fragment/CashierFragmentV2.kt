@@ -14,6 +14,7 @@ import com.same.part.assistant.adapter.CashierFirstLevelAdapter
 import com.same.part.assistant.adapter.CashierProductAdapter
 import com.same.part.assistant.adapter.CashierSecondLevelAdapter
 import com.same.part.assistant.app.base.BaseFragment
+import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.data.model.CashierAllProduct
 import com.same.part.assistant.data.model.CashierProduct
 import com.same.part.assistant.data.model.CustomCategory
@@ -75,6 +76,22 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
                         )
                     }
                 )
+            }
+
+            setOnItemLongClickListener { adapter, view, position ->
+                val cashierProduct = adapter.data[position] as CashierProduct
+                showMessage("请确认是否删除该商品", positiveAction = {
+                    mViewModel.delCashierProduct(cashierProduct, onSuccess = {
+//                        mViewModel.queryShopCategoryDetail()
+                        ToastUtils.showShort(it)
+                        mViewModel.getProductList(mViewModel.currentSecondCategoryId.value).removeAt(position)
+                        adapter.data.removeAt(position)
+                        adapter.notifyItemRemoved(position)
+                    }, onError = {
+                        ToastUtils.showShort(it)
+                    })
+                }, negativeButtonText = "取消")
+                true
             }
         }
     }
@@ -179,11 +196,13 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
             if (requestCode == REQUEST_CODE_SEARCH_PRODUCT_TO_EDIT) {
                 val list =
                     data?.getSerializableExtra(KEY_CASHIER_PRODUCT_CHANGE_LIST) as? ArrayList<CashierProduct>
-                if (!list.isNullOrEmpty()) {
-                    mViewModel.updateProductBecauseOfSearch(list){
-                        mCashierProductAdapter.notifyDataSetChanged()
-                    }
+                val delList =
+                    data?.getSerializableExtra(KEY_CASHIER_PRODUCT_DEL_LIST) as? ArrayList<CashierProduct>
+
+                mViewModel.updateProductBecauseOfSearch(list, delList) {
+                    mCashierProductAdapter.setList(mViewModel.getProductList(mViewModel.currentSecondCategoryId.value))
                 }
+
             }
         }
     }
@@ -217,6 +236,11 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
          * 发生变化的收银商品集合
          */
         const val KEY_CASHIER_PRODUCT_CHANGE_LIST = "KEY_CASHIER_PRODUCT_CHANGE_LIST"
+
+        /**
+         * 已删除的收银商品集合
+         */
+        const val KEY_CASHIER_PRODUCT_DEL_LIST = "KEY_CASHIER_PRODUCT_DEL_LIST"
     }
 
 }

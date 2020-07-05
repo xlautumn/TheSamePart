@@ -128,28 +128,80 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
         }
     }
 
+    /**
+     * 批量删除收银商品
+     */
+    fun delCashierProduct(cashierProduct: CashierProduct,
+                          onSuccess: (String) -> Unit,
+                          onError: (String) -> Unit){
+        fun parseResponseBody(
+            it: ResponseBody,
+            onSuccess: (String) -> Unit,
+            onError: (String) -> Unit
+        ) {
+            val response: String = it.string()
+            val responseObject = JSON.parseObject(response)
+            val code = responseObject.getInteger("code")
+            val msg = responseObject.getString("message")
+            if (code == 1) {
+                onSuccess(msg)
+            } else {
+                onError(msg)
+            }
+        }
+        requestResponseBody({ HttpRequestManger.instance.delCashierProduct(arrayListOf(cashierProduct.productId)) },
+            success = {
+                parseResponseBody(it, onSuccess, onError)
+            }, error = {
+                onError(it.errorMsg)
+            })
+    }
 
     /**
      * @param list 商品数据发生变化的商品集合
      * @param notifyCurrentVisibleProductChange 通知当前正在显示的商品数据发生变化
      */
     fun updateProductBecauseOfSearch(
-        list: List<CashierProduct>,
+        list: List<CashierProduct>?,
+        delList: List<CashierProduct>?,
         notifyCurrentVisibleProductChange: () -> Unit
     ) {
+        if (list.isNullOrEmpty()&&delList.isNullOrEmpty()){
+            return
+        }
+        val tempList = list?.let { ArrayList(it) } ?: arrayListOf()
+        val tempDelList = delList?.let { ArrayList(it) } ?: arrayListOf()
+        var needNotifyCurrentVisibleProductChange = false
         cashierAllProduct?.categoryProductMap?.entries?.forEach { entry ->
             val secondCategoryId = entry.key
-            entry.value.filter { cashierProduct ->
-                list.find { changeItem -> cashierProduct.productId == changeItem.productId }
+            val iterator = tempList.iterator()
+            while (iterator.hasNext()){
+                val changeItem = iterator.next()
+                entry.value.find { cashierProduct -> cashierProduct.productId == changeItem.productId }
                     ?.let {
-                        cashierProduct.state = it.state
-                        true
-                    } ?: false
-            }.also {
-                if (it.isNotEmpty() && secondCategoryId == currentSecondCategoryId.value) {
-                    notifyCurrentVisibleProductChange()
+                        it.state = changeItem.state
+                        iterator.remove()
+                        if (secondCategoryId == currentSecondCategoryId.value) {
+                            needNotifyCurrentVisibleProductChange = true
+                        }
+                    }
+            }
+            val delIterator = tempDelList.iterator()
+            while (delIterator.hasNext()){
+                val delCashierProduct = delIterator.next()
+                entry.value.find { cashierProduct ->
+                    cashierProduct.productId == delCashierProduct.productId
+                }?.let {
+                    entry.value.remove(it)
+                    delIterator.remove()
+                    if (secondCategoryId == currentSecondCategoryId.value) {
+                        needNotifyCurrentVisibleProductChange = true
+                    }
                 }
             }
+        }
+        if (needNotifyCurrentVisibleProductChange){
+            notifyCurrentVisibleProductChange()
         }
     }
 
