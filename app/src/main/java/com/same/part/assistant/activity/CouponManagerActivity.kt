@@ -62,7 +62,10 @@ class CouponManagerActivity :
             addChildClickViewIds(R.id.llOperation)
             setOnItemChildClickListener { adapter, view, position ->
                 if (view.id == R.id.llOperation) {
-                    provideCoupon(mCouponAdapter.data[position])
+                    val item = mCouponAdapter.data[position]
+                    if (item.status=="1") {
+                        provideCoupon(item)
+                    }
                 }
             }
         }
@@ -132,7 +135,7 @@ class CouponManagerActivity :
                     }
                 )
 
-                holder.setText(R.id.tvOperation, "发放")
+                holder.setText(R.id.tvOperation, if (status == "1") "发放" else "---")
             }
         }
     }
