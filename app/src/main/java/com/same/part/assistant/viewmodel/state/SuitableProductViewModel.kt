@@ -23,8 +23,7 @@ class SuitableProductViewModel(application: Application) : BaseViewModel(applica
      * 收银商品
      */
     val cashierProductResultState = MutableLiveData<ResultState<GetCashierProductMsg>>()
-    private val _cashierProductList = MutableLiveData<ArrayList<CashierProduct>>()
-    val cashierProductList: LiveData<ArrayList<CashierProduct>> = _cashierProductList
+    val cashierProductList: ArrayList<CashierProduct> = arrayListOf()
 
 
     fun setSuitableProductList(data: List<CashierProduct>){
@@ -33,17 +32,13 @@ class SuitableProductViewModel(application: Application) : BaseViewModel(applica
 
 
     fun setProductList(data:List<CashierProduct>,isRefresh:Boolean ){
-        _cashierProductList.value?.apply {
+        cashierProductList.apply {
             if (isRefresh){
                 this.clear()
                 this.addAll(data)
             }else{
                 this.addAll(data)
             }
-            _cashierProductList.value = _cashierProductList.value
-        }?: kotlin.run {
-            val list = ArrayList(data)
-            _cashierProductList.value = list
         }
     }
 

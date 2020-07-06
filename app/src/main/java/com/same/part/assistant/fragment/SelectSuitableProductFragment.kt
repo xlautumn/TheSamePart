@@ -68,8 +68,15 @@ class SelectSuitableProductFragment : Fragment() {
         mAdapter.setOnItemClickListener { adapter, view, position ->
             view.isSelected = !view.isSelected
             (adapter.data[position] as CashierProductWrap).isSelect = view.isSelected
+            checkIfAllSelected()
         }
 
+        //全选
+        binding.tvCheckAll.setOnClickListener { view ->
+            mAdapter.data.filterNot { it.hasAdd }.forEach { it.isSelect = !it.isSelect }
+            checkIfAllSelected()
+            mAdapter.notifyDataSetChanged()
+        }
         binding.rvProduct.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
@@ -115,7 +122,8 @@ class SelectSuitableProductFragment : Fragment() {
                             binding.smartRefreshLayout.resetNoMoreData()
 
                             suitableProductViewModel.setProductList(it.data.data, true)
-
+                            setAdapterData(it.data.data,true)
+                            checkIfAllSelected()
                         }
                         if (isLoadMore) {
                             isLoadMore = false
@@ -129,6 +137,8 @@ class SelectSuitableProductFragment : Fragment() {
                                     it.data.data,
                                     false
                                 )
+                                setAdapterData(it.data.data,false)
+                                checkIfAllSelected()
                                 binding.smartRefreshLayout.finishLoadMore()
                             }
 
@@ -141,16 +151,15 @@ class SelectSuitableProductFragment : Fragment() {
 
                 })
 
-            //注册数据集合观察者
-            suitableProductViewModel.cashierProductList.observe(viewLifecycleOwner, Observer {
-                setData(it)
-            })
-
-            suitableProductViewModel.cashierProductList.value?.apply {
-                setData(this)
-            } ?: kotlin.run {
-                refreshData()
+            suitableProductViewModel.cashierProductList.apply {
+                if (this.isEmpty()){
+                    refreshData()
+                }else {
+                    setAdapterData(this, true)
+                    checkIfAllSelected()
+                }
             }
+
         }
     }
 
@@ -175,11 +184,28 @@ class SelectSuitableProductFragment : Fragment() {
         dialog?.dismiss()
     }
 
-    private fun setData(data: List<CashierProduct>) {
-        data.map {
-            val hasAdd = suitableProductViewModel.hasAdd(it)
-            CashierProductWrap(it, hasAdd)
-        }.also { mAdapter.setList(it) }
+    private fun setAdapterData(data: List<CashierProduct>,isRefresh:Boolean) {
+        data.map {   val hasAdd = suitableProductViewModel.hasAdd(it)
+            CashierProductWrap(it,hasAdd)
+        }.let {
+            if (isRefresh) {
+                mAdapter.setList(it)
+            }else{
+                mAdapter.addData(it)
+            }
+        }
+    }
+
+    /**
+     *检查是否全部选中
+     */
+    private fun checkIfAllSelected() {
+        if (mAdapter.data.isNullOrEmpty()) {
+            binding.tvCheckAll.isSelected = false
+        } else {
+            val unSelectItem = mAdapter.data.find { !it.hasAdd && !it.isSelect }
+            binding.tvCheckAll.isSelected = unSelectItem == null
+        }
     }
 
     /**

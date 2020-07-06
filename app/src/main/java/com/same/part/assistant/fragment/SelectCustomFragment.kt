@@ -67,6 +67,7 @@ class SelectCustomFragment : Fragment() {
         mAdapter.setOnItemClickListener { adapter, view, position ->
             view.isSelected = !view.isSelected
             (adapter.data[position] as CustomerWrap).isSelect = view.isSelected
+            checkIfAllSelected()
         }
 
         binding.rvCustomer.apply {
@@ -76,6 +77,13 @@ class SelectCustomFragment : Fragment() {
         }
 
         customerType = arguments?.getInt(KEY_CUSTOMER_TYPE) ?: CUSTOMER_TYPE_GENERAL
+
+        //全选
+        binding.tvCheckAll.setOnClickListener { view ->
+            mAdapter.data.filterNot { it.hasAdd }.forEach { it.isSelect = !it.isSelect }
+            checkIfAllSelected()
+            mAdapter.notifyDataSetChanged()
+        }
 
         binding.smartRefreshLayout.setEnableLoadMore(false)
         binding.smartRefreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
@@ -118,7 +126,8 @@ class SelectCustomFragment : Fragment() {
                             binding.smartRefreshLayout.resetNoMoreData()
 
                             provideCouponViewModel.setCustomerList(it.data, customerType, true)
-
+                            setAdapterData(it.data,true)
+                            checkIfAllSelected()
                         }
                         if (isLoadMore) {
                             isLoadMore = false
@@ -129,6 +138,8 @@ class SelectCustomFragment : Fragment() {
                                 binding.smartRefreshLayout.finishLoadMoreWithNoMoreData()
                             } else {
                                 provideCouponViewModel.setCustomerList(it.data, customerType, false)
+                                setAdapterData(it.data,false)
+                                checkIfAllSelected()
                                 binding.smartRefreshLayout.finishLoadMore()
                             }
 
@@ -141,16 +152,13 @@ class SelectCustomFragment : Fragment() {
 
                 })
 
-            //注册数据集合观察者
-            provideCouponViewModel.getCustomerList(customerType).observe(viewLifecycleOwner,
-                Observer {
-                    setData(it)
-                })
-
-            provideCouponViewModel.getCustomerList(customerType).value?.apply {
-                setData(this)
-            } ?: kotlin.run {
-                refreshData()
+            provideCouponViewModel.getCustomerList(customerType).apply {
+                if (this.isEmpty()) {
+                    refreshData()
+                }else{
+                    setAdapterData(this,true)
+                    checkIfAllSelected()
+                }
             }
         }
     }
@@ -177,11 +185,30 @@ class SelectCustomFragment : Fragment() {
         dialog?.dismiss()
     }
 
-    private fun setData(data: List<Customer>) {
+    private fun setAdapterData(data: List<Customer>,isRefresh:Boolean) {
         data.map {
             val hasAdd = provideCouponViewModel.hasAdd(it)
             CustomerWrap(it, hasAdd)
-        }.also { mAdapter.setList(it) }
+        }.also {
+            if (isRefresh) {
+                mAdapter.setList(it)
+            }else{
+                mAdapter.addData(it)
+            }
+        }
+    }
+
+
+    /**
+     *检查是否全部选中
+     */
+    private fun checkIfAllSelected() {
+        if (mAdapter.data.isNullOrEmpty()) {
+            binding.tvCheckAll.isSelected = false
+        } else {
+            val unSelectItem = mAdapter.data.find { !it.hasAdd && !it.isSelect }
+            binding.tvCheckAll.isSelected = unSelectItem == null
+        }
     }
 
     /**

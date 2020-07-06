@@ -37,17 +37,17 @@ class ProvideCouponViewModel(application: Application) : BaseViewModel(applicati
      * 普通客户
      */
     private val generalCustomerResultState = MutableLiveData<ResultState<List<Customer>>>()
-    private val _generalCustomerList = MutableLiveData<ArrayList<Customer>>()
+    private val _generalCustomerList = arrayListOf<Customer>()
 
     /**
      * 会员客户
      */
     private val memberCustomerResultState = MutableLiveData<ResultState<List<Customer>>>()
-    private val _memberCustomerList = MutableLiveData<ArrayList<Customer>>()
+    private val _memberCustomerList = arrayListOf<Customer>()
 
     private val customerResultStateArray =
         SparseArray<MutableLiveData<ResultState<List<Customer>>>>()
-    private val customerListArray = SparseArray<MutableLiveData<ArrayList<Customer>>>()
+    private val customerListArray = SparseArray<ArrayList<Customer>>()
 
     init {
         customerResultStateArray.append(CUSTOMER_TYPE_GENERAL, generalCustomerResultState)
@@ -60,22 +60,22 @@ class ProvideCouponViewModel(application: Application) : BaseViewModel(applicati
         return customerResultStateArray[customerType]
     }
 
-    fun getCustomerList(customerType: Int): LiveData<ArrayList<Customer>> {
+    fun getCustomerList(customerType: Int): ArrayList<Customer> {
         return customerListArray[customerType]
     }
 
     fun setCustomerList(data:List<Customer>,customerType: Int,isRefresh:Boolean ){
-        customerListArray[customerType].value?.apply {
+        customerListArray[customerType].apply {
             if (isRefresh){
                 this.clear()
                 this.addAll(data)
             }else{
                 this.addAll(data)
             }
-            customerListArray[customerType].value = customerListArray[customerType].value
+
         }?: kotlin.run {
             val list = ArrayList(data)
-            customerListArray[customerType].value = list
+            customerListArray.put(customerType,list)
         }
     }
 
