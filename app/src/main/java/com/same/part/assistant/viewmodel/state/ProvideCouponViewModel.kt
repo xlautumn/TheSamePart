@@ -15,6 +15,7 @@ import com.same.part.assistant.fragment.SelectCustomFragment.Companion.CUSTOMER_
 import com.same.part.assistant.fragment.SelectCustomFragment.Companion.CUSTOMER_TYPE_MEMBER
 import me.hgj.jetpackmvvm.base.viewmodel.BaseViewModel
 import me.hgj.jetpackmvvm.ext.request
+import me.hgj.jetpackmvvm.ext.requestResponseBody
 import me.hgj.jetpackmvvm.ext.requestTR
 import me.hgj.jetpackmvvm.state.ResultState
 import okhttp3.ResponseBody
@@ -114,15 +115,36 @@ class ProvideCouponViewModel(application: Application) : BaseViewModel(applicati
     /**
      * 发放优惠券
      */
-    fun sendCoupon() {
+    fun sendCoupon( onSuccess: (String) -> Unit,
+                    onError: (String) -> Unit) {
+        fun parseResponseBody(
+            it: ResponseBody,
+            onSuccess: (String) -> Unit,
+            onError: (String) -> Unit
+        ) {
+            val response: String = it.string()
+            val responseObject = JSON.parseObject(response)
+            val code = responseObject.getInteger("code")
+            val msg = responseObject.getString("message")
+            if (code == 1) {
+                onSuccess(msg)
+            } else {
+                onError(msg)
+            }
+        }
+
         val customerList = customerListToProvider.value
         if (couponInfoModel != null && !customerList.isNullOrEmpty()) {
-            request({
+            requestResponseBody({
                 HttpRequestManger.instance.sendCoupon(
                     couponInfoModel!!.couponActivityId,
-                    customerList.map { it.userId }
+                    customerList.map { it.userId.toInt() }
                 )
-            }, couponSendResultState, true)
+            }, success = {
+                parseResponseBody(it, onSuccess, onError)
+            }, error = {
+                onError(it.errorMsg)
+            })
         }
     }
 

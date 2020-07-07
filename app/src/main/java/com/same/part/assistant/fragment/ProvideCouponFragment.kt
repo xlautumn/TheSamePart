@@ -1,5 +1,6 @@
 package com.same.part.assistant.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -22,6 +23,7 @@ import com.same.part.assistant.viewmodel.request.RequestProvideCouponViewModel
 import com.same.part.assistant.viewmodel.state.ProvideCouponViewModel
 import kotlinx.android.synthetic.main.activity_channel.*
 import me.hgj.jetpackmvvm.ext.getViewModel
+import me.hgj.jetpackmvvm.ext.parseState
 import me.shaohui.bottomdialog.BottomDialog
 
 class ProvideCouponFragment :
@@ -40,7 +42,16 @@ class ProvideCouponFragment :
             if (provideCouponViewModel.customerListToProvider.value.isNullOrEmpty()){
                 ToastUtils.showShort("您还未选择发放客户")
             }else {
-                provideCouponViewModel.sendCoupon()
+                provideCouponViewModel.sendCoupon(onSuccess = {
+                    ToastUtils.showShort(it)
+
+                    activity?.apply {
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    }
+                },onError = {
+                    ToastUtils.showShort(it)
+                })
             }
         }
         mDatabind.emptyView.apply {
@@ -68,6 +79,14 @@ class ProvideCouponFragment :
             provideCouponViewModel = getViewModel<ProvideCouponViewModel>()
             provideCouponViewModel.customerListToProvider.observe(viewLifecycleOwner, Observer {
                 mAdapter.setList(it)
+            })
+
+            provideCouponViewModel.couponSendResultState.observe(viewLifecycleOwner, Observer {
+                parseState(it,onSuccess = {
+
+                },onError = {
+                    ToastUtils.showShort(it.errorMsg)
+                })
             })
         }
     }

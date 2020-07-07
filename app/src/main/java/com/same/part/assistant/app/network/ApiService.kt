@@ -346,7 +346,7 @@ interface ApiService {
      * 发放优惠券
      */
     @POST("biz/coupon-activity/send")
-    suspend fun sendCoupon(@Body requestSendCoupon: RequestSendCoupon): ApiResponse<String>
+    suspend fun sendCoupon(@Body requestSendCoupon: RequestSendCoupon): ResponseBody
 
     /**
      * 获取收银商品列表

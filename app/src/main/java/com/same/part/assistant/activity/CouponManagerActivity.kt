@@ -1,5 +1,6 @@
 package com.same.part.assistant.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -94,6 +95,15 @@ class CouponManagerActivity :
                 mSmartRefreshLayout.refreshComplete()
             })
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode== Activity.RESULT_OK){
+            if (requestCode == REQUEST_CODE_PROVIDE_COUPON){
+                mRequestCouponsViewModel.getCouponsList()
+            }
+        }
     }
 
     override fun onDestroy() {

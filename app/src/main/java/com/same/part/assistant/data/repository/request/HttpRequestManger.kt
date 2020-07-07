@@ -9,6 +9,7 @@ import com.same.part.assistant.data.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import me.hgj.jetpackmvvm.ext.util.toJson
 import me.hgj.jetpackmvvm.network.AppException
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -374,13 +375,13 @@ class HttpRequestManger {
     /**
      * 发放优惠券
      */
-    suspend fun sendCoupon(couponId: String, userIds: List<String>): ApiResponse<String> {
+    suspend fun sendCoupon(couponId: String, userIds: List<Int>): ResponseBody {
         return NetworkApi.service.sendCoupon(
             RequestSendCoupon(
                 appKey = CacheUtil.getAppKey(),
                 appSecret = CacheUtil.getAppSecret(),
                 id = couponId,
-                userIds = userIds.joinToString()
+                userIds = userIds
             )
         )
     }

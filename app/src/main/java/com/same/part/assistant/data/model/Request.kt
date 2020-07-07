@@ -261,7 +261,7 @@ data class RequestSendCoupon(
     val appKey: String,
     val appSecret: String,
     val id: String,
-    val userIds: String
+    val userIds: List<Int>
 )
 
 data class RequestCashierProduct(
