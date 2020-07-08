@@ -36,7 +36,6 @@ class VipCardManagerActivity : AppCompatActivity() {
     fun eventRefresh(messageEvent: String) {
         if (HAND_CARD_SUCCESS == messageEvent) {
             mSmartRefreshLayout.autoRefresh()
-            mToolbarAdd.isEnabled = false
         }
     }
 
@@ -117,9 +116,6 @@ class VipCardManagerActivity : AppCompatActivity() {
                 it.isRefresh -> {
                     mCardAdapter.setNewInstance(it.memberCardList)
                     mSmartRefreshLayout.finishRefresh()
-                    if (it.memberCardList.size > 0) {
-                        mToolbarAdd.isEnabled = false
-                    }
                 }
                 it.hasMore -> {
                     mCardAdapter.addData(it.memberCardList)
