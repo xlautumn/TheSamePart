@@ -389,11 +389,11 @@ class HttpRequestManger {
     /**
      * 获取收银商品列表
      */
-    suspend fun getCashierProductList(name: String,page: Int,size:Int):ApiResponse<GetCashierProductMsg>{
+    suspend fun getCashierProductList(name: String,page: Int,size:Int,state:Int?):ApiResponse<GetCashierProductMsg>{
         return NetworkApi.service.getCashierProductList(
             token = CacheUtil.getToken(),
             name = name,
-            page = page, size = size, type="1,2")
+            page = page, size = size, type="1,2",state = state)
     }
 
     /**
@@ -432,6 +432,26 @@ class HttpRequestManger {
             productIds = productIds.joinToString (separator = ","),
             appKey = CacheUtil.getAppKey(),
             appSecret = CacheUtil.getAppSecret()
+        )
+    }
+
+    /**
+     *
+     * 获取二级分类下的商品列表
+     */
+
+    suspend fun getProduct(
+        customCategoryId: String,//二级分类Id
+        page: String, //请求页码
+        size: String, //分页大小
+        sort: String,
+        token: String = CacheUtil.getToken(),
+        shopId: String = CacheUtil.getShopId().toString()
+    ): ApiResponse<List<CustomCategoryProduct>> {
+       return NetworkApi.service.getProduct(
+            token,
+            shopId,
+            customCategoryId, page, size, sort
         )
     }
 }

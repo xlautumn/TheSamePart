@@ -3,6 +3,7 @@ package com.same.part.assistant.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,8 @@ import com.same.part.assistant.data.model.CustomCategory
 import com.same.part.assistant.data.model.GetCashierCategoryDetail
 import com.same.part.assistant.databinding.FragmentCashierV2Binding
 import com.same.part.assistant.viewmodel.request.RequestCashierViewModel
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import me.hgj.jetpackmvvm.ext.parseState
 
 
@@ -28,6 +31,11 @@ import me.hgj.jetpackmvvm.ext.parseState
  * 收银商品
  */
 class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV2Binding>() {
+
+    private val pageSize = 50
+    private var pageNo = 0
+    private var isRefresh = false
+    private var isLoadMore = false
 
     private val mFirstLevelAdapter by lazy {
         CashierFirstLevelAdapter(Proxy()).apply {
@@ -84,7 +92,8 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
                     mViewModel.delCashierProduct(cashierProduct, onSuccess = {
 //                        mViewModel.queryShopCategoryDetail()
                         ToastUtils.showShort(it)
-                        mViewModel.getProductList(mViewModel.currentSecondCategoryId.value).removeAt(position)
+                        mViewModel.getProductList(mViewModel.currentSecondCategoryId.value)
+                            .removeAt(position)
                         adapter.data.removeAt(position)
                         adapter.notifyItemRemoved(position)
                     }, onError = {
@@ -118,10 +127,26 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
             setEmptyView(mDatabind.emptyView)
         }
 
-        mDatabind.mSmartRefreshLayout.setEnableLoadMore(false)
-        mDatabind.mSmartRefreshLayout.setOnRefreshListener {
-            mViewModel.queryShopCategoryDetail()
-        }
+        mDatabind.mSmartRefreshLayout.setOnRefreshLoadMoreListener(object :
+            OnRefreshLoadMoreListener {
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                if (!isRefresh && !isLoadMore) {
+                    isLoadMore = true
+                    mViewModel.queryShopCategoryDetail(
+                        pageSize.toString(),
+                        (pageNo + 1).toString()
+                    )
+                }
+
+            }
+
+            override fun onRefresh(refreshLayout: RefreshLayout) {
+                if (!isRefresh && !isLoadMore) {
+                    refreshData()
+                }
+            }
+
+        })
 
         mDatabind.layoutSearch.setOnClickListener {
             startActivityForResult(
@@ -150,17 +175,51 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
 
         mViewModel.productResultState.observe(viewLifecycleOwner, Observer {
             parseState(it, onSuccess = { getCashierCategoryDetail ->
-                mDatabind.mSmartRefreshLayout.finishRefresh()
-                getCashierCategoryDetail.customCategoryProducts.map { it.product }.let {
-                    mViewModel.getProductList(getCashierCategoryDetail.customCategoryId).apply {
-                        clear()
-                        addAll(it)
-                        mCashierProductAdapter.setList(it)
+                if (isRefresh) {
+                    isRefresh = false
+                    mDatabind.mSmartRefreshLayout.finishRefresh()
+                    getCashierCategoryDetail.customCategoryProducts.map { it.product }.let {
+                        mViewModel.getProductList(getCashierCategoryDetail.customCategoryId).apply {
+                            clear()
+                            addAll(it)
+                            if (getCashierCategoryDetail.customCategoryId == mViewModel.currentSecondCategoryId.value) {
+                                mCashierProductAdapter.setList(it)
+                            }
+                        }
                     }
                 }
+
+                if (isLoadMore) {
+                    isLoadMore = false
+                    pageNo++
+                    if (getCashierCategoryDetail.customCategoryProducts.isNullOrEmpty()) {
+                        ToastUtils.showShort("没有更多商品了")
+                        mDatabind.mSmartRefreshLayout.finishLoadMoreWithNoMoreData()
+                    } else {
+                        getCashierCategoryDetail.customCategoryProducts.map { it.product }.let {
+                            mViewModel.getProductList(getCashierCategoryDetail.customCategoryId)
+                                .apply {
+                                    addAll(it)
+                                    if (getCashierCategoryDetail.customCategoryId == mViewModel.currentSecondCategoryId.value) {
+                                        mCashierProductAdapter.addData(it)
+                                    }
+                                }
+                        }
+                        mDatabind.mSmartRefreshLayout.finishLoadMore()
+                    }
+
+                }
+
             }, onError = {
-                mDatabind.mSmartRefreshLayout.finishRefresh()
                 ToastUtils.showShort(it.errorMsg)
+                if (isRefresh) {
+                    isRefresh = false
+                    mDatabind.mSmartRefreshLayout.finishRefresh()
+                }
+                if (isLoadMore) {
+                    isLoadMore = false
+                    mDatabind.mSmartRefreshLayout.finishLoadMore(false)
+                }
             })
         })
         mViewModel.firstCategoryId.observe(viewLifecycleOwner, Observer {
@@ -182,7 +241,7 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
                 val list = mViewModel.getProductList(it)
                 if (list.isNullOrEmpty()) {
                     mCashierProductAdapter.setList(arrayListOf())
-                    mViewModel.queryShopCategoryDetail()
+                    refreshData()
                 } else {
                     mCashierProductAdapter.setList(list)
                 }
@@ -218,6 +277,19 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
             mFirstLevelAdapter.setList(it.categoryList)
         }
 
+    }
+
+
+    /**
+     * 刷新数据
+     */
+    private fun refreshData() {
+        isRefresh = true
+        pageNo = 0
+        mViewModel.queryShopCategoryDetail(
+            pageSize.toString(),
+            pageNo.toString()
+        )
     }
 
 

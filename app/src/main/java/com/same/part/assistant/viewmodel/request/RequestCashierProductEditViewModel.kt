@@ -40,7 +40,7 @@ class RequestCashierProductEditViewModel(application: Application) :
      */
     private fun getCashierProductList(name: String) {
         request(
-            { HttpRequestManger.instance.getCashierProductList(name, 0, 50) },
+            { HttpRequestManger.instance.getCashierProductList(name, 0, 50,null) },
             cashierProductResultState, true, "正在搜索..."
         )
     }

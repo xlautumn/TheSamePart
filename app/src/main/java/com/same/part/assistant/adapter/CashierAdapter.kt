@@ -65,7 +65,7 @@ class CashierProductAdapter() :
             }
         }
         var cashQuantity = item.quantity
-        if (item.type != "1" && cashQuantity.isNotEmpty() && cashQuantity.contains(".")) {
+        if (item.type != "1" && cashQuantity?.isNotEmpty()==true && cashQuantity.contains(".")) {
             val index = cashQuantity.indexOf(".")
             cashQuantity = cashQuantity.substring(0, index)
         }

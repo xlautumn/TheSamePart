@@ -57,31 +57,28 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
     /**
      * 查询商品分类详情
      */
-    fun queryShopCategoryDetail() {
+    fun queryShopCategoryDetail(
+        size: String,
+        page: String//请求页码
+    ) {
         val customCategoryId = currentSecondCategoryId.value
         if (!customCategoryId.isNullOrEmpty()) {
             requestTR(
                 {
-                    HttpRequestManger.instance.queryShopCategoryDetail(
-                        token = CacheUtil.getToken(),
-                        customCategoryId = customCategoryId
+                    HttpRequestManger.instance.getProduct(
+                        page = page,
+                        size = size,
+                        customCategoryId = customCategoryId,
+                        sort = SORT_TYPE_DEFAULT
                     )
                 },
                 _productResultState,
                 paresResult = {
-                    val response: String = it.string()
-                    val responseObject = JSON.parseObject(response)
-                    val code = responseObject.getString("code")
-                    if (code == "1") {
-                        val content = responseObject.getString("content")
-                        val getCashierCategoryDetail =
-                            GsonUtils.fromJson(content, GetCashierCategoryDetail::class.java)
-                        Triple(getCashierCategoryDetail, code, "")
-                    } else {
-                        val msg = responseObject.getString("message")
-                        Triple(null, code, msg)
+                    if (it.isSucces()){
+                        Triple(GetCashierCategoryDetail(customCategoryId,it.data), it.code, "")
+                    }else{
+                        Triple(null, it.code, it.errorMsg)
                     }
-
                 },
                 isShowDialog = true
             )
@@ -131,9 +128,11 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
     /**
      * 批量删除收银商品
      */
-    fun delCashierProduct(cashierProduct: CashierProduct,
-                          onSuccess: (String) -> Unit,
-                          onError: (String) -> Unit){
+    fun delCashierProduct(
+        cashierProduct: CashierProduct,
+        onSuccess: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
         fun parseResponseBody(
             it: ResponseBody,
             onSuccess: (String) -> Unit,
@@ -149,7 +148,13 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
                 onError(msg)
             }
         }
-        requestResponseBody({ HttpRequestManger.instance.delCashierProduct(arrayListOf(cashierProduct.productId)) },
+        requestResponseBody({
+            HttpRequestManger.instance.delCashierProduct(
+                arrayListOf(
+                    cashierProduct.productId
+                )
+            )
+        },
             success = {
                 parseResponseBody(it, onSuccess, onError)
             }, error = {
@@ -166,7 +171,7 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
         delList: List<CashierProduct>?,
         notifyCurrentVisibleProductChange: () -> Unit
     ) {
-        if (list.isNullOrEmpty()&&delList.isNullOrEmpty()){
+        if (list.isNullOrEmpty() && delList.isNullOrEmpty()) {
             return
         }
         val tempList = list?.let { ArrayList(it) } ?: arrayListOf()
@@ -175,7 +180,7 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
         cashierAllProduct?.categoryProductMap?.entries?.forEach { entry ->
             val secondCategoryId = entry.key
             val iterator = tempList.iterator()
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 val changeItem = iterator.next()
                 entry.value.find { cashierProduct -> cashierProduct.productId == changeItem.productId }
                     ?.let {
@@ -187,7 +192,7 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
                     }
             }
             val delIterator = tempDelList.iterator()
-            while (delIterator.hasNext()){
+            while (delIterator.hasNext()) {
                 val delCashierProduct = delIterator.next()
                 entry.value.find { cashierProduct ->
                     cashierProduct.productId == delCashierProduct.productId
@@ -200,7 +205,7 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
                 }
             }
         }
-        if (needNotifyCurrentVisibleProductChange){
+        if (needNotifyCurrentVisibleProductChange) {
             notifyCurrentVisibleProductChange()
         }
     }
@@ -228,5 +233,13 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
      */
     fun getProductList(secondCategoryId: String): ArrayList<CashierProduct> =
         this.cashierAllProduct?.getProductList(secondCategoryId) ?: arrayListOf()
+
+
+    companion object {
+        const val SORT_TYPE_DEFAULT = "product.sequence,desc"//默认
+        const val SORT_TYPE_TOTAL_SALES_DESC = "product.totalSales,desc"//总销量 降序
+        const val SORT_TYPE_PRICE_DESC = "product.price,desc"//价格 降序
+        const val SORT_TYPE_TIME_DESC = "product.addTime,desc"//添加时间 降序
+    }
 
 }

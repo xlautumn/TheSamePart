@@ -358,7 +358,8 @@ interface ApiService {
         @Field("name") name: String,
         @Field("page") page: Int,
         @Field("size") size: Int,
-        @Field("type") type: String
+        @Field("type") type: String,
+        @Field("state")state:Int? // 1：所有上架商品，0：所有下架商品，不传所有商品
     ): ApiResponse<GetCashierProductMsg>
 
     /**
@@ -388,4 +389,19 @@ interface ApiService {
         @Query("appKey") appKey: String,
         @Query("appSecret") appSecret: String
     ): ResponseBody
+
+    /**
+     *
+     * 获取二级分类下的商品列表
+     */
+    @GET("biz/getProduct")
+    suspend fun getProduct(
+        @Header("WSCX") token: String,
+        @Query("shopId") shopId: String,
+        @Query("customCategoryId") customCategoryId: String,//二级分类Id
+        @Query("page") page: String, //请求页码
+        @Query("size") size: String, //分页大小
+        @Query("sort") sort: String,  //默认：product.sequence,desc   product.totalSales,desc 总销量；product.price,desc 价格； product.addTime,desc 添加时间
+        @Query("productState") productState: Int = 1 //管家端传1  收银端传2
+    ): ApiResponse<List<CustomCategoryProduct>>
 }
