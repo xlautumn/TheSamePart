@@ -469,8 +469,12 @@ data class MemberCardModel(
     val name: String,
     val discount: Int,
     val userCount: Int,
-    val description: String
-) : Serializable
+    val description: String,
+    val lifetime: Lifetime
+) : Serializable {
+    //    "lifetime": "{\"type\":2,\"day\":\"30\"}"
+    data class Lifetime(val type: Int, val day: String?) : Serializable
+}
 
 data class AddressMsg(
     val `data`: List<Address>,

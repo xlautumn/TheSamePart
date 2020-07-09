@@ -45,13 +45,18 @@ class RequestVipCardViewModel(application: Application) : BaseViewModel(applicat
                     jsonObject.getJSONArray("content")?.takeIf { it.size >= 0 }?.apply {
                         for (i in 0 until size) {
                             getJSONObject(i)?.apply {
+                                val lifeTimeJson = getJSONObject("lifetime")
+                                val type = lifeTimeJson.getIntValue("type")
+                                val day = lifeTimeJson.getString("day")
+
                                 cardList.add(
                                     MemberCardModel(
                                         getIntValue("cardId"),
                                         getString("name"),
                                         getIntValue("discount"),
                                         getIntValue("userCount"),
-                                        getString("description") ?: ""
+                                        getString("description") ?: "",
+                                        MemberCardModel.Lifetime(type,day)
                                     )
                                 )
                             }

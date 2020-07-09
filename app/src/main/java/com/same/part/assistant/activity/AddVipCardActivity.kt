@@ -61,6 +61,7 @@ class AddVipCardActivity : BaseActivity<AddVipCardViewModel, ActivityAddVipCardB
                 mViewModel.name.set(name)
                 mViewModel.discount.set(discount.toString())
                 mViewModel.description.set(description)
+                mViewModel.cardPeriodOfValidity.set(this.lifetime.day?:"0")
             }
             mDatabind.etDiscount.setFocusable(false)
             mDatabind.etDiscount.isFocusableInTouchMode = false
