@@ -277,7 +277,9 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun eventRefresh(messageEvent: String) {
         if (AddCashierGoodActivity.ADD_OR_UPDATE_CASHIER_SUCCESS == messageEvent
-            ||AddProductClassificationActivity.ADDCLASSIFICATION_SUCCESS == messageEvent) {
+            || AddProductClassificationActivity.ADDCLASSIFICATION_SUCCESS == messageEvent
+            || ProductClassificationFragment.DEL_CLASSIFICATION_SUCCESS == messageEvent
+        ) {
             mViewModel.clearData()
             mViewModel.requestCashierClassification()
         }

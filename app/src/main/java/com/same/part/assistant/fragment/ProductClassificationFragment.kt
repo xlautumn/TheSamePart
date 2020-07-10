@@ -157,6 +157,7 @@ class ProductClassificationFragment : Fragment() {
             Observer { position ->
                 mProductClassificationList.removeAt(position)
                 mCategoryAdapter.notifyItemRemoved(position)
+                EventBus.getDefault().post(DEL_CLASSIFICATION_SUCCESS)
             })
     }
 
@@ -388,5 +389,9 @@ class ProductClassificationFragment : Fragment() {
             loadProductClassificationList(page = mCurrentPage, isRefresh = true)
             mSmartRefreshLayout?.setNoMoreData(false)
         }
+    }
+
+    companion object{
+        const val DEL_CLASSIFICATION_SUCCESS = "DEL_CLASSIFICATION_SUCCESS"
     }
 }
