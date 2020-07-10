@@ -3,13 +3,13 @@ package com.same.part.assistant.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
 import com.same.part.assistant.R
 import com.same.part.assistant.activity.AddCashierGoodActivity
+import com.same.part.assistant.activity.AddProductClassificationActivity
 import com.same.part.assistant.activity.SearchCashierProductToEditActivity
 import com.same.part.assistant.adapter.CashierFirstLevelAdapter
 import com.same.part.assistant.adapter.CashierProductAdapter
@@ -19,12 +19,14 @@ import com.same.part.assistant.app.ext.showMessage
 import com.same.part.assistant.data.model.CashierAllProduct
 import com.same.part.assistant.data.model.CashierProduct
 import com.same.part.assistant.data.model.CustomCategory
-import com.same.part.assistant.data.model.GetCashierCategoryDetail
 import com.same.part.assistant.databinding.FragmentCashierV2Binding
 import com.same.part.assistant.viewmodel.request.RequestCashierViewModel
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import me.hgj.jetpackmvvm.ext.parseState
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 /**
@@ -109,6 +111,7 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
 
 
     override fun initView(savedInstanceState: Bundle?) {
+        EventBus.getDefault().register(this)
         mDatabind.rvFirstLevel.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = mFirstLevelAdapter
@@ -263,6 +266,20 @@ class CashierFragmentV2 : BaseFragment<RequestCashierViewModel, FragmentCashierV
                 }
 
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun eventRefresh(messageEvent: String) {
+        if (AddCashierGoodActivity.ADD_OR_UPDATE_CASHIER_SUCCESS == messageEvent
+            ||AddProductClassificationActivity.ADDCLASSIFICATION_SUCCESS == messageEvent) {
+            mViewModel.clearData()
+            mViewModel.requestCashierClassification()
         }
     }
 

@@ -219,6 +219,10 @@ class RequestCashierViewModel(application: Application) : BaseViewModel(applicat
         return this.cashierAllProduct
     }
 
+    fun clearData(){
+        this.cashierAllProduct = null
+    }
+
     /**
      * 获取分类名称
      */
