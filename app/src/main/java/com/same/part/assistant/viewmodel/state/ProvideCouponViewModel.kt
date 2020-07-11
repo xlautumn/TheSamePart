@@ -183,7 +183,7 @@ class ProvideCouponViewModel(application: Application) : BaseViewModel(applicati
                     )
                 } ?: kotlin.run {
                     val code = jsonObject.getString("code")
-                    val msg = jsonObject.getString("massage")
+                    val msg = jsonObject.getString("message")
                     Triple(
                         null, code, msg
                     )
