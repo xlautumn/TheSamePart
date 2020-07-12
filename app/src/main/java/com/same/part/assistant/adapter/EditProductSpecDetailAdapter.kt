@@ -42,11 +42,6 @@ class EditProductSpecDetailAdapter(
         holder.bind(productType, data[position], proxyClick)
     }
 
-    override fun onViewRecycled(holder: EditProductSpecDetailViewHolder) {
-        super.onViewRecycled(holder)
-        holder.onRecycle()
-    }
-
     fun setData(data: List<EditProductSku>) {
         this.data.clear()
         this.data.addAll(data)
@@ -70,6 +65,8 @@ class EditProductSpecDetailViewHolder(private val binding: LayoutSpecDetailItemB
             binding.ivSpecCheck.isSelected = productSku.isSelect
             proxyClick.productSkuDataStateChanged()
         }
+
+        onRecycle()
 
         /**
          * 价格
@@ -112,7 +109,7 @@ class EditProductSpecDetailViewHolder(private val binding: LayoutSpecDetailItemB
         binding.scanBarCode.setOnClickListener { proxyClick.scanCode(binding.etBarcode) }
     }
 
-    fun onRecycle() {
+    private fun onRecycle() {
         val priceTextWatcher = binding.etPrice.tag as? TextWatcher
         priceTextWatcher?.let {
             binding.etPrice.removeTextChangedListener(it)
